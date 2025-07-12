@@ -1,122 +1,264 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const InnoSyncApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class InnoSyncApp extends StatelessWidget {
+  const InnoSyncApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+    return const MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: AuthScreen(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
+class AuthScreen extends StatefulWidget {
+  const AuthScreen({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<AuthScreen> createState() => _AuthScreenState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _AuthScreenState extends State<AuthScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+  bool isPasswordVisible = false;
+  bool rememberMe = false;
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  @override
+  void initState() {
+    _tabController = TabController(length: 2, vsync: this);
+    super.initState();
+  }
+
+  Widget _buildTextField({
+    required String hint,
+    required IconData icon,
+    bool obscure = false,
+    VoidCallback? togglePassword,
+  }) {
+    return TextField(
+      obscureText: obscure && !isPasswordVisible,
+      decoration: InputDecoration(
+        hintText: hint,
+        prefixIcon: Icon(icon, color: Colors.green),
+        suffixIcon: hint == "Password"
+            ? IconButton(
+          icon: Icon(
+            isPasswordVisible
+                ? Icons.visibility_off
+                : Icons.visibility,
+            color: Colors.green,
+          ),
+          onPressed: togglePassword,
+        )
+            : null,
+        filled: true,
+        fillColor: Colors.white,
+        contentPadding:
+        const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTabSelector() {
+    return Container(
+      height: 40,
+      margin: const EdgeInsets.symmetric(horizontal: 40),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.green),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: TabBar(
+        controller: _tabController,
+        labelColor: Colors.white,
+        unselectedLabelColor: Colors.green,
+        labelStyle: const TextStyle(fontWeight: FontWeight.bold),
+        indicator: BoxDecoration(
+          color: Colors.green,
+          borderRadius: BorderRadius.circular(6),
+        ),
+        indicatorSize: TabBarIndicatorSize.tab,
+        tabs: const [
+          Tab(text: "Log In"),
+          Tab(text: "Sign Up"),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildForm(bool isLogin) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 40),
+      child: Column(
+        children: [
+          const SizedBox(height: 24),
+          _buildTextField(hint: "Email", icon: Icons.person),
+          const SizedBox(height: 16),
+          _buildTextField(
+            hint: "Password",
+            icon: Icons.lock,
+            obscure: true,
+            togglePassword: () {
+              setState(() {
+                isPasswordVisible = !isPasswordVisible;
+              });
+            },
+          ),
+          const SizedBox(height: 8),
+          if (isLogin)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Checkbox(
+                      value: rememberMe,
+                      onChanged: (val) {
+                        setState(() => rememberMe = val ?? false);
+                      },
+                    ),
+                    const Text("Remember me"),
+                  ],
+                ),
+                TextButton(
+                  onPressed: () {},
+                  child: const Text(
+                    "Forgot Password ?",
+                    style: TextStyle(
+                      color: Colors.blue,
+                      fontSize: 13,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          const SizedBox(height: 20),
+          SizedBox(
+            width: double.infinity,
+            height: 48,
+            child: ElevatedButton(
+              onPressed: () {},
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: Text(isLogin ? "Log in" : "Continue", style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w600),),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTopDecoration() {
+    return SizedBox(
+      height: 160,
+      child: Stack(
+        children: [
+          Positioned(
+            top: -40,
+            left: -40,
+            child: Container(
+              width: 160,
+              height: 160,
+              decoration: const BoxDecoration(
+                color: Colors.green,
+                borderRadius: BorderRadius.only(
+                  bottomRight: Radius.circular(160),
+                ),
+              ),
+              child: const Center(
+                child: Text(""), // Placeholder for top-left curve
+              ),
+            ),
+          ),
+          Positioned(
+            top: -40,
+            right: -40,
+            child: Container(
+              width: 160,
+              height: 160,
+              decoration: const BoxDecoration(
+                color: Colors.green,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(160),
+                ),
+              ),
+              child: const Center(
+                child: Text(""), // Placeholder for top-right curve
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLogo() {
+    return Column(
+      children: const [
+        Text.rich(
+          TextSpan(
+            text: "Inno",
+            style: TextStyle(
+              fontSize: 32,
+              color: Colors.green,
+              fontWeight: FontWeight.bold,
+            ),
+            children: [
+              TextSpan(
+                text: "Sync",
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(height: 6),
+        Text(
+          "We work it together !",
+          style: TextStyle(
+            fontSize: 14,
+            color: Colors.green,
+          ),
+        ),
+      ],
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+      backgroundColor: Colors.white,
+      body: Column(
+        children: [
+          _buildTopDecoration(),
+          _buildLogo(),
+          const SizedBox(height: 20),
+          _buildTabSelector(),
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                _buildForm(true),
+                _buildForm(false),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
