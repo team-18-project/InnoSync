@@ -6,7 +6,7 @@ class ProfileCreationPage extends StatefulWidget {
   const ProfileCreationPage({super.key});
 
   @override
-  _ProfileCreationPageState createState() => _ProfileCreationPageState();
+  State<ProfileCreationPage> createState() => _ProfileCreationPageState();
 }
 
 class _ProfileCreationPageState extends State<ProfileCreationPage> {
@@ -29,20 +29,22 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
 
   Future<void> _pickImage() async {
     try {
-      final ImagePicker _picker = ImagePicker();
-      final XFile? pickedFile = await _picker.pickImage(
+      final picker = ImagePicker();
+      final XFile? pickedFile = await picker.pickImage(
         source: ImageSource.gallery,
       );
 
-      if (pickedFile != null) {
+      if (pickedFile != null && mounted) {
         setState(() {
           _profileImage = File(pickedFile.path);
         });
       }
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Error picking image: $e')));
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Error picking image: $e')));
+      }
     }
   }
 
