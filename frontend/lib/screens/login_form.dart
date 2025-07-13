@@ -12,7 +12,12 @@ class _LoginFormPageState extends State<LoginFormPage>
   late TabController _tabController;
   final TextEditingController _emailController = TextEditingController();
   bool _obscurePassword = true;
-  String? email;
+
+  // Temporary container for emails
+  final List<String> _existingEmails = [
+    'existinguser@example.com',
+    '3ilim69@gmail.com',
+  ];
 
   @override
   void initState() {
@@ -23,16 +28,28 @@ class _LoginFormPageState extends State<LoginFormPage>
   @override
   void dispose() {
     _tabController.dispose();
+    _emailController.dispose();
     super.dispose();
   }
 
-  bool _accountExists(String email) {
-    // Имитация проверки существующего аккаунта
-    const List<String> existingEmails = [
-      'existinguser@example.com',
-      '3ilim69@gmail.com',
-    ];
-    return existingEmails.contains(email);
+  void _logIn(String email) {
+    if (email.isEmpty) {
+      throw Exception('Email is required.');
+    }
+    if (!_existingEmails.contains(email)) {
+      throw Exception('Account not found. Please sign up.');
+    }
+    // TODO: Implement login request
+  }
+
+  void _signUp(String email) {
+    if (email.isEmpty) {
+      throw Exception('Email is required.');
+    }
+    if (_existingEmails.contains(email)) {
+      throw Exception('Account already exists. Please log in.');
+    }
+    // TODO: Implement sign up request
   }
 
   Widget _buildTabSelector() {
@@ -64,8 +81,10 @@ class _LoginFormPageState extends State<LoginFormPage>
     required String hint,
     bool obscure = false,
     VoidCallback? toggleObscure,
+    TextEditingController? controller,
   }) {
     return TextField(
+      controller: controller,
       obscureText: obscure,
       decoration: InputDecoration(
         prefixIcon: Icon(icon, color: Colors.green),
@@ -89,7 +108,11 @@ class _LoginFormPageState extends State<LoginFormPage>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildInputField(icon: Icons.person, hint: "Email"),
+        _buildInputField(
+          icon: Icons.person,
+          hint: "Email",
+          controller: _emailController,
+        ),
         const SizedBox(height: 12),
         _buildInputField(
           icon: Icons.lock,
@@ -129,13 +152,7 @@ class _LoginFormPageState extends State<LoginFormPage>
             ),
             onPressed: () {
               try {
-                setState(() {
-                  // email is a field of State of login page
-                  email = _emailController.text.trim();
-                  if (_accountExists(email!)) {
-                    throw Exception('Account already exists. Please sign up.');
-                  }
-                });
+                _logIn(_emailController.text.trim());
                 Navigator.pushNamed(context, '/dashboard');
               } catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(
@@ -156,7 +173,11 @@ class _LoginFormPageState extends State<LoginFormPage>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildInputField(icon: Icons.person, hint: "Email"),
+        _buildInputField(
+          icon: Icons.person,
+          hint: "Email",
+          controller: _emailController,
+        ),
         const SizedBox(height: 12),
         _buildInputField(
           icon: Icons.lock,
@@ -180,7 +201,16 @@ class _LoginFormPageState extends State<LoginFormPage>
               ),
             ),
             onPressed: () {
-              Navigator.pushNamed(context, '/create_profile');
+              try {
+                _signUp(_emailController.text.trim());
+                Navigator.pushNamed(context, '/create_profile');
+              } catch (e) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(e.toString().replaceFirst('Exception: ', '')),
+                  ),
+                );
+              }
             },
             child: const Text(
               "Continue",
