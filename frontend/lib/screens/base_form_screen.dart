@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
-abstract class BaseFormScreen extends StatefulWidget {
-  const BaseFormScreen({super.key});
-}
-
-abstract class BaseFormScreenState<T extends BaseFormScreen> extends State<T> {
+// Mixin for form functionality
+mixin BaseFormMixin<T extends StatefulWidget> on State<T> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
 
-  // Abstract methods that subclasses must implement
-  String get screenTitle;
-  String get screenSubtitle;
-  Widget buildFormContent();
-  void onSubmit();
+  // Getters for form state
+  GlobalKey<FormState> get formKey => _formKey;
+  bool get isLoading => _isLoading;
 
   // Common validation methods
   String? validateEmail(String? value) {
@@ -62,10 +57,8 @@ abstract class BaseFormScreenState<T extends BaseFormScreen> extends State<T> {
     });
   }
 
-  bool get isLoading => _isLoading;
-
   // Common submit method
-  void handleSubmit() {
+  void handleSubmit(VoidCallback onSubmit) {
     if (_formKey.currentState!.validate()) {
       setLoading(true);
       try {
@@ -79,10 +72,13 @@ abstract class BaseFormScreenState<T extends BaseFormScreen> extends State<T> {
   }
 
   // Common button widget
-  Widget buildSubmitButton({required String text, VoidCallback? onPressed}) {
+  Widget buildSubmitButton({
+    required String text,
+    required VoidCallback onPressed,
+  }) {
     return ElevatedButton(
       style: AppTheme.primaryButtonStyle,
-      onPressed: _isLoading ? null : (onPressed ?? handleSubmit),
+      onPressed: _isLoading ? null : onPressed,
       child: _isLoading
           ? const SizedBox(
               height: 20,
@@ -96,8 +92,12 @@ abstract class BaseFormScreenState<T extends BaseFormScreen> extends State<T> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
+  // Common form container
+  Widget buildFormContainer({
+    required Widget child,
+    String? title,
+    String? subtitle,
+  }) {
     return Scaffold(
       backgroundColor: AppTheme.backgroundColor,
       body: Center(
@@ -112,19 +112,20 @@ abstract class BaseFormScreenState<T extends BaseFormScreen> extends State<T> {
               key: _formKey,
               child: Column(
                 children: [
-                  // Title
-                  Text(
-                    screenTitle,
-                    style: AppTheme.appTitleStyle.copyWith(
-                      color: AppTheme.primaryColor,
+                  if (title != null) ...[
+                    Text(
+                      title,
+                      style: AppTheme.appTitleStyle.copyWith(
+                        color: AppTheme.primaryColor,
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 5),
-                  // Subtitle
-                  Text(screenSubtitle, style: AppTheme.appSubtitleStyle),
-                  const SizedBox(height: AppTheme.largeSpacing),
-                  // Form content
-                  buildFormContent(),
+                    const SizedBox(height: 5),
+                  ],
+                  if (subtitle != null) ...[
+                    Text(subtitle, style: AppTheme.appSubtitleStyle),
+                    const SizedBox(height: AppTheme.largeSpacing),
+                  ],
+                  child,
                 ],
               ),
             ),
