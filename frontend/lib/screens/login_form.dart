@@ -12,6 +12,7 @@ class _LoginFormPageState extends State<LoginFormPage>
   late TabController _tabController;
   final TextEditingController _emailController = TextEditingController();
   bool _obscurePassword = true;
+  String? email;
 
   @override
   void initState() {
@@ -127,17 +128,21 @@ class _LoginFormPageState extends State<LoginFormPage>
               ),
             ),
             onPressed: () {
-              final email = _emailController.text.trim();
-              if (_accountExists(email)) {
-                // Показать ошибку, если аккаунт уже существует
+              try {
+                setState(() {
+                  // email is a field of State of login page
+                  email = _emailController.text.trim();
+                  if (_accountExists(email!)) {
+                    throw Exception('Account already exists. Please sign up.');
+                  }
+                });
+                Navigator.pushNamed(context, '/dashboard');
+              } catch (e) {
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Account already exists. Please sign up.'),
+                  SnackBar(
+                    content: Text(e.toString().replaceFirst('Exception: ', '')),
                   ),
                 );
-              } else {
-                // Перейти к созданию профиля
-                Navigator.pushNamed(context, '/dashboard');
               }
             },
             child: const Text("Log in", style: TextStyle(color: Colors.white)),
