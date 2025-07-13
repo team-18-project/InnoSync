@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 import '../widgets/custom_form_field.dart';
-import 'base_form_screen.dart';
+import '../mixins/form_mixin.dart';
 
 class LoginFormPage extends StatefulWidget {
   const LoginFormPage({super.key});
