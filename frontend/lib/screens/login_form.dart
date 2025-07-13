@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'profile_creation_page.dart';
 
 class LoginFormPage extends StatefulWidget {
   const LoginFormPage({super.key});
@@ -11,6 +10,7 @@ class LoginFormPage extends StatefulWidget {
 class _LoginFormPageState extends State<LoginFormPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  final TextEditingController _emailController = TextEditingController();
   bool _obscurePassword = true;
 
   @override
@@ -27,7 +27,10 @@ class _LoginFormPageState extends State<LoginFormPage>
 
   bool _accountExists(String email) {
     // Имитация проверки существующего аккаунта
-    const List<String> existingEmails = ['existinguser@example.com', '3ilim69@gmail.com'];
+    const List<String> existingEmails = [
+      'existinguser@example.com',
+      '3ilim69@gmail.com',
+    ];
     return existingEmails.contains(email);
   }
 
@@ -67,17 +70,15 @@ class _LoginFormPageState extends State<LoginFormPage>
         prefixIcon: Icon(icon, color: Colors.green),
         suffixIcon: toggleObscure != null
             ? IconButton(
-          icon: Icon(
-            obscure ? Icons.visibility_off : Icons.visibility,
-            color: Colors.green,
-          ),
-          onPressed: toggleObscure,
-        )
+                icon: Icon(
+                  obscure ? Icons.visibility_off : Icons.visibility,
+                  color: Colors.green,
+                ),
+                onPressed: toggleObscure,
+              )
             : null,
         hintText: hint,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
         contentPadding: const EdgeInsets.symmetric(vertical: 14),
       ),
     );
@@ -130,14 +131,13 @@ class _LoginFormPageState extends State<LoginFormPage>
               if (_accountExists(email)) {
                 // Показать ошибку, если аккаунт уже существует
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Account already exists. Please sign up.')),
+                  const SnackBar(
+                    content: Text('Account already exists. Please sign up.'),
+                  ),
                 );
               } else {
                 // Перейти к созданию профиля
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const ProfileCreationPage()),
-                );
+                Navigator.pushNamed(context, '/dashboard');
               }
             },
             child: const Text("Log in", style: TextStyle(color: Colors.white)),
@@ -174,8 +174,13 @@ class _LoginFormPageState extends State<LoginFormPage>
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            onPressed: () {},
-            child: const Text("Continue", style: TextStyle(color: Colors.white)),
+            onPressed: () {
+              Navigator.pushNamed(context, '/create_profile');
+            },
+            child: const Text(
+              "Continue",
+              style: TextStyle(color: Colors.white),
+            ),
           ),
         ),
       ],
@@ -227,10 +232,7 @@ class _LoginFormPageState extends State<LoginFormPage>
                   height: 300,
                   child: TabBarView(
                     controller: _tabController,
-                    children: [
-                      _buildLoginTab(),
-                      _buildSignUpTab(),
-                    ],
+                    children: [_buildLoginTab(), _buildSignUpTab()],
                   ),
                 ),
               ],

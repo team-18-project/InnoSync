@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'dashboard_page.dart';
 
 class ProfileCreationPage extends StatefulWidget {
   const ProfileCreationPage({super.key});
@@ -31,7 +30,9 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
   Future<void> _pickImage() async {
     try {
       final ImagePicker _picker = ImagePicker();
-      final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+      final XFile? pickedFile = await _picker.pickImage(
+        source: ImageSource.gallery,
+      );
 
       if (pickedFile != null) {
         setState(() {
@@ -39,9 +40,9 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
         });
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error picking image: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error picking image: $e')));
     }
   }
 
@@ -61,8 +62,12 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
               onTap: _pickImage,
               child: CircleAvatar(
                 radius: 60,
-                backgroundImage: _profileImage != null ? FileImage(_profileImage!) : null,
-                child: _profileImage == null ? const Icon(Icons.add_a_photo) : null,
+                backgroundImage: _profileImage != null
+                    ? FileImage(_profileImage!)
+                    : null,
+                child: _profileImage == null
+                    ? const Icon(Icons.add_a_photo)
+                    : null,
               ),
             ),
             const SizedBox(height: 16),
@@ -88,12 +93,12 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
                 ),
                 onPressed: () {
                   // Переход на панель управления после успешного заполнения профиля
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (context) => const DashboardPage()),
-                  );
+                  Navigator.pushReplacementNamed(context, '/dashboard');
                 },
-                child: const Text('Next', style: TextStyle(color: Colors.white)),
+                child: const Text(
+                  'Next',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
             ),
           ],
@@ -102,15 +107,17 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
     );
   }
 
-  Widget _buildInputField(String label, TextEditingController controller, {int maxLines = 1}) {
+  Widget _buildInputField(
+    String label,
+    TextEditingController controller, {
+    int maxLines = 1,
+  }) {
     return TextField(
       controller: controller,
       maxLines: maxLines,
       decoration: InputDecoration(
         labelText: label,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         contentPadding: const EdgeInsets.symmetric(vertical: 14),
       ),
     );
