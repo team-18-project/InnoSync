@@ -32,6 +32,8 @@ RUN yes | sdkmanager --licenses && \
 
 # Install Flutter
 RUN git clone https://github.com/flutter/flutter.git /opt/flutter && \
+    cd /opt/flutter && \
+    git checkout 3.32.6 && \
     export PATH="$PATH:/opt/flutter/bin" && \
     flutter doctor
 
