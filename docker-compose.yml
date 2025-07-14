@@ -1,0 +1,82 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    container_name: innosync-db
+    environment:
+      POSTGRES_DB: innosync
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/init:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
+    networks:
+      - innosync-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: innosync-backend
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: innosync
+      DB_SSLMODE: disable
+      JWT_SECRET: "your-production-secret-key-change-this"
+      JWT_ACCESS_TTL: "15m"
+      JWT_REFRESH_TTL: "168h"
+      SERVER_PORT: 3000
+      SERVER_HOST: "0.0.0.0"
+      GIN_MODE: "release"
+      UPLOAD_MAX_SIZE: "10485760"
+      UPLOAD_DIR: "uploads"
+    ports:
+      - "3000:3000"
+    volumes:
+      - backend_uploads:/root/uploads
+    networks:
+      - innosync-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    restart: unless-stopped
+
+  # Adminer (Database Management Tool)
+  adminer:
+    image: adminer:latest
+    container_name: innosync-adminer
+    depends_on:
+      - db
+    ports:
+      - "3001:8080"
+    networks:
+      - innosync-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    driver: local
+  backend_uploads:
+    driver: local
+
+networks:
+  innosync-network:
+    driver: bridge

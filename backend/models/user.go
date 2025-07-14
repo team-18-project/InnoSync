@@ -4,14 +4,26 @@ import (
 	"time"
 )
 
+// User represents a user in the system
 type User struct {
 	ID        int64     `json:"id" db:"id"`
 	Email     string    `json:"email" db:"email"`
 	FullName  string    `json:"full_name" db:"full_name"`
 	Password  string    `json:"-" db:"password"`
 	CreatedAt time.Time `json:"created_at" db:"created_at"`
+	LastLogin *time.Time `json:"last_login,omitempty" db:"last_login"`
 }
 
+// RefreshToken represents a refresh token
+type RefreshToken struct {
+	ID         int64     `json:"id" db:"id"`
+	UserID     int64     `json:"user_id" db:"user_id"`
+	Token      string    `json:"token" db:"token"`
+	ExpiryDate time.Time `json:"expiry_date" db:"expiry_date"`
+	DeviceID   *string   `json:"device_id,omitempty" db:"device_id"`
+}
+
+// Enums for education and expertise levels
 type EducationEnum string
 
 const (
@@ -31,21 +43,47 @@ const (
 	ExpertiseLevelResearcher ExpertiseLevelEnum = "RESEARCHER"
 )
 
-type InvitationStatusEnum string
+// Authentication request/response models
+type SignupRequest struct {
+	Email    string `json:"email" binding:"required,email"`
+	Password string `json:"password" binding:"required,min=6"`
+	FullName string `json:"full_name" binding:"required"`
+}
 
-const (
-	InvitationStatusInvited  InvitationStatusEnum = "INVITED"
-	InvitationStatusAccepted InvitationStatusEnum = "ACCEPTED"
-	InvitationStatusDeclined InvitationStatusEnum = "DECLINED"
-	InvitationStatusRevoked  InvitationStatusEnum = "REVOKED"
-)
+type LoginRequest struct {
+	Email    string `json:"email" binding:"required,email"`
+	Password string `json:"password" binding:"required"`
+}
 
-type ApplicationStatusEnum string
+type RefreshTokenRequest struct {
+	RefreshToken string `json:"refresh_token" binding:"required"`
+}
 
-const (
-	ApplicationStatusPending     ApplicationStatusEnum = "PENDING"
-	ApplicationStatusUnderReview ApplicationStatusEnum = "UNDER_REVIEW"
-	ApplicationStatusAccepted    ApplicationStatusEnum = "ACCEPTED"
-	ApplicationStatusRejected    ApplicationStatusEnum = "REJECTED"
-	ApplicationStatusWithdrawn   ApplicationStatusEnum = "WITHDRAWN"
-)
+type TokenResponse struct {
+	AccessToken  string `json:"access_token"`
+	RefreshToken string `json:"refresh_token"`
+	TokenType    string `json:"token_type"`
+	ExpiresIn    int64  `json:"expires_in"`
+}
+
+type AuthResponse struct {
+	User   *User          `json:"user"`
+	Tokens *TokenResponse `json:"tokens"`
+}
+
+type LogoutRequest struct {
+	RefreshToken string `json:"refresh_token" binding:"required"`
+}
+
+// Helper methods
+func (u *User) IsValid() bool {
+	return u.Email != "" && u.FullName != "" && u.Password != ""
+}
+
+func (rt *RefreshToken) IsExpired() bool {
+	return time.Now().After(rt.ExpiryDate)
+}
+
+func (rt *RefreshToken) IsValid() bool {
+	return rt.Token != "" && rt.UserID > 0 && !rt.IsExpired()
+}
