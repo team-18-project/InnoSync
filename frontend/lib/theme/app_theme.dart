@@ -8,6 +8,23 @@ class AppTheme {
   static const Color errorColor = Colors.red;
   static const Color linkColor = Colors.blue;
 
+  // Additional colors to replace hardcoded values
+  static const Color cardBackgroundColor = Colors.white;
+  static const Color cardShadowColor = Color(
+    0xFFE0E0E0,
+  ); // Light grey for shadows
+  static const Color secondaryTextColor = Color(
+    0xFF757575,
+  ); // Grey for secondary text
+  static const Color appBarColor =
+      primaryColor; // Use primary color for app bar
+  static const Color tabLabelColor = Colors.white; // For tab labels
+  static const Color progressIndicatorColor =
+      Colors.white; // For loading indicators
+  static const Color profileImagePickerBackground = Color(
+    0xFFF0F8F0,
+  ); // Light green background for profile picker
+
   // Text Styles
   static const TextStyle appTitleStyle = TextStyle(
     fontSize: 32,
@@ -21,6 +38,23 @@ class AppTheme {
 
   static const TextStyle errorTextStyle = TextStyle(color: errorColor);
 
+  // Additional text styles
+  static const TextStyle cardTitleStyle = TextStyle(
+    fontWeight: FontWeight.bold,
+    fontSize: 18,
+  );
+
+  static const TextStyle cardSubtitleStyle = TextStyle(
+    fontSize: 14,
+    color: secondaryTextColor,
+  );
+
+  static const TextStyle cardBodyStyle = TextStyle(fontSize: 14);
+
+  static const TextStyle cardLabelStyle = TextStyle(
+    fontWeight: FontWeight.bold,
+  );
+
   // Button Styles
   static ButtonStyle primaryButtonStyle = ElevatedButton.styleFrom(
     backgroundColor: primaryColor,
@@ -28,7 +62,11 @@ class AppTheme {
     minimumSize: const Size(double.infinity, 48),
   );
 
-  static const TextStyle buttonTextStyle = TextStyle(color: Colors.white);
+  static const TextStyle buttonTextStyle = TextStyle(
+    color: progressIndicatorColor,
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+  );
 
   // Input Field Styles
   static InputDecoration inputDecoration({
@@ -55,6 +93,19 @@ class AppTheme {
   static BoxDecoration tabIndicatorDecoration = BoxDecoration(
     color: primaryColor,
     borderRadius: BorderRadius.circular(12),
+  );
+
+  // Card decoration
+  static BoxDecoration cardDecoration = BoxDecoration(
+    color: cardBackgroundColor,
+    borderRadius: BorderRadius.circular(12),
+    boxShadow: [
+      BoxShadow(
+        color: cardShadowColor,
+        blurRadius: 8,
+        offset: const Offset(0, 2),
+      ),
+    ],
   );
 
   // Spacing

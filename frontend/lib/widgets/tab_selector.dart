@@ -19,7 +19,7 @@ class TabSelector extends StatelessWidget {
       child: TabBar(
         controller: controller,
         indicator: AppTheme.tabIndicatorDecoration,
-        labelColor: Colors.white,
+        labelColor: AppTheme.tabLabelColor,
         unselectedLabelColor: AppTheme.primaryColor,
         indicatorSize: TabBarIndicatorSize.tab,
         tabs: tabLabels.map((label) => Tab(text: label)).toList(),

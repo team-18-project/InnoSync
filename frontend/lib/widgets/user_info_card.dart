@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'spacing.dart';
+import '../theme/app_theme.dart';
 
 class UserInfoCard extends StatelessWidget {
   final String name;
@@ -27,11 +28,7 @@ class UserInfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: width,
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [BoxShadow(color: Colors.grey.shade200, blurRadius: 8)],
-      ),
+      decoration: AppTheme.cardDecoration,
       padding: const EdgeInsets.all(20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -47,27 +44,18 @@ class UserInfoCard extends StatelessWidget {
                 : null,
           ),
           const VSpace(16),
-          Text(
-            name,
-            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
-          ),
+          Text(name, style: AppTheme.cardTitleStyle),
           const VSpace(8),
-          Text(email, style: const TextStyle(fontSize: 14, color: Colors.grey)),
+          Text(email, style: AppTheme.cardSubtitleStyle),
           const VSpace(16),
-          const Text("Bio:", style: TextStyle(fontWeight: FontWeight.bold)),
-          Text(bio, style: const TextStyle(fontSize: 14)),
+          const Text("Bio:", style: AppTheme.cardLabelStyle),
+          Text(bio, style: AppTheme.cardBodyStyle),
           const VSpace(16),
-          const Text(
-            "Positions:",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          Text(positions, style: const TextStyle(fontSize: 14)),
+          const Text("Positions:", style: AppTheme.cardLabelStyle),
+          Text(positions, style: AppTheme.cardBodyStyle),
           const VSpace(16),
-          const Text(
-            "Technologies:",
-            style: TextStyle(fontWeight: FontWeight.bold),
-          ),
-          Text(technologies, style: const TextStyle(fontSize: 14)),
+          const Text("Technologies:", style: AppTheme.cardLabelStyle),
+          Text(technologies, style: AppTheme.cardBodyStyle),
         ],
       ),
     );
