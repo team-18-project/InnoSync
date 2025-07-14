@@ -37,17 +37,15 @@ RUN git clone https://github.com/flutter/flutter.git /opt/flutter && \
 
 ENV PATH=$PATH:/opt/flutter/bin
 
-# Set working directory
+# Set working directory to the project root
 WORKDIR /app
 
-# Copy pubspec files
-COPY pubspec.* ./
-
-# Get dependencies
-RUN flutter pub get
-
-# Copy source code
+# Copy the entire project
 COPY . .
+
+# Change to frontend directory and get dependencies
+WORKDIR /app/frontend
+RUN flutter pub get
 
 # Build APK
 CMD ["flutter", "build", "apk", "--release"] 
