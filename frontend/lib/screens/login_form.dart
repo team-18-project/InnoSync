@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
-import '../widgets/custom_form_field.dart';
+import '../widgets/validated_text_field.dart';
+import '../widgets/tab_selector.dart';
+import '../widgets/remember_me_checkbox.dart';
+import '../widgets/spacing.dart';
 import '../mixins/form_mixin.dart';
 
 class LoginFormPage extends StatefulWidget {
@@ -16,6 +19,7 @@ class _LoginFormPageState extends State<LoginFormPage>
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _obscurePassword = true;
+  bool _rememberMe = false;
 
   // Temporary container for emails
   final List<String> _existingEmails = [
@@ -57,36 +61,18 @@ class _LoginFormPageState extends State<LoginFormPage>
     Navigator.pushNamed(context, '/create_profile');
   }
 
-  Widget _buildTabSelector() {
-    return Container(
-      height: AppTheme.tabHeight,
-      decoration: AppTheme.tabSelectorDecoration,
-      child: TabBar(
-        controller: _tabController,
-        indicator: AppTheme.tabIndicatorDecoration,
-        labelColor: Colors.white,
-        unselectedLabelColor: AppTheme.primaryColor,
-        indicatorSize: TabBarIndicatorSize.tab,
-        tabs: const [
-          Tab(text: 'Log In'),
-          Tab(text: 'Sign Up'),
-        ],
-      ),
-    );
-  }
-
   Widget _buildLoginTab() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CustomFormField(
+        ValidatedTextField(
           icon: Icons.person,
           hint: "Email",
           controller: _emailController,
           validator: validateEmail,
         ),
-        const SizedBox(height: AppTheme.defaultSpacing),
-        CustomFormField(
+        const VSpace.medium(),
+        ValidatedTextField(
           icon: Icons.lock,
           hint: "Password",
           obscure: _obscurePassword,
@@ -98,22 +84,15 @@ class _LoginFormPageState extends State<LoginFormPage>
             });
           },
         ),
-        const SizedBox(height: AppTheme.smallSpacing),
-        Row(
-          children: [
-            Checkbox(value: false, onChanged: (_) {}),
-            const Text("Remember me"),
-            const Spacer(),
-            TextButton(
-              onPressed: () {},
-              child: Text(
-                "Forgot Password ?",
-                style: TextStyle(color: AppTheme.linkColor),
-              ),
-            ),
-          ],
+        const VSpace.small(),
+        RememberMeCheckbox(
+          value: _rememberMe,
+          onChanged: (value) => setState(() => _rememberMe = value ?? false),
+          onForgotPassword: () {
+            // TODO: Implement forgot password
+          },
         ),
-        const SizedBox(height: AppTheme.defaultSpacing - 2),
+        const VSpace.mediumMinus(),
         buildSubmitButton(
           text: "Log in",
           onPressed: () => handleSubmit(_logIn),
@@ -126,14 +105,14 @@ class _LoginFormPageState extends State<LoginFormPage>
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        CustomFormField(
+        ValidatedTextField(
           icon: Icons.person,
           hint: "Email",
           controller: _emailController,
           validator: validateEmail,
         ),
-        const SizedBox(height: AppTheme.defaultSpacing),
-        CustomFormField(
+        const VSpace.medium(),
+        ValidatedTextField(
           icon: Icons.lock,
           hint: "Password",
           obscure: _obscurePassword,
@@ -145,7 +124,7 @@ class _LoginFormPageState extends State<LoginFormPage>
             });
           },
         ),
-        const SizedBox(height: AppTheme.defaultSpacing + 4),
+        const VSpace.mediumPlus(),
         buildSubmitButton(
           text: "Continue",
           onPressed: () => handleSubmit(_signUp),
@@ -161,9 +140,12 @@ class _LoginFormPageState extends State<LoginFormPage>
       subtitle: "We work it together !",
       child: Column(
         children: [
-          _buildTabSelector(),
-          const SizedBox(height: AppTheme.defaultSpacing + 8),
-          SizedBox(
+          TabSelector(
+            controller: _tabController,
+            tabLabels: const ['Log In', 'Sign Up'],
+          ),
+          const VSpace.mediumPlusPlus(),
+          FixedHeightSpace(
             height: AppTheme.tabViewHeight,
             child: TabBarView(
               controller: _tabController,

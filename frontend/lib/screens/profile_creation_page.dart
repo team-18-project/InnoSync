@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import '../widgets/profile_image_picker.dart';
+import '../widgets/spacing.dart';
+import '../theme/app_theme.dart';
 
 class ProfileCreationPage extends StatefulWidget {
   const ProfileCreationPage({super.key});
@@ -27,81 +29,46 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
     super.dispose();
   }
 
-  Future<void> _pickImage() async {
-    try {
-      final picker = ImagePicker();
-      final XFile? pickedFile = await picker.pickImage(
-        source: ImageSource.gallery,
-      );
-
-      if (pickedFile != null && mounted) {
-        setState(() {
-          _profileImage = File(pickedFile.path);
-        });
-      }
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text('Error picking image: $e')));
-      }
-    }
+  void _onImagePicked(File image) {
+    setState(() {
+      _profileImage = image;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFCF7FD),
+      backgroundColor: AppTheme.backgroundColor,
       appBar: AppBar(
         title: const Text('Profile Creation'),
-        backgroundColor: Colors.green,
+        backgroundColor: AppTheme.primaryColor,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(AppTheme.defaultPadding),
         child: Column(
           children: [
-            GestureDetector(
-              onTap: _pickImage,
-              child: CircleAvatar(
-                radius: 60,
-                backgroundImage: _profileImage != null
-                    ? FileImage(_profileImage!)
-                    : null,
-                child: _profileImage == null
-                    ? const Icon(Icons.add_a_photo)
-                    : null,
-              ),
+            ProfileImagePicker(
+              profileImage: _profileImage,
+              onImagePicked: _onImagePicked,
             ),
-            const SizedBox(height: 16),
+            const VSpace.mediumPlus(),
             _buildInputField('Full Name', _fullNameController),
-            const SizedBox(height: 16),
+            const VSpace.mediumPlus(),
             _buildInputField('Email', _emailController),
-            const SizedBox(height: 16),
+            const VSpace.mediumPlus(),
             _buildInputField('Telegram', _telegramController),
-            const SizedBox(height: 16),
+            const VSpace.mediumPlus(),
             _buildInputField('Github', _githubController),
-            const SizedBox(height: 16),
+            const VSpace.mediumPlus(),
             _buildInputField('Bio', _bioController, maxLines: 4),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: double.infinity,
-              height: 48,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-                onPressed: () {
-                  // Переход на панель управления после успешного заполнения профиля
-                  Navigator.pushReplacementNamed(context, '/dashboard');
-                },
-                child: const Text(
-                  'Next',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
+            const VSpace.mediumPlusPlus(),
+            ElevatedButton(
+              style: AppTheme.primaryButtonStyle,
+              onPressed: () {
+                // Переход на панель управления после успешного заполнения профиля
+                Navigator.pushReplacementNamed(context, '/dashboard');
+              },
+              child: const Text('Next', style: AppTheme.buttonTextStyle),
             ),
           ],
         ),

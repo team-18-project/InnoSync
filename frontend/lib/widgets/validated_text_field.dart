@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
 
-class CustomFormField extends StatelessWidget {
+class ValidatedTextField extends StatelessWidget {
   final IconData icon;
   final String hint;
   final bool obscure;
@@ -9,7 +9,7 @@ class CustomFormField extends StatelessWidget {
   final String? Function(String?)? validator;
   final VoidCallback? toggleObscure;
 
-  const CustomFormField({
+  const ValidatedTextField({
     super.key,
     required this.icon,
     required this.hint,

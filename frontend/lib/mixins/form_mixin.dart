@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import '../widgets/spacing.dart';
 
 // Mixin for form functionality
 mixin BaseFormMixin<T extends StatefulWidget> on State<T> {
@@ -80,12 +81,14 @@ mixin BaseFormMixin<T extends StatefulWidget> on State<T> {
       style: AppTheme.primaryButtonStyle,
       onPressed: _isLoading ? null : onPressed,
       child: _isLoading
-          ? const SizedBox(
+          ? const FixedHeightSpace(
               height: 20,
-              width: 20,
-              child: CircularProgressIndicator(
-                strokeWidth: 2,
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              child: FixedWidthSpace(
+                width: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                ),
               ),
             )
           : Text(text, style: AppTheme.buttonTextStyle),
@@ -119,11 +122,11 @@ mixin BaseFormMixin<T extends StatefulWidget> on State<T> {
                         color: AppTheme.primaryColor,
                       ),
                     ),
-                    const SizedBox(height: 5),
+                    const VSpace(5),
                   ],
                   if (subtitle != null) ...[
                     Text(subtitle, style: AppTheme.appSubtitleStyle),
-                    const SizedBox(height: AppTheme.largeSpacing),
+                    const VSpace.large(),
                   ],
                   child,
                 ],
