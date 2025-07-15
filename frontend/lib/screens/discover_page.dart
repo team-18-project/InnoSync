@@ -116,6 +116,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                         icon: const Icon(Icons.add),
                         onPressed: () =>
                             _addSearchFilter(_searchController.text),
+                        iconSize: 24,
                       ),
                     ),
                   ),
