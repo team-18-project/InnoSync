@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
-import '../widgets/profile_image_picker.dart';
-import '../widgets/spacing.dart';
+import '../widgets/common/widgets.dart';
+import '../widgets/login/widgets.dart';
 import '../theme/colors.dart';
 import '../theme/text_styles.dart';
 import '../theme/dimensions.dart';

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../theme/colors.dart';
-import '../theme/dimensions.dart';
+import '../../theme/colors.dart';
+import '../../theme/dimensions.dart';
 
 class ValidatedTextField extends StatelessWidget {
   final IconData icon;

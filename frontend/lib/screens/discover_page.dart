@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/colors.dart';
 import '../models/project_model.dart';
-import '../widgets/switcher_button.dart';
+import '../widgets/common/widgets.dart';
 
 typedef ProjectTapCallback = void Function(Project project);
 
@@ -75,15 +75,15 @@ class _DiscoverPageState extends State<DiscoverPage> {
                   padding: const EdgeInsets.all(4),
                   child: Row(
                     children: [
-                      SwitcherButton(
-                        label: 'Projects',
-                        selected: _searchMode == 'Projects',
-                        onTap: () => setState(() => _searchMode = 'Projects'),
+                      ModeSwitcher(
+                        currentMode: _searchMode,
+                        onModeChanged: (mode) =>
+                            setState(() => _searchMode = mode),
                       ),
-                      SwitcherButton(
-                        label: 'Talents',
-                        selected: _searchMode == 'Talents',
-                        onTap: () => setState(() => _searchMode = 'Talents'),
+                      ModeSwitcher(
+                        currentMode: _searchMode,
+                        onModeChanged: (mode) =>
+                            setState(() => _searchMode = mode),
                       ),
                     ],
                   ),

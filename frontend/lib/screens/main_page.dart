@@ -4,7 +4,7 @@ import 'pages/dashboard_page.dart';
 import 'pages/invitations_page.dart';
 import 'pages/my_projects_page.dart';
 import '../theme/colors.dart';
-import '../widgets/main_app_bar.dart';
+import '../widgets/common/main_app_bar.dart';
 import 'pages/views/project_view.dart';
 import 'pages/views/talent_view.dart';
 import '../models/project_model.dart';

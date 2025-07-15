@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/theme/colors.dart';
 import '../../../theme/text_styles.dart';
 import '../../../models/project_model.dart';
-import '../../../widgets/spacing.dart';
-import '../../../widgets/submit_button.dart';
+import '../../../widgets/common/widgets.dart';
 
 class ProjectView extends StatelessWidget {
   final Project project;

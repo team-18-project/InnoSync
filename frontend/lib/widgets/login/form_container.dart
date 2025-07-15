@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../theme/colors.dart';
-import '../theme/text_styles.dart';
-import '../theme/dimensions.dart';
-import 'spacing.dart';
+import '../../theme/colors.dart';
+import '../../theme/text_styles.dart';
+import '../../theme/dimensions.dart';
+import '../common/widgets.dart';
 
 class FormContainer extends StatelessWidget {
   final Widget child;

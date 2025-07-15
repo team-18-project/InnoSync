@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../theme/colors.dart';
+import '../../theme/colors.dart';
 
 class RememberMeCheckbox extends StatelessWidget {
   final bool value;

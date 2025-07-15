@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import '../../widgets/user_info_card.dart';
-import '../../widgets/dashboard_tabs.dart';
-import '../../widgets/spacing.dart';
+import '../../widgets/dashboard/widgets.dart';
+import '../../widgets/common/widgets.dart';
 import '../../theme/colors.dart';
 import '../../theme/dimensions.dart';
 

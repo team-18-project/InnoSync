@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../theme/dimensions.dart';
+import '../../theme/dimensions.dart';
 
 /// Vertical spacing widget for consistent spacing between elements
 class VSpace extends StatelessWidget {

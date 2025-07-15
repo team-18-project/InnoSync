@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/dimensions.dart';
-import '../widgets/tab_selector.dart';
-import '../widgets/spacing.dart';
-import '../widgets/login_tab.dart';
-import '../widgets/signup_tab.dart';
-import '../widgets/form_container.dart';
+import '../widgets/login/widgets.dart';
+import '../widgets/common/widgets.dart';
 import '../utils/ui_helpers.dart';
 
 class LoginFormPage extends StatefulWidget {
@@ -100,7 +97,7 @@ class _LoginFormPageState extends State<LoginFormPage>
             controller: _tabController,
             tabLabels: const ['Log In', 'Sign Up'],
           ),
-          const VSpace.mediumPlusPlus(),
+          const VSpace.xxl(),
           FixedHeightSpace(
             height: AppDimensions.tabViewHeight,
             child: TabBarView(

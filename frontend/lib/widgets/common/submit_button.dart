@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
-import '../theme/colors.dart';
-import '../theme/text_styles.dart';
-import 'spacing.dart';
+import '../../theme/colors.dart';
+import '../../theme/app_theme.dart';
+import '../../theme/text_styles.dart';
+import '../common/widgets.dart';
 
 class SubmitButton extends StatelessWidget {
   final String text;

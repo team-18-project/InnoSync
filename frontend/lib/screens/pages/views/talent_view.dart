@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/theme/colors.dart';
 import '../../../theme/text_styles.dart';
 import '../../../models/talent_model.dart';
-import '../../../widgets/submit_button.dart';
-import '../../../widgets/spacing.dart';
+import '../../../widgets/common/widgets.dart';
 
 class TalentView extends StatelessWidget {
   final Talent talent;

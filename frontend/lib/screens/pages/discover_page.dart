@@ -2,14 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:frontend/theme/colors.dart';
 import '../../models/project_model.dart';
 import '../../models/talent_model.dart';
-import '../../widgets/mode_switcher.dart';
-import '../../widgets/search_bar.dart';
-import '../../widgets/sort_filter_button.dart';
-import '../../widgets/search_filter_chips.dart';
-import '../../widgets/project_card.dart';
-import '../../widgets/talent_card.dart';
+import '../../widgets/discover/widgets.dart';
 import '../../mixins/search_mixin.dart';
-import '../../widgets/spacing.dart';
+import '../../widgets/common/widgets.dart';
 
 typedef ProjectTapCallback = void Function(Project project);
 typedef TalentTapCallback = void Function(Talent talent);

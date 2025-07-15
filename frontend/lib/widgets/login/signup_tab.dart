@@ -1,33 +1,26 @@
 import 'package:flutter/material.dart';
 import 'validated_text_field.dart';
-import 'remember_me_checkbox.dart';
-import 'spacing.dart';
-import 'submit_button.dart';
-import '../utils/validators.dart';
+import '../../widgets/common/spacing.dart';
+import '../../widgets/common/submit_button.dart';
+import '../../utils/validators.dart';
 
-class LoginTab extends StatefulWidget {
+class SignupTab extends StatefulWidget {
   final TextEditingController emailController;
   final TextEditingController passwordController;
-  final bool rememberMe;
-  final Function(bool?) onRememberMeChanged;
-  final VoidCallback onForgotPassword;
-  final VoidCallback onLogin;
+  final VoidCallback onSignup;
 
-  const LoginTab({
+  const SignupTab({
     super.key,
     required this.emailController,
     required this.passwordController,
-    required this.rememberMe,
-    required this.onRememberMeChanged,
-    required this.onForgotPassword,
-    required this.onLogin,
+    required this.onSignup,
   });
 
   @override
-  State<LoginTab> createState() => _LoginTabState();
+  State<SignupTab> createState() => _SignupTabState();
 }
 
-class _LoginTabState extends State<LoginTab> {
+class _SignupTabState extends State<SignupTab> {
   bool _obscurePassword = true;
 
   @override
@@ -54,16 +47,10 @@ class _LoginTabState extends State<LoginTab> {
             });
           },
         ),
-        const VSpace.small(),
-        RememberMeCheckbox(
-          value: widget.rememberMe,
-          onChanged: widget.onRememberMeChanged,
-          onForgotPassword: widget.onForgotPassword,
-        ),
-        const VSpace.mediumMinus(),
+        const VSpace.mediumPlus(),
         SubmitButton(
-          text: "Log in",
-          onPressed: widget.onLogin,
+          text: "Continue",
+          onPressed: widget.onSignup,
           isLoading: false,
         ),
       ],

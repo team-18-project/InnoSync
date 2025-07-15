@@ -1,26 +1,33 @@
 import 'package:flutter/material.dart';
 import 'validated_text_field.dart';
-import 'spacing.dart';
-import 'submit_button.dart';
-import '../utils/validators.dart';
+import 'remember_me_checkbox.dart';
+import '../../widgets/common/spacing.dart';
+import '../../widgets/common/submit_button.dart';
+import '../../utils/validators.dart';
 
-class SignupTab extends StatefulWidget {
+class LoginTab extends StatefulWidget {
   final TextEditingController emailController;
   final TextEditingController passwordController;
-  final VoidCallback onSignup;
+  final bool rememberMe;
+  final Function(bool?) onRememberMeChanged;
+  final VoidCallback onForgotPassword;
+  final VoidCallback onLogin;
 
-  const SignupTab({
+  const LoginTab({
     super.key,
     required this.emailController,
     required this.passwordController,
-    required this.onSignup,
+    required this.rememberMe,
+    required this.onRememberMeChanged,
+    required this.onForgotPassword,
+    required this.onLogin,
   });
 
   @override
-  State<SignupTab> createState() => _SignupTabState();
+  State<LoginTab> createState() => _LoginTabState();
 }
 
-class _SignupTabState extends State<SignupTab> {
+class _LoginTabState extends State<LoginTab> {
   bool _obscurePassword = true;
 
   @override
@@ -34,7 +41,7 @@ class _SignupTabState extends State<SignupTab> {
           controller: widget.emailController,
           validator: Validators.validateEmail,
         ),
-        const VSpace.medium(),
+        const VSpace.md(),
         ValidatedTextField(
           icon: Icons.lock,
           hint: "Password",
@@ -47,10 +54,16 @@ class _SignupTabState extends State<SignupTab> {
             });
           },
         ),
-        const VSpace.mediumPlus(),
+        const VSpace.sm(),
+        RememberMeCheckbox(
+          value: widget.rememberMe,
+          onChanged: widget.onRememberMeChanged,
+          onForgotPassword: widget.onForgotPassword,
+        ),
+        const VSpace.md(),
         SubmitButton(
-          text: "Continue",
-          onPressed: widget.onSignup,
+          text: "Log in",
+          onPressed: widget.onLogin,
           isLoading: false,
         ),
       ],
