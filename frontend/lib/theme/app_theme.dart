@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 
 class AppTheme {
   // Colors
-  static const Color primaryColor = Colors.green;
+  static const Color primaryColor = Color(
+    0xFF40BA21,
+  ); // Main green for buttons and primary selection
+  static const Color secondaryColor = Color(
+    0xFF298217,
+  ); // Secondary green for backgrounds and extensions
   static const Color backgroundColor = Color(0xFFFCF7FD);
   static const Color textColor = Colors.black;
   static const Color errorColor = Colors.red;
@@ -23,7 +28,7 @@ class AppTheme {
       Colors.white; // For loading indicators
   static const Color profileImagePickerBackground = Color(
     0xFFF0F8F0,
-  ); // Light green background for profile picker
+  ); // Light green background for profile picker (keeping light for contrast)
 
   // Text Styles
   static const TextStyle appTitleStyle = TextStyle(
@@ -86,7 +91,7 @@ class AppTheme {
 
   // Container Styles
   static BoxDecoration tabSelectorDecoration = BoxDecoration(
-    border: Border.all(color: primaryColor),
+    border: Border.all(color: secondaryColor),
     borderRadius: BorderRadius.circular(12),
   );
 
