@@ -22,7 +22,7 @@ class AppTheme {
     0xFF757575,
   ); // Grey for secondary text
   static const Color appBarColor =
-      primaryColor; // Use primary color for app bar
+      backgroundColor; // Use background color for app bar
   static const Color tabLabelColor = Colors.white; // For tab labels
   static const Color progressIndicatorColor =
       Colors.white; // For loading indicators

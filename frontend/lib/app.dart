@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'routes.dart';
 import 'theme/app_theme.dart';
 
@@ -16,9 +17,10 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.green,
         primaryColor: AppTheme.primaryColor,
         scaffoldBackgroundColor: AppTheme.backgroundColor,
+        textTheme: GoogleFonts.montserratTextTheme(),
         appBarTheme: const AppBarTheme(
           backgroundColor: AppTheme.appBarColor,
-          foregroundColor: AppTheme.tabLabelColor,
+          foregroundColor: AppTheme.textColor,
           elevation: 0,
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
