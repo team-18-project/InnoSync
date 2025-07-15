@@ -4,7 +4,10 @@ import '../widgets/validated_text_field.dart';
 import '../widgets/tab_selector.dart';
 import '../widgets/remember_me_checkbox.dart';
 import '../widgets/spacing.dart';
-import '../mixins/form_mixin.dart';
+import '../mixins/validation_mixin.dart';
+import '../mixins/ui_mixin.dart';
+import '../mixins/form_widgets_mixin.dart';
+import '../mixins/form_logic_mixin.dart';
 
 class LoginFormPage extends StatefulWidget {
   const LoginFormPage({super.key});
@@ -14,7 +17,12 @@ class LoginFormPage extends StatefulWidget {
 }
 
 class _LoginFormPageState extends State<LoginFormPage>
-    with SingleTickerProviderStateMixin, BaseFormMixin {
+    with
+        SingleTickerProviderStateMixin,
+        ValidationMixin,
+        UIMixin,
+        FormWidgetsMixin,
+        FormLogicMixin {
   late TabController _tabController;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
