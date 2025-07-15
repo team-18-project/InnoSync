@@ -33,10 +33,6 @@ This directory contains separated mixins for different form functionalities. You
 **Methods**:
 - `handleSubmit(VoidCallback onSubmit)` - Handle form submission with validation
 
-### 5. `combined_form_mixin.dart`
-**Purpose**: Combined mixin that provides access to all other mixins
-**Usage**: Use this when you need all form functionality
-
 ## Usage Examples
 
 ### Option 1: Use Individual Mixins
@@ -69,37 +65,7 @@ class _LoginPageState extends State<LoginPage>
 }
 ```
 
-### Option 2: Use Combined Mixin
-```dart
-class LoginPage extends StatefulWidget {
-  @override
-  _LoginPageState createState() => _LoginPageState();
-}
-
-class _LoginPageState extends State<LoginPage> 
-    with CombinedFormMixin {
-  
-  @override
-  Widget build(BuildContext context) {
-    return buildFormContainer(
-      title: 'Login',
-      child: Column(
-        children: [
-          // Your form fields here
-          buildSubmitButton(
-            text: 'Login',
-            onPressed: () => handleSubmit(() {
-              // Your login logic here
-            }),
-          ),
-        ],
-      ),
-    );
-  }
-}
-```
-
-### Option 3: Use Only What You Need
+### Option 2: Use Only What You Need
 ```dart
 class SimpleForm extends StatefulWidget {
   @override
@@ -125,6 +91,5 @@ class _SimpleFormState extends State<SimpleForm>
 ## Best Practices
 
 1. **Use individual mixins** when you only need specific functionality
-2. **Use CombinedFormMixin** when you need all form features
-3. **Keep mixins focused** on a single responsibility
-4. **Document your mixins** with clear purpose and usage examples 
+2. **Keep mixins focused** on a single responsibility
+3. **Document your mixins** with clear purpose and usage examples 
