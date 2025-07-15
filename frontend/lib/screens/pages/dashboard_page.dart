@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../widgets/dashboard/widgets.dart';
 import '../../widgets/common/widgets.dart';
 import '../../theme/colors.dart';
-  import '../../theme/dimensions.dart';
-import '../repositories/invitation_repository.dart';
-import '../repositories/proposal_repository.dart';
-import '../repositories/profile_repository.dart';
-import '../services/api_service.dart';
+import '../../theme/dimensions.dart';
+import '../../repositories/profile_repository.dart';
+import '../../services/api_service.dart';
+import '../../widgets/dashboard/widgets.dart';
 
 class DashboardPage extends StatelessWidget {
   final String token;
@@ -15,8 +13,6 @@ class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final apiService = ApiService();
-    final invitationRepository = InvitationRepository(apiService: apiService);
-    final proposalRepository = ProposalRepository(apiService: apiService);
     final profileRepository = ProfileRepository(apiService: apiService);
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -69,9 +65,9 @@ class DashboardPage extends StatelessWidget {
                   positions: profile['position'] ?? '-',
                   technologies: (profile['technologies'] is List)
                       ? (profile['technologies'] as List)
-                          .map((t) => t['name'] ?? '')
-                          .where((t) => t.isNotEmpty)
-                          .join(', ')
+                            .map((t) => t['name'] ?? '')
+                            .where((t) => t.isNotEmpty)
+                            .join(', ')
                       : '-',
                   avatarUrl: profile['avatar_url'],
                 );
@@ -80,17 +76,15 @@ class DashboardPage extends StatelessWidget {
             const HSpace.mediumPlus(),
             Expanded(
               child: DashboardTabs(
-                tabLabels: const [
-                  "Overview",
-                  "Projects",
-                  "Invitations",
-                  "Proposals",
-                ],
+                tabLabels: const ["Overview", "Proposals"],
                 tabViews: [
-                  OverviewTab(token: token, profileRepository: profileRepository),
-                  ProjectsTab(token: token),
-                  InvitationsTab(token: token, invitationRepository: invitationRepository),
-                  ProposalsTab(token: token, proposalRepository: proposalRepository),
+                  DashboardTabs(
+                    tabLabels: const ["Overview", "Proposals"],
+                    tabViews: [
+                      Center(child: Text('Overview content')),
+                      Center(child: Text('Proposals content')),
+                    ],
+                  ),
                 ],
               ),
             ),

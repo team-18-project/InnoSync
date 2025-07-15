@@ -5,9 +5,11 @@ import '../widgets/login/widgets.dart';
 import '../theme/colors.dart';
 import '../theme/text_styles.dart';
 import '../theme/dimensions.dart';
+import '../theme/app_theme.dart';
 import '../repositories/profile_repository.dart';
 import '../utils/token_storage.dart';
 import '../services/api_service.dart';
+import '../utils/ui_helpers.dart';
 
 class ProfileCreationPage extends StatefulWidget {
   const ProfileCreationPage({super.key});
@@ -27,7 +29,8 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     if (args != null) {
       _emailController.text = args['email'] ?? '';
       _fullNameController.text = args['name'] ?? '';
@@ -88,16 +91,19 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
                   token: token!,
                   name: _fullNameController.text,
                   email: _emailController.text,
-                  telegram: _telegramController.text.isEmpty ? null : _telegramController.text,
-                  github: _githubController.text.isEmpty ? null : _githubController.text,
+                  telegram: _telegramController.text.isEmpty
+                      ? null
+                      : _telegramController.text,
+                  github: _githubController.text.isEmpty
+                      ? null
+                      : _githubController.text,
                   bio: _bioController.text.isEmpty ? null : _bioController.text,
                 );
                 if (success) {
-                  Navigator.pushReplacementNamed(context, '/dashboard');
+                  await saveToken(token!);
+                  Navigator.pushReplacementNamed(context, '/main');
                 } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Failed to create profile')),
-                  );
+                  UIHelpers.showError(context, 'Failed to create profile');
                 }
               },
               child: const Text('Sign up', style: AppTextStyles.buttonText),

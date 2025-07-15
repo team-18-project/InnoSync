@@ -9,6 +9,7 @@ import 'pages/views/project_view.dart';
 import 'pages/views/talent_view.dart';
 import '../models/project_model.dart';
 import '../models/talent_model.dart';
+import '../utils/token_storage.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -27,25 +28,27 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
-    _pages.addAll([
-      DiscoverPage(
-        onProjectTap: (project) {
-          setState(() {
-            _selectedProject = project;
-            _selectedTalent = null;
-          });
-        },
-        onTalentTap: (talent) {
-          setState(() {
-            _selectedTalent = talent;
-            _selectedProject = null;
-          });
-        },
-      ),
-      const InvitationsPage(),
-      const MyProjectsPage(),
-      const DashboardPage(),
-    ]);
+    getToken().then((token) {
+      _pages.addAll([
+        DiscoverPage(
+          onProjectTap: (project) {
+            setState(() {
+              _selectedProject = project;
+              _selectedTalent = null;
+            });
+          },
+          onTalentTap: (talent) {
+            setState(() {
+              _selectedTalent = talent;
+              _selectedProject = null;
+            });
+          },
+        ),
+        const InvitationsPage(),
+        const MyProjectsPage(),
+        DashboardPage(token: token!),
+      ]);
+    });
   }
 
   void _goBackFromView() {

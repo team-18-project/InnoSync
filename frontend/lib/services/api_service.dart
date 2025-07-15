@@ -1,5 +1,6 @@
-import 'package:http/http.dart' as http;
 import 'dart:convert';
+
+import 'package:http/http.dart' as http;
 
 class ApiService {
   static const String baseUrl = 'http://localhost:3000/api/v1';
@@ -18,21 +19,27 @@ class ApiService {
     return null;
   }
 
-  static Future<bool> signup(String email, String password, String fullName) async {
-  final url = Uri.parse('$baseUrl/auth/signup');
-  final response = await http.post(
-    url,
-    headers: {'Content-Type': 'application/json'},
-    body: jsonEncode({
-      'email': email,
-      'password': password,
-      'full_name': fullName,
-    }),
-  );
-  return response.statusCode == 201;
-}
+  static Future<bool> signup(
+    String email,
+    String password,
+    String fullName,
+  ) async {
+    final url = Uri.parse('$baseUrl/auth/signup');
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'email': email,
+        'password': password,
+        'full_name': fullName,
+      }),
+    );
+    return response.statusCode == 201;
+  }
 
-  static Future<List<Map<String, dynamic>>> getUserProjects(String token) async {
+  static Future<List<Map<String, dynamic>>> getUserProjects(
+    String token,
+  ) async {
     final url = Uri.parse('$baseUrl/projects/me');
     final response = await http.get(
       url,
@@ -46,7 +53,12 @@ class ApiService {
     }
   }
 
-  static Future<bool> createProject(String token, String title, String? description, int? teamSize) async {
+  static Future<bool> createProject(
+    String token,
+    String title,
+    String? description,
+    int? teamSize,
+  ) async {
     final url = Uri.parse('$baseUrl/projects');
     final response = await http.post(
       url,
@@ -73,7 +85,9 @@ class ApiService {
       final List data = jsonDecode(response.body);
       return data.cast<Map<String, dynamic>>();
     } else {
-      print('fetchInvitations error: \\${response.statusCode} \\${response.body}');
+      print(
+        'fetchInvitations error: \\${response.statusCode} \\${response.body}',
+      );
       throw Exception('Failed to load invitations');
     }
   }
@@ -88,7 +102,9 @@ class ApiService {
       final List data = jsonDecode(response.body);
       return data.cast<Map<String, dynamic>>();
     } else {
-      print('fetchProposals error: \\${response.statusCode} \\${response.body}');
+      print(
+        'fetchProposals error: \\${response.statusCode} \\${response.body}',
+      );
       throw Exception('Failed to load proposals');
     }
   }
@@ -143,7 +159,9 @@ class ApiService {
     if (response.statusCode == 201) {
       return true;
     } else {
-      print('createInvitation error: \\${response.statusCode} \\${response.body}');
+      print(
+        'createInvitation error: \\${response.statusCode} \\${response.body}',
+      );
       return false;
     }
   }
@@ -163,19 +181,23 @@ class ApiService {
     List<Map<String, dynamic>>? workExperience,
   }) async {
     final url = Uri.parse('$baseUrl/profile');
-    final Map<String, dynamic> body = {
-      'name': name,
-      'email': email,
-    };
-    if (telegram != null && telegram.trim().isNotEmpty) body['telegram'] = telegram;
+    final Map<String, dynamic> body = {'name': name, 'email': email};
+    if (telegram != null && telegram.trim().isNotEmpty)
+      body['telegram'] = telegram;
     if (github != null && github.trim().isNotEmpty) body['github'] = github;
     if (bio != null && bio.trim().isNotEmpty) body['bio'] = bio;
-    if (position != null && position.trim().isNotEmpty) body['position'] = position;
-    if (education != null && education.trim().isNotEmpty) body['education'] = education;
-    if (expertise != null && expertise.trim().isNotEmpty) body['expertise'] = expertise;
-    if (expertiseLevel != null && expertiseLevel.trim().isNotEmpty) body['expertise_level'] = expertiseLevel;
-    if (technologies != null && technologies.isNotEmpty) body['technologies'] = technologies;
-    if (workExperience != null && workExperience.isNotEmpty) body['work_experience'] = workExperience;
+    if (position != null && position.trim().isNotEmpty)
+      body['position'] = position;
+    if (education != null && education.trim().isNotEmpty)
+      body['education'] = education;
+    if (expertise != null && expertise.trim().isNotEmpty)
+      body['expertise'] = expertise;
+    if (expertiseLevel != null && expertiseLevel.trim().isNotEmpty)
+      body['expertise_level'] = expertiseLevel;
+    if (technologies != null && technologies.isNotEmpty)
+      body['technologies'] = technologies;
+    if (workExperience != null && workExperience.isNotEmpty)
+      body['work_experience'] = workExperience;
 
     final response = await http.post(
       url,
