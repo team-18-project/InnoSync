@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
+import 'package:frontend/theme/colors.dart';
 
 class DashboardTabs extends StatelessWidget {
   final List<String> tabLabels;
@@ -10,7 +10,7 @@ class DashboardTabs extends StatelessWidget {
     super.key,
     required this.tabLabels,
     required this.tabViews,
-    this.indicatorColor = AppTheme.primaryColor,
+    this.indicatorColor = AppColors.primary,
   }) : assert(tabLabels.length == tabViews.length);
 
   @override

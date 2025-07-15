@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
-import '../widgets/profile_image_picker.dart';
-import '../widgets/spacing.dart';
-import '../theme/app_theme.dart';
+import '../widgets/common/widgets.dart';
+import '../widgets/login/widgets.dart';
+import '../theme/colors.dart';
+import '../theme/text_styles.dart';
+import '../theme/dimensions.dart';
 
 class ProfileCreationPage extends StatefulWidget {
   const ProfileCreationPage({super.key});
@@ -38,37 +40,37 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.backgroundColor,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        title: const Text('Profile Creation'),
-        backgroundColor: AppTheme.primaryColor,
+        title: const Text('Profile Creation', style: AppTextStyles.h2),
+        backgroundColor: AppColors.primary,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(AppTheme.defaultPadding),
+        padding: const EdgeInsets.all(AppDimensions.paddingXl),
         child: Column(
           children: [
             ProfileImagePicker(
               profileImage: _profileImage,
               onImagePicked: _onImagePicked,
+              backgroundColor: AppColors.profilePickerBackground,
             ),
-            const VSpace.mediumPlus(),
+            const VSpace.lg(),
             _buildInputField('Full Name', _fullNameController),
-            const VSpace.mediumPlus(),
+            const VSpace.lg(),
             _buildInputField('Email', _emailController),
-            const VSpace.mediumPlus(),
+            const VSpace.lg(),
             _buildInputField('Telegram', _telegramController),
-            const VSpace.mediumPlus(),
+            const VSpace.lg(),
             _buildInputField('Github', _githubController),
-            const VSpace.mediumPlus(),
+            const VSpace.lg(),
             _buildInputField('Bio', _bioController, maxLines: 4),
-            const VSpace.mediumPlusPlus(),
+            const VSpace.xxl(),
             ElevatedButton(
-              style: AppTheme.primaryButtonStyle,
+              style: Theme.of(context).elevatedButtonTheme.style,
               onPressed: () {
-                // Переход на панель управления после успешного заполнения профиля
-                Navigator.pushReplacementNamed(context, '/dashboard');
+                Navigator.pushReplacementNamed(context, '/main');
               },
-              child: const Text('Next', style: AppTheme.buttonTextStyle),
+              child: const Text('Sign up', style: AppTextStyles.buttonText),
             ),
           ],
         ),
@@ -86,10 +88,12 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
       maxLines: maxLines,
       decoration: InputDecoration(
         labelText: label,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
+        ),
         contentPadding: const EdgeInsets.symmetric(
-          vertical: 14,
-          horizontal: 16,
+          vertical: AppDimensions.paddingMd,
+          horizontal: AppDimensions.paddingLg,
         ),
       ),
     );

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../widgets/user_info_card.dart';
-import '../widgets/dashboard_tabs.dart';
-import '../widgets/spacing.dart';
-import '../theme/app_theme.dart';
+import '../../widgets/dashboard/widgets.dart';
+import '../../widgets/common/widgets.dart';
+import '../../theme/colors.dart';
+import '../../theme/dimensions.dart';
 
 class DashboardPage extends StatelessWidget {
   const DashboardPage({super.key});
@@ -10,7 +10,7 @@ class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.backgroundColor,
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text('User Dashboard'),
         actions: [
@@ -30,7 +30,7 @@ class DashboardPage extends StatelessWidget {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(AppTheme.defaultPadding),
+        padding: const EdgeInsets.all(AppDimensions.paddingMd),
         child: Row(
           children: [
             // Левый блок с информацией о пользователе
@@ -46,17 +46,9 @@ class DashboardPage extends StatelessWidget {
             // Основной блок с вкладками
             Expanded(
               child: DashboardTabs(
-                tabLabels: const [
-                  "Overview",
-                  "Projects",
-                  "Invitations",
-                  "Proposals",
-                  "Chats",
-                ],
+                tabLabels: const ["Overview", "Proposals", "Chats"],
                 tabViews: const [
                   Center(child: Text('Overview content')),
-                  Center(child: Text('Projects content')),
-                  Center(child: Text('Invitations content')),
                   Center(child: Text('Proposals content')),
                   Center(child: Text('Chats content')),
                 ],

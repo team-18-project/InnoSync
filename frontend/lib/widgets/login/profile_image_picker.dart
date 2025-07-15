@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import '../theme/app_theme.dart';
+import 'package:frontend/theme/colors.dart';
 
 class ProfileImagePicker extends StatelessWidget {
   final File? profileImage;
@@ -44,11 +44,10 @@ class ProfileImagePicker extends StatelessWidget {
       onTap: () => _pickImage(context),
       child: CircleAvatar(
         radius: radius,
-        backgroundColor:
-            backgroundColor ?? AppTheme.profileImagePickerBackground,
+        backgroundColor: backgroundColor ?? AppColors.profilePickerBackground,
         backgroundImage: profileImage != null ? FileImage(profileImage!) : null,
         child: profileImage == null
-            ? Icon(placeholderIcon, size: 40, color: AppTheme.primaryColor)
+            ? Icon(placeholderIcon, size: radius, color: AppColors.primary)
             : null,
       ),
     );

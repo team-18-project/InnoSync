@@ -1,13 +1,8 @@
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
-import '../widgets/validated_text_field.dart';
-import '../widgets/tab_selector.dart';
-import '../widgets/remember_me_checkbox.dart';
-import '../widgets/spacing.dart';
-import '../mixins/validation_mixin.dart';
-import '../mixins/ui_mixin.dart';
-import '../mixins/form_widgets_mixin.dart';
-import '../mixins/form_logic_mixin.dart';
+import '../theme/dimensions.dart';
+import '../widgets/login/widgets.dart';
+import '../widgets/common/widgets.dart';
+import '../utils/ui_helpers.dart';
 
 class LoginFormPage extends StatefulWidget {
   const LoginFormPage({super.key});
@@ -17,17 +12,12 @@ class LoginFormPage extends StatefulWidget {
 }
 
 class _LoginFormPageState extends State<LoginFormPage>
-    with
-        SingleTickerProviderStateMixin,
-        ValidationMixin,
-        UIMixin,
-        FormWidgetsMixin,
-        FormLogicMixin {
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  bool _obscurePassword = true;
   bool _rememberMe = false;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   // Temporary container for emails
   final List<String> _existingEmails = [
@@ -50,100 +40,55 @@ class _LoginFormPageState extends State<LoginFormPage>
   }
 
   void _logIn() {
-    final email = _emailController.text.trim();
-    if (!_existingEmails.contains(email)) {
-      showError('Account not found. Please sign up.');
-      return;
+    if (_formKey.currentState?.validate() ?? false) {
+      final email = _emailController.text.trim();
+      if (!_existingEmails.contains(email)) {
+        UIHelpers.showError(context, 'Account not found. Please sign up.');
+        return;
+      }
+      // TODO: Implement login request with try catch
+      Navigator.pushNamed(context, '/main');
     }
-    // TODO: Implement login request with try catch
-    Navigator.pushNamed(context, '/dashboard');
   }
 
   void _signUp() {
-    final email = _emailController.text.trim();
-    if (_existingEmails.contains(email)) {
-      showError('Account already exists. Please log in.');
-      return;
+    if (_formKey.currentState?.validate() ?? false) {
+      final email = _emailController.text.trim();
+      if (_existingEmails.contains(email)) {
+        UIHelpers.showError(context, 'Account already exists. Please log in.');
+        return;
+      }
+      // TODO: Implement sign up request with try catch
+      Navigator.pushNamed(context, '/create_profile');
     }
-    // TODO: Implement sign up request with try catch
-    Navigator.pushNamed(context, '/create_profile');
   }
 
   Widget _buildLoginTab() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ValidatedTextField(
-          icon: Icons.person,
-          hint: "Email",
-          controller: _emailController,
-          validator: validateEmail,
-        ),
-        const VSpace.medium(),
-        ValidatedTextField(
-          icon: Icons.lock,
-          hint: "Password",
-          obscure: _obscurePassword,
-          controller: _passwordController,
-          validator: validatePassword,
-          toggleObscure: () {
-            setState(() {
-              _obscurePassword = !_obscurePassword;
-            });
-          },
-        ),
-        const VSpace.small(),
-        RememberMeCheckbox(
-          value: _rememberMe,
-          onChanged: (value) => setState(() => _rememberMe = value ?? false),
-          onForgotPassword: () {
-            // TODO: Implement forgot password
-          },
-        ),
-        const VSpace.mediumMinus(),
-        buildSubmitButton(
-          text: "Log in",
-          onPressed: () => handleSubmit(_logIn),
-        ),
-      ],
+    return LoginTab(
+      emailController: _emailController,
+      passwordController: _passwordController,
+      rememberMe: _rememberMe,
+      onRememberMeChanged: (value) =>
+          setState(() => _rememberMe = value ?? false),
+      onForgotPassword: () {
+        // TODO: Implement forgot password
+      },
+      onLogin: _logIn,
     );
   }
 
   Widget _buildSignUpTab() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ValidatedTextField(
-          icon: Icons.person,
-          hint: "Email",
-          controller: _emailController,
-          validator: validateEmail,
-        ),
-        const VSpace.medium(),
-        ValidatedTextField(
-          icon: Icons.lock,
-          hint: "Password",
-          obscure: _obscurePassword,
-          controller: _passwordController,
-          validator: validatePassword,
-          toggleObscure: () {
-            setState(() {
-              _obscurePassword = !_obscurePassword;
-            });
-          },
-        ),
-        const VSpace.mediumPlus(),
-        buildSubmitButton(
-          text: "Continue",
-          onPressed: () => handleSubmit(_signUp),
-        ),
-      ],
+    return SignupTab(
+      emailController: _emailController,
+      passwordController: _passwordController,
+      onSignup: _signUp,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return buildFormContainer(
+    return FormContainer(
+      formKey: _formKey,
       title: "InnoSync",
       subtitle: "We work it together !",
       child: Column(
@@ -152,9 +97,9 @@ class _LoginFormPageState extends State<LoginFormPage>
             controller: _tabController,
             tabLabels: const ['Log In', 'Sign Up'],
           ),
-          const VSpace.mediumPlusPlus(),
+          const VSpace.xxl(),
           FixedHeightSpace(
-            height: AppTheme.tabViewHeight,
+            height: AppDimensions.tabViewHeight,
             child: TabBarView(
               controller: _tabController,
               children: [_buildLoginTab(), _buildSignUpTab()],

@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
+import '../../theme/colors.dart';
+import '../../theme/dimensions.dart';
 
 class ValidatedTextField extends StatelessWidget {
   final IconData icon;
   final String hint;
-  final bool obscure;
   final TextEditingController controller;
   final String? Function(String?)? validator;
+  final bool obscure;
   final VoidCallback? toggleObscure;
 
   const ValidatedTextField({
     super.key,
     required this.icon,
     required this.hint,
-    this.obscure = false,
     required this.controller,
     this.validator,
+    this.obscure = false,
     this.toggleObscure,
   });
 
@@ -23,16 +24,22 @@ class ValidatedTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       controller: controller,
-      obscureText: obscure,
       validator: validator,
-      decoration: AppTheme.inputDecoration(
-        icon: icon,
-        hint: hint,
+      obscureText: obscure,
+      decoration: InputDecoration(
+        prefixIcon: Icon(icon, color: AppColors.primary),
+        hintText: hint,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: AppDimensions.paddingMd,
+        ),
         suffixIcon: toggleObscure != null
             ? IconButton(
                 icon: Icon(
                   obscure ? Icons.visibility_off : Icons.visibility,
-                  color: AppTheme.primaryColor,
+                  color: AppColors.primary,
                 ),
                 onPressed: toggleObscure,
               )
