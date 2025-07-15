@@ -3,6 +3,8 @@ import '../theme/dimensions.dart';
 import '../widgets/login/widgets.dart';
 import '../widgets/common/widgets.dart';
 import '../utils/ui_helpers.dart';
+import '../services/api_service.dart';
+import '../utils/token_storage.dart'; // где реализованы saveToken/getToken
 
 class LoginFormPage extends StatefulWidget {
   const LoginFormPage({super.key});
@@ -18,6 +20,7 @@ class _LoginFormPageState extends State<LoginFormPage>
   final TextEditingController _passwordController = TextEditingController();
   bool _rememberMe = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final _fullNameController = TextEditingController();
 
   // Temporary container for emails
   final List<String> _existingEmails = [
@@ -39,29 +42,51 @@ class _LoginFormPageState extends State<LoginFormPage>
     super.dispose();
   }
 
-  void _logIn() {
-    if (_formKey.currentState?.validate() ?? false) {
-      final email = _emailController.text.trim();
-      if (!_existingEmails.contains(email)) {
-        UIHelpers.showError(context, 'Account not found. Please sign up.');
-        return;
-      }
-      // TODO: Implement login request with try catch
-      Navigator.pushNamed(context, '/main');
+  void _logIn() async {
+  final email = _emailController.text.trim();
+  final password = _passwordController.text;
+  try {
+    final String? token = await ApiService.login(email, password);
+    if (token != null) {
+      await saveToken(token); // сохраняем токен для будущих запросов
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => DashboardPage(token: token)),
+      );
+    } else {
+      showError('Login failed. Check your email and password.');
     }
+  } catch (e) {
+    showError('Connection error.');
   }
+}
 
-  void _signUp() {
-    if (_formKey.currentState?.validate() ?? false) {
-      final email = _emailController.text.trim();
-      if (_existingEmails.contains(email)) {
-        UIHelpers.showError(context, 'Account already exists. Please log in.');
-        return;
+void _signUp() async {
+  final email = _emailController.text.trim();
+  final password = _passwordController.text;
+  final fullName = _fullNameController.text.trim();
+  try {
+    final success = await ApiService.signup(email, password, fullName);
+    if (success) {
+      // Immediately log in after signup
+      final String? token = await ApiService.login(email, password);
+      if (token != null) {
+        await saveToken(token);
+        Navigator.pushNamed(
+          context,
+          '/create_profile',
+          arguments: {'email': email, 'name': fullName},
+        );
+      } else {
+        showError('Could not log in after signup.');
       }
-      // TODO: Implement sign up request with try catch
-      Navigator.pushNamed(context, '/create_profile');
+    } else {
+      showError('Registration error. Email may already exist.');
     }
+  } catch (e) {
+    showError('Server connection error.');
   }
+}
 
   Widget _buildLoginTab() {
     return LoginTab(
@@ -78,10 +103,46 @@ class _LoginFormPageState extends State<LoginFormPage>
   }
 
   Widget _buildSignUpTab() {
-    return SignupTab(
-      emailController: _emailController,
-      passwordController: _passwordController,
-      onSignup: _signUp,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ValidatedTextField(
+          icon: Icons.person,
+          hint: "Name",
+          controller: _fullNameController,
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'Enter Name';
+            }
+            return null;
+          },
+        ),
+        const VSpace.medium(),
+        ValidatedTextField(
+          icon: Icons.email,
+          hint: "Email",
+          controller: _emailController,
+          validator: validateEmail,
+        ),
+        const VSpace.medium(),
+        ValidatedTextField(
+          icon: Icons.lock,
+          hint: "Password",
+          obscure: _obscurePassword,
+          controller: _passwordController,
+          validator: validatePassword,
+          toggleObscure: () {
+            setState(() {
+              _obscurePassword = !_obscurePassword;
+            });
+          },
+        ),
+        const VSpace.mediumPlus(),
+        buildSubmitButton(
+          text: "Continue",
+          onPressed: () => handleSubmit(_signUp),
+        ),
+      ],
     );
   }
 
