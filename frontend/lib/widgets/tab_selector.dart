@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
+import '../theme/colors.dart';
+import '../theme/dimensions.dart';
 
 class TabSelector extends StatelessWidget {
   final TabController controller;
@@ -14,13 +15,19 @@ class TabSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: AppTheme.tabHeight,
-      decoration: AppTheme.tabSelectorDecoration,
+      height: AppDimensions.tabHeight,
+      decoration: BoxDecoration(
+        border: Border.all(color: AppColors.primaryDark),
+        borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
+      ),
       child: TabBar(
         controller: controller,
-        indicator: AppTheme.tabIndicatorDecoration,
-        labelColor: AppTheme.tabLabelColor,
-        unselectedLabelColor: AppTheme.primaryColor,
+        indicator: BoxDecoration(
+          color: AppColors.primary,
+          borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
+        ),
+        labelColor: AppColors.textOnPrimary,
+        unselectedLabelColor: AppColors.primary,
         indicatorSize: TabBarIndicatorSize.tab,
         tabs: tabLabels.map((label) => Tab(text: label)).toList(),
       ),

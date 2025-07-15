@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
+import '../theme/colors.dart';
+import '../theme/text_styles.dart';
+import '../theme/dimensions.dart';
 import 'spacing.dart';
 
 class FormContainer extends StatelessWidget {
@@ -19,31 +21,26 @@ class FormContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.backgroundColor,
+      backgroundColor: AppColors.background,
       body: Center(
         child: SingleChildScrollView(
           child: Container(
-            width: AppTheme.containerWidth,
+            width: AppDimensions.containerWidth,
             padding: const EdgeInsets.symmetric(
-              horizontal: AppTheme.defaultPadding,
-              vertical: AppTheme.defaultPadding,
+              horizontal: AppDimensions.paddingXl,
+              vertical: AppDimensions.paddingXl,
             ),
             child: Form(
               key: formKey,
               child: Column(
                 children: [
                   if (title != null) ...[
-                    Text(
-                      title!,
-                      style: AppTheme.appTitleStyle.copyWith(
-                        color: AppTheme.primaryColor,
-                      ),
-                    ),
-                    const VSpace(5),
+                    Text(title!, style: AppTextStyles.appTitle),
+                    const VSpace.xs(),
                   ],
                   if (subtitle != null) ...[
-                    Text(subtitle!, style: AppTheme.appSubtitleStyle),
-                    const VSpace.large(),
+                    Text(subtitle!, style: AppTextStyles.appSubtitle),
+                    const VSpace.xl(),
                   ],
                   child,
                 ],

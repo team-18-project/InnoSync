@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/app_theme.dart';
+import '../theme/colors.dart';
+import '../theme/text_styles.dart';
 import 'spacing.dart';
 
 class SubmitButton extends StatelessWidget {
@@ -27,12 +29,12 @@ class SubmitButton extends StatelessWidget {
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
                   valueColor: AlwaysStoppedAnimation<Color>(
-                    AppTheme.progressIndicatorColor,
+                    AppColors.textOnPrimary,
                   ),
                 ),
               ),
             )
-          : Text(text, style: AppTheme.buttonTextStyle),
+          : Text(text, style: AppTextStyles.buttonText),
     );
   }
 }

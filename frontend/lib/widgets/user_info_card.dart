@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'spacing.dart';
-import '../theme/app_theme.dart';
+import '../theme/colors.dart';
+import '../theme/text_styles.dart';
+import '../theme/dimensions.dart';
 
 class UserInfoCard extends StatelessWidget {
   final String name;
@@ -28,8 +30,18 @@ class UserInfoCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: width,
-      decoration: AppTheme.cardDecoration,
-      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: AppColors.cardBackground,
+        borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.shadow,
+            blurRadius: AppDimensions.shadowBlur,
+            offset: const Offset(0, AppDimensions.shadowOffset),
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.all(AppDimensions.paddingXl),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -43,19 +55,19 @@ class UserInfoCard extends StatelessWidget {
                 ? Icon(Icons.person, size: avatarRadius)
                 : null,
           ),
-          const VSpace(16),
-          Text(name, style: AppTheme.cardTitleStyle),
-          const VSpace(8),
-          Text(email, style: AppTheme.cardSubtitleStyle),
-          const VSpace(16),
-          const Text("Bio:", style: AppTheme.cardLabelStyle),
-          Text(bio, style: AppTheme.cardBodyStyle),
-          const VSpace(16),
-          const Text("Positions:", style: AppTheme.cardLabelStyle),
-          Text(positions, style: AppTheme.cardBodyStyle),
-          const VSpace(16),
-          const Text("Technologies:", style: AppTheme.cardLabelStyle),
-          Text(technologies, style: AppTheme.cardBodyStyle),
+          const VSpace.lg(),
+          Text(name, style: AppTextStyles.cardTitle),
+          const VSpace.sm(),
+          Text(email, style: AppTextStyles.cardSubtitle),
+          const VSpace.lg(),
+          const Text("Bio:", style: AppTextStyles.cardLabelStyle),
+          Text(bio, style: AppTextStyles.bodyMedium),
+          const VSpace.lg(),
+          const Text("Positions:", style: AppTextStyles.cardLabelStyle),
+          Text(positions, style: AppTextStyles.bodyMedium),
+          const VSpace.lg(),
+          const Text("Technologies:", style: AppTextStyles.cardLabelStyle),
+          Text(technologies, style: AppTextStyles.bodyMedium),
         ],
       ),
     );

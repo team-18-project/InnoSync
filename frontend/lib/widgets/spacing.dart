@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
+import '../theme/dimensions.dart';
 
 /// Vertical spacing widget for consistent spacing between elements
 class VSpace extends StatelessWidget {
@@ -8,15 +8,21 @@ class VSpace extends StatelessWidget {
   const VSpace(this.height, {super.key});
 
   // Predefined spacing sizes
-  const VSpace.small({super.key}) : height = AppTheme.smallSpacing;
-  const VSpace.medium({super.key}) : height = AppTheme.defaultSpacing;
-  const VSpace.large({super.key}) : height = AppTheme.largeSpacing;
+  const VSpace.xs({super.key}) : height = AppDimensions.xs;
+  const VSpace.sm({super.key}) : height = AppDimensions.sm;
+  const VSpace.md({super.key}) : height = AppDimensions.md;
+  const VSpace.lg({super.key}) : height = AppDimensions.lg;
+  const VSpace.xl({super.key}) : height = AppDimensions.xl;
+  const VSpace.xxl({super.key}) : height = AppDimensions.xxl;
+  const VSpace.xxxl({super.key}) : height = AppDimensions.xxxl;
 
-  // Custom spacing with theme-based calculations
-  const VSpace.mediumMinus({super.key}) : height = AppTheme.defaultSpacing - 2;
-  const VSpace.mediumPlus({super.key}) : height = AppTheme.defaultSpacing + 4;
-  const VSpace.mediumPlusPlus({super.key})
-    : height = AppTheme.defaultSpacing + 8;
+  // Legacy spacing for backward compatibility
+  const VSpace.small({super.key}) : height = AppDimensions.sm;
+  const VSpace.medium({super.key}) : height = AppDimensions.md;
+  const VSpace.large({super.key}) : height = AppDimensions.xl;
+  const VSpace.mediumMinus({super.key}) : height = AppDimensions.md - 2;
+  const VSpace.mediumPlus({super.key}) : height = AppDimensions.md + 4;
+  const VSpace.mediumPlusPlus({super.key}) : height = AppDimensions.md + 8;
 
   @override
   Widget build(BuildContext context) {
@@ -31,12 +37,19 @@ class HSpace extends StatelessWidget {
   const HSpace(this.width, {super.key});
 
   // Predefined spacing sizes
-  const HSpace.small({super.key}) : width = 8;
-  const HSpace.medium({super.key}) : width = 16;
-  const HSpace.large({super.key}) : width = AppTheme.defaultSpacing;
+  const HSpace.xs({super.key}) : width = AppDimensions.xs;
+  const HSpace.sm({super.key}) : width = AppDimensions.sm;
+  const HSpace.md({super.key}) : width = AppDimensions.md;
+  const HSpace.lg({super.key}) : width = AppDimensions.lg;
+  const HSpace.xl({super.key}) : width = AppDimensions.xl;
+  const HSpace.xxl({super.key}) : width = AppDimensions.xxl;
+  const HSpace.xxxl({super.key}) : width = AppDimensions.xxxl;
 
-  // Custom spacing with theme-based calculations
-  const HSpace.mediumPlus({super.key}) : width = AppTheme.defaultSpacing + 8;
+  // Legacy spacing for backward compatibility
+  const HSpace.small({super.key}) : width = AppDimensions.sm;
+  const HSpace.medium({super.key}) : width = AppDimensions.md;
+  const HSpace.large({super.key}) : width = AppDimensions.xl;
+  const HSpace.mediumPlus({super.key}) : width = AppDimensions.md + 8;
 
   @override
   Widget build(BuildContext context) {

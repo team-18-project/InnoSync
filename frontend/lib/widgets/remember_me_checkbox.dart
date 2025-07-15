@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../theme/app_theme.dart';
+import '../theme/colors.dart';
 
 class RememberMeCheckbox extends StatelessWidget {
   final bool value;
@@ -25,7 +25,7 @@ class RememberMeCheckbox extends StatelessWidget {
             onPressed: onForgotPassword,
             child: Text(
               "Forgot Password ?",
-              style: TextStyle(color: AppTheme.linkColor),
+              style: TextStyle(color: AppColors.info),
             ),
           ),
       ],
