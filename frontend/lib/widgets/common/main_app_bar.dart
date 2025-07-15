@@ -5,12 +5,26 @@ import '../../theme/text_styles.dart';
 class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;
   final List<Widget>? actions;
+  final bool showBackButton;
 
-  const MainAppBar({super.key, this.title, this.actions});
+  const MainAppBar({
+    super.key,
+    this.title,
+    this.actions,
+    this.showBackButton = true,
+  });
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      leading: showBackButton
+          ? IconButton(
+              icon: const Icon(Icons.arrow_back),
+              onPressed: () => Navigator.of(
+                context,
+              ).pushNamedAndRemoveUntil('/main', (route) => false),
+            )
+          : null,
       backgroundColor: AppColors.background,
       foregroundColor: AppColors.textPrimary,
       elevation: 0,
