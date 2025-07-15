@@ -56,7 +56,7 @@ class _LoginFormPageState extends State<LoginFormPage>
       return;
     }
     // TODO: Implement login request with try catch
-    Navigator.pushNamed(context, '/dashboard');
+    Navigator.pushNamed(context, '/discover');
   }
 
   void _signUp() {

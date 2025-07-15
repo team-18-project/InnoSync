@@ -66,7 +66,7 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
               style: AppTheme.primaryButtonStyle,
               onPressed: () {
                 // Переход на панель управления после успешного заполнения профиля
-                Navigator.pushReplacementNamed(context, '/dashboard');
+                Navigator.pushReplacementNamed(context, '/discover');
               },
               child: const Text('Next', style: AppTheme.buttonTextStyle),
             ),
