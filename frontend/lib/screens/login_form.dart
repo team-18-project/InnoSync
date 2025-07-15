@@ -8,6 +8,9 @@ import '../mixins/validation_mixin.dart';
 import '../mixins/ui_mixin.dart';
 import '../mixins/form_widgets_mixin.dart';
 import '../mixins/form_logic_mixin.dart';
+import '../services/api_service.dart';
+import '../utils/token_storage.dart'; // где реализованы saveToken/getToken
+import 'dashboard_page.dart'; // импортируй DashboardPage
 
 class LoginFormPage extends StatefulWidget {
   const LoginFormPage({super.key});
@@ -28,6 +31,7 @@ class _LoginFormPageState extends State<LoginFormPage>
   final TextEditingController _passwordController = TextEditingController();
   bool _obscurePassword = true;
   bool _rememberMe = false;
+  final _fullNameController = TextEditingController();
 
   // Temporary container for emails
   final List<String> _existingEmails = [
@@ -49,25 +53,51 @@ class _LoginFormPageState extends State<LoginFormPage>
     super.dispose();
   }
 
-  void _logIn() {
-    final email = _emailController.text.trim();
-    if (!_existingEmails.contains(email)) {
-      showError('Account not found. Please sign up.');
-      return;
+  void _logIn() async {
+  final email = _emailController.text.trim();
+  final password = _passwordController.text;
+  try {
+    final String? token = await ApiService.login(email, password);
+    if (token != null) {
+      await saveToken(token); // сохраняем токен для будущих запросов
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => DashboardPage(token: token)),
+      );
+    } else {
+      showError('Login failed. Check your email and password.');
     }
-    // TODO: Implement login request with try catch
-    Navigator.pushNamed(context, '/dashboard');
+  } catch (e) {
+    showError('Connection error.');
   }
+}
 
-  void _signUp() {
-    final email = _emailController.text.trim();
-    if (_existingEmails.contains(email)) {
-      showError('Account already exists. Please log in.');
-      return;
+void _signUp() async {
+  final email = _emailController.text.trim();
+  final password = _passwordController.text;
+  final fullName = _fullNameController.text.trim();
+  try {
+    final success = await ApiService.signup(email, password, fullName);
+    if (success) {
+      // Immediately log in after signup
+      final String? token = await ApiService.login(email, password);
+      if (token != null) {
+        await saveToken(token);
+        Navigator.pushNamed(
+          context,
+          '/create_profile',
+          arguments: {'email': email, 'name': fullName},
+        );
+      } else {
+        showError('Could not log in after signup.');
+      }
+    } else {
+      showError('Registration error. Email may already exist.');
     }
-    // TODO: Implement sign up request with try catch
-    Navigator.pushNamed(context, '/create_profile');
+  } catch (e) {
+    showError('Server connection error.');
   }
+}
 
   Widget _buildLoginTab() {
     return Column(
@@ -115,6 +145,18 @@ class _LoginFormPageState extends State<LoginFormPage>
       children: [
         ValidatedTextField(
           icon: Icons.person,
+          hint: "Name",
+          controller: _fullNameController,
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'Enter Name';
+            }
+            return null;
+          },
+        ),
+        const VSpace.medium(),
+        ValidatedTextField(
+          icon: Icons.email,
           hint: "Email",
           controller: _emailController,
           validator: validateEmail,

@@ -5,5 +5,5 @@ import 'screens/dashboard_page.dart';
 final appRoutes = {
   '/login': (context) => const LoginFormPage(),
   '/create_profile': (context) => const ProfileCreationPage(),
-  '/dashboard': (context) => const DashboardPage(),
+  // '/dashboard': (context) => const DashboardPage(),
 };
