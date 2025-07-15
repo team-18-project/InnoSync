@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../theme/colors.dart';
+import '../../theme/text_styles.dart';
 
 class SwitcherButton extends StatelessWidget {
   final String label;
@@ -20,12 +22,12 @@ class SwitcherButton extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 10),
         decoration: BoxDecoration(
-          color: selected ? const Color(0xFF40BA21) : Colors.white,
+          color: selected ? AppColors.primary : AppColors.background,
           borderRadius: BorderRadius.circular(24),
           boxShadow: selected
               ? [
                   BoxShadow(
-                    color: const Color(0xFF40BA21).withValues(alpha: 0.15),
+                    color: AppColors.primary.withValues(alpha: 0.15),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),
@@ -34,10 +36,8 @@ class SwitcherButton extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: TextStyle(
-            color: selected ? Colors.white : Colors.black87,
-            fontWeight: FontWeight.w600,
-            fontSize: 16,
+          style: AppTextStyles.bodyLarge.copyWith(
+            color: selected ? AppColors.textOnPrimary : AppColors.textPrimary,
           ),
         ),
       ),

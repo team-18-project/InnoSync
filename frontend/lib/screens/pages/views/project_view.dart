@@ -69,9 +69,11 @@ class ProjectView extends StatelessWidget {
                       (skill) => Chip(
                         label: Text(
                           skill,
-                          style: const TextStyle(color: Colors.white),
+                          style: AppTextStyles.bodyLarge.copyWith(
+                            color: AppColors.textOnPrimary,
+                          ),
                         ),
-                        backgroundColor: const Color(0xFF298217),
+                        backgroundColor: AppColors.primary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
@@ -99,9 +101,11 @@ class ProjectView extends StatelessWidget {
                       (pos) => Chip(
                         label: Text(
                           pos,
-                          style: const TextStyle(color: Colors.white),
+                          style: AppTextStyles.bodyLarge.copyWith(
+                            color: AppColors.textOnPrimary,
+                          ),
                         ),
-                        backgroundColor: const Color(0xFF298217),
+                        backgroundColor: AppColors.primary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),

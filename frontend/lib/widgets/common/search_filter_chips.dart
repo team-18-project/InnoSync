@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../theme/colors.dart';
+import '../../theme/text_styles.dart';
 
 class SearchFilterChips extends StatelessWidget {
   final List<String> filters;
@@ -28,25 +30,20 @@ class SearchFilterChips extends StatelessWidget {
               return Chip(
                 label: Text(
                   keyword,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500,
+                  style: AppTextStyles.bodyLarge.copyWith(
+                    color: AppColors.textOnPrimary,
                   ),
                 ),
-                backgroundColor: const Color(0xFF298217),
+                backgroundColor: AppColors.primary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(24),
                 ),
                 deleteIcon: Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
+                  decoration: BoxDecoration(
+                    color: AppColors.textOnPrimary,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(
-                    Icons.close,
-                    size: 18,
-                    color: Color(0xFF298217),
-                  ),
+                  child: Icon(Icons.close, size: 18, color: AppColors.primary),
                 ),
                 onDeleted: () => onRemoveFilter(keyword),
               );

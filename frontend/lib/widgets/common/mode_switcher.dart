@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../theme/colors.dart';
 import 'switcher_button.dart';
 
 class ModeSwitcher extends StatelessWidget {
@@ -20,7 +21,7 @@ class ModeSwitcher extends StatelessWidget {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: Colors.grey[200],
+            color: AppColors.textSecondary,
             borderRadius: BorderRadius.circular(32),
           ),
           padding: const EdgeInsets.all(4),

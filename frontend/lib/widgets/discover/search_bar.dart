@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/theme/colors.dart';
 
 class CustomSearchBar extends StatelessWidget {
   final TextEditingController controller;
@@ -25,7 +26,7 @@ class CustomSearchBar extends StatelessWidget {
           prefixIcon: const Icon(Icons.search),
           border: OutlineInputBorder(borderRadius: BorderRadius.circular(12.0)),
           filled: true,
-          fillColor: Colors.white,
+          fillColor: AppColors.background,
           contentPadding: const EdgeInsets.symmetric(
             vertical: 0,
             horizontal: 16,

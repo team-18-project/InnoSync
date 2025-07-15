@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:frontend/models/talent_model.dart';
 import 'package:frontend/theme/colors.dart';
 import 'package:frontend/theme/text_styles.dart';
+import 'package:frontend/widgets/common/widgets.dart';
 
 class TalentCard extends StatelessWidget {
   final Talent talent;
@@ -37,9 +38,13 @@ class TalentCard extends StatelessWidget {
                           fit: BoxFit.cover,
                         ),
                       )
-                    : const Icon(Icons.person, size: 32, color: Colors.grey),
+                    : const Icon(
+                        Icons.person,
+                        size: 32,
+                        color: AppColors.textSecondary,
+                      ),
               ),
-              const SizedBox(width: 20),
+              const HSpace.small(),
               // Name, description, and details
               Expanded(
                 child: Column(
@@ -49,7 +54,7 @@ class TalentCard extends StatelessWidget {
                       talent.name,
                       style: AppTextStyles.h3.copyWith(fontSize: 20),
                     ),
-                    const SizedBox(height: 4),
+                    const VSpace.small(),
                     // Years and graduation type
                     Row(
                       children: [
@@ -64,10 +69,8 @@ class TalentCard extends StatelessWidget {
                           ),
                           child: Text(
                             '${talent.yearsOfExperience} years',
-                            style: TextStyle(
+                            style: AppTextStyles.bodyLarge.copyWith(
                               color: AppColors.primary,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),

@@ -22,7 +22,7 @@ class TalentView extends StatelessWidget {
             // Profile Image
             CircleAvatar(
               radius: 80,
-              backgroundColor: Colors.grey[200],
+              backgroundColor: AppColors.textSecondary,
               child: talent.profileImageUrl != null
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(80),
@@ -33,7 +33,11 @@ class TalentView extends StatelessWidget {
                         height: 160,
                       ),
                     )
-                  : const Icon(Icons.person, size: 80, color: Colors.grey),
+                  : const Icon(
+                      Icons.person,
+                      size: 80,
+                      color: AppColors.textSecondary,
+                    ),
             ),
             const VSpace(24),
             // Name
@@ -58,10 +62,8 @@ class TalentView extends StatelessWidget {
                   ),
                   child: Text(
                     '${talent.yearsOfExperience} years experience',
-                    style: TextStyle(
+                    style: AppTextStyles.bodyLarge.copyWith(
                       color: AppColors.primary,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
@@ -72,15 +74,13 @@ class TalentView extends StatelessWidget {
                     vertical: 6,
                   ),
                   decoration: BoxDecoration(
-                    color: const Color(0xFF298217).withValues(alpha: 0.1),
+                    color: AppColors.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Text(
                     talent.graduationType,
-                    style: const TextStyle(
-                      color: Color(0xFF298217),
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
+                    style: AppTextStyles.bodyLarge.copyWith(
+                      color: AppColors.primary,
                     ),
                   ),
                 ),
@@ -92,7 +92,7 @@ class TalentView extends StatelessWidget {
               talent.description,
               style: AppTextStyles.bodyLarge.copyWith(
                 fontSize: 16,
-                color: Colors.black87,
+                color: AppColors.textPrimary,
               ),
               textAlign: TextAlign.center,
             ),
@@ -115,9 +115,11 @@ class TalentView extends StatelessWidget {
                       (skill) => Chip(
                         label: Text(
                           skill,
-                          style: const TextStyle(color: Colors.white),
+                          style: AppTextStyles.bodyLarge.copyWith(
+                            color: AppColors.textOnPrimary,
+                          ),
                         ),
-                        backgroundColor: const Color(0xFF298217),
+                        backgroundColor: AppColors.primary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
@@ -144,9 +146,11 @@ class TalentView extends StatelessWidget {
                       (position) => Chip(
                         label: Text(
                           position,
-                          style: const TextStyle(color: Colors.white),
+                          style: AppTextStyles.bodyLarge.copyWith(
+                            color: AppColors.textOnPrimary,
+                          ),
                         ),
-                        backgroundColor: const Color(0xFF298217),
+                        backgroundColor: AppColors.primary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
@@ -168,14 +172,20 @@ class TalentView extends StatelessWidget {
               const VSpace(8),
               if (talent.email != null) ...[
                 ListTile(
-                  leading: const Icon(Icons.email, color: Colors.grey),
+                  leading: const Icon(
+                    Icons.email,
+                    color: AppColors.textSecondary,
+                  ),
                   title: Text(talent.email!),
                   contentPadding: EdgeInsets.zero,
                 ),
               ],
               if (talent.location != null) ...[
                 ListTile(
-                  leading: const Icon(Icons.location_on, color: Colors.grey),
+                  leading: const Icon(
+                    Icons.location_on,
+                    color: AppColors.textSecondary,
+                  ),
                   title: Text(talent.location!),
                   contentPadding: EdgeInsets.zero,
                 ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../theme/colors.dart';
 import '../models/project_model.dart';
 import '../widgets/common/widgets.dart';
+import '../theme/text_styles.dart';
 
 typedef ProjectTapCallback = void Function(Project project);
 
@@ -69,7 +70,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    color: Colors.grey[200],
+                    color: AppColors.textSecondary,
                     borderRadius: BorderRadius.circular(32),
                   ),
                   padding: const EdgeInsets.all(4),
@@ -90,7 +91,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            const VSpace.medium(),
             // Search bar and sort row
             Row(
               children: [
@@ -106,7 +107,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                         borderRadius: BorderRadius.circular(12.0),
                       ),
                       filled: true,
-                      fillColor: Colors.white,
+                      fillColor: AppColors.textSecondary,
                       contentPadding: const EdgeInsets.symmetric(
                         vertical: 0,
                         horizontal: 16,
@@ -119,10 +120,10 @@ class _DiscoverPageState extends State<DiscoverPage> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
+                const HSpace.small(),
                 // Sort/filter button with small triangle
                 Material(
-                  color: Colors.white,
+                  color: AppColors.textSecondary,
                   borderRadius: BorderRadius.circular(12.0),
                   child: InkWell(
                     borderRadius: BorderRadius.circular(12.0),
@@ -136,11 +137,11 @@ class _DiscoverPageState extends State<DiscoverPage> {
                       ),
                       child: Row(
                         children: const [
-                          Icon(Icons.sort, color: Colors.black87),
+                          Icon(Icons.sort, color: AppColors.textPrimary),
                           SizedBox(width: 4),
                           Icon(
                             Icons.arrow_drop_down,
-                            color: Colors.black87,
+                            color: AppColors.textPrimary,
                             size: 20,
                           ),
                         ],
@@ -152,36 +153,35 @@ class _DiscoverPageState extends State<DiscoverPage> {
             ),
             // Search filter chips
             if (_searchFilters.isNotEmpty) ...[
-              const SizedBox(height: 12),
+              const VSpace.small(),
               SizedBox(
                 height: 40,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   itemCount: _searchFilters.length,
-                  separatorBuilder: (context, i) => const SizedBox(width: 8),
+                  separatorBuilder: (context, i) => const HSpace.small(),
                   itemBuilder: (context, i) {
                     final keyword = _searchFilters[i];
                     return Chip(
                       label: Text(
                         keyword,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
+                        style: AppTextStyles.bodyLarge.copyWith(
+                          color: AppColors.textOnPrimary,
                         ),
                       ),
-                      backgroundColor: const Color(0xFF298217),
+                      backgroundColor: AppColors.primary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(24),
                       ),
                       deleteIcon: Container(
                         decoration: const BoxDecoration(
-                          color: Colors.white,
+                          color: AppColors.textOnPrimary,
                           shape: BoxShape.circle,
                         ),
                         child: const Icon(
                           Icons.close,
                           size: 18,
-                          color: Color(0xFF298217),
+                          color: AppColors.primary,
                         ),
                       ),
                       onDeleted: () => _removeSearchFilter(keyword),
@@ -190,12 +190,12 @@ class _DiscoverPageState extends State<DiscoverPage> {
                 ),
               ),
             ],
-            const SizedBox(height: 24),
+            const VSpace.medium(),
             // Project list
             Expanded(
               child: ListView.separated(
                 itemCount: _projects.length,
-                separatorBuilder: (context, i) => const SizedBox(height: 16),
+                separatorBuilder: (context, i) => const VSpace.medium(),
                 itemBuilder: (context, i) {
                   final project = _projects[i];
                   return GestureDetector(
@@ -215,7 +215,7 @@ class _DiscoverPageState extends State<DiscoverPage> {
                               width: 56,
                               height: 56,
                               decoration: BoxDecoration(
-                                color: Colors.grey[200],
+                                color: AppColors.textSecondary,
                                 borderRadius: BorderRadius.circular(12),
                               ),
                               child: project.logoUrl != null
@@ -229,30 +229,20 @@ class _DiscoverPageState extends State<DiscoverPage> {
                                   : const Icon(
                                       Icons.apps,
                                       size: 32,
-                                      color: Colors.grey,
+                                      color: AppColors.textSecondary,
                                     ),
                             ),
-                            const SizedBox(width: 20),
+                            const HSpace.small(),
                             // Title and description
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    project.title,
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 20,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 8),
+                                  Text(project.title, style: AppTextStyles.h3),
+                                  const VSpace.small(),
                                   Text(
                                     project.description,
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.black87,
-                                    ),
+                                    style: AppTextStyles.bodyLarge,
                                   ),
                                 ],
                               ),
