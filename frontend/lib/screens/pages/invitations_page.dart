@@ -46,18 +46,22 @@ class _InvitationsPageState extends State<InvitationsPage> {
       _invitations.removeWhere((inv) => inv['id'] == id);
     });
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text(accept ? 'Invitation accepted!' : 'Invitation declined!')),
+      SnackBar(
+        content: Text(accept ? 'Invitation accepted!' : 'Invitation declined!'),
+      ),
     );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView.separated(
-        itemCount: invitations.length,
+        itemCount: _invitations.length,
         separatorBuilder: (context, i) => const VSpace.mediumPlus(),
         itemBuilder: (context, i) => InvitationCard(
-          invitation: invitations[i],
-          onTap: () => widget.onInvitationTap(invitations[i]),
+          invitation: Invitation.fromJson(_invitations[i]),
+          onTap: () =>
+              widget.onInvitationTap(Invitation.fromJson(_invitations[i])),
         ),
         padding: const EdgeInsets.all(24),
       ),

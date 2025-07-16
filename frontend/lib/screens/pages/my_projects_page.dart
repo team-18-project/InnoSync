@@ -3,8 +3,6 @@ import 'package:frontend/screens/pages/views/project_create.dart';
 import 'package:frontend/models/project_model.dart';
 import 'package:frontend/utils/token_storage.dart';
 import 'package:frontend/services/api_service.dart';
-import 'package:frontend/theme/colors.dart';
-import 'package:frontend/widgets/common/widgets.dart';
 import 'package:frontend/widgets/discover/widgets.dart';
 
 typedef ProjectTapCallback = void Function(Project project);
@@ -44,43 +42,40 @@ class _MyProjectsPageState extends State<MyProjectsPage> {
     } catch (e) {
       setState(() => _loading = false);
       print('Ошибка загрузки проектов: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Ошибка загрузки проектов: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Ошибка загрузки проектов: $e')));
     }
   }
 
   void _onProjectCreated() {
     _fetchProjects();
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Проект успешно создан!')),
-    );
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(const SnackBar(content: Text('Проект успешно создан!')));
   }
+
   @override
   Widget build(BuildContext context) {
-    _projects.addAll([
-      Project(title: 'Project 1', description: 'Description 1'),
-    ]); // TODO: replace with API request
     return Scaffold(
       body: _loading
           ? const Center(child: CircularProgressIndicator())
           : _projects.isEmpty
-              ? const Center(child: Text('Нет проектов'))
-              : ListView.builder(
-                  itemCount: _projects.length,
-                  itemBuilder: (context, i) => return ProjectCard(
-                  project: _project[i],
-                  onTap: () => widget.onProjectTap?.call(project),
-                );
-                ),
+          ? const Center(child: Text('Нет проектов'))
+          : ListView.builder(
+              itemCount: _projects.length,
+              itemBuilder: (context, i) => ProjectCard(
+                project: _projects[i],
+                onTap: () => widget.onProjectTap?.call(_projects[i]),
+              ),
+            ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => ProjectCreate(
-                onProjectCreated: _onProjectCreated,
-              ),
+              builder: (context) =>
+                  ProjectCreate(onProjectCreated: _onProjectCreated),
             ),
           );
         },

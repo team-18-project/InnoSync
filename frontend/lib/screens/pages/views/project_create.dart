@@ -124,7 +124,7 @@ class _ProjectCreateState extends State<ProjectCreate> {
                 TextField(
                   controller: _teamSizeController,
                   decoration: InputDecoration(labelText: 'Team Size'),
-                ),                
+                ),
                 if (_skills.isNotEmpty)
                   Positioned(
                     left: 0,
@@ -291,9 +291,14 @@ class _ProjectCreateState extends State<ProjectCreate> {
                       if (mounted) Navigator.pop(context);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Failed to create project.')),
+                        const SnackBar(
+                          content: Text('Failed to create project.'),
+                        ),
                       );
                     }
+                  },
+                  child: const Text('Create Project'),
+                ),
               ],
             ),
           ),
