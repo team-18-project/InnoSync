@@ -5,6 +5,7 @@ import '../../models/talent_model.dart';
 import '../../widgets/discover/widgets.dart';
 import '../../mixins/search_mixin.dart';
 import '../../widgets/common/widgets.dart';
+import '../../widgets/common/theme_switcher_button.dart';
 
 typedef ProjectTapCallback = void Function(Project project);
 typedef TalentTapCallback = void Function(Talent talent);
@@ -86,7 +87,12 @@ class _DiscoverPageState extends State<DiscoverPage> with SearchMixin {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).colorScheme.background,
+      appBar: AppBar(
+        title: const Text('Discover'),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        actions: const [ThemeSwitcherButton()],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -124,25 +130,119 @@ class _DiscoverPageState extends State<DiscoverPage> with SearchMixin {
               child: _searchMode == 'Projects'
                   ? ListView.separated(
                       itemCount: _projects.length,
-                      separatorBuilder: (context, i) =>
-                          const VSpace.mediumPlus(),
+                      separatorBuilder: (context, i) => const VSpace.mediumPlus(),
                       itemBuilder: (context, i) {
                         final project = _projects[i];
-                        return ProjectCard(
-                          project: project,
-                          onTap: () => widget.onProjectTap?.call(project),
+                        return Card(
+                          color: Theme.of(context).colorScheme.surface,
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Logo or placeholder
+                                Container(
+                                  width: 56,
+                                  height: 56,
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).colorScheme.secondary.withOpacity(0.2),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: project.logoUrl != null
+                                      ? ClipRRect(
+                                          borderRadius: BorderRadius.circular(12),
+                                          child: Image.network(
+                                            project.logoUrl!,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        )
+                                      : Icon(
+                                          Icons.apps,
+                                          size: 32,
+                                          color: Theme.of(context).colorScheme.secondary,
+                                        ),
+                                ),
+                                const HSpace.small(),
+                                // Title and description
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(project.title, style: Theme.of(context).textTheme.titleMedium),
+                                      const VSpace.small(),
+                                      Text(
+                                        project.description,
+                                        style: Theme.of(context).textTheme.bodyLarge,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         );
                       },
                     )
                   : ListView.separated(
                       itemCount: _talents.length,
-                      separatorBuilder: (context, i) =>
-                          const VSpace.mediumPlus(),
+                      separatorBuilder: (context, i) => const VSpace.mediumPlus(),
                       itemBuilder: (context, i) {
                         final talent = _talents[i];
-                        return TalentCard(
-                          talent: talent,
-                          onTap: () => widget.onTalentTap?.call(talent),
+                        return Card(
+                          color: Theme.of(context).colorScheme.surface,
+                          elevation: 2,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Logo or placeholder
+                                Container(
+                                  width: 56,
+                                  height: 56,
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).colorScheme.secondary.withOpacity(0.2),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: talent.profileImageUrl != null
+                                      ? ClipRRect(
+                                          borderRadius: BorderRadius.circular(12),
+                                          child: Image.network(
+                                            talent.profileImageUrl!,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        )
+                                      : Icon(
+                                          Icons.person,
+                                          size: 32,
+                                          color: Theme.of(context).colorScheme.secondary,
+                                        ),
+                                ),
+                                const HSpace.small(),
+                                // Title and description
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(talent.name, style: Theme.of(context).textTheme.titleMedium),
+                                      const VSpace.small(),
+                                      Text(
+                                        talent.description,
+                                        style: Theme.of(context).textTheme.bodyLarge,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                         );
                       },
                     ),

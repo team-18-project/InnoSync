@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../widgets/dashboard/widgets.dart';
 import '../../widgets/common/widgets.dart';
+import '../../widgets/common/theme_switcher_button.dart';
 import '../../theme/colors.dart';
 import '../../theme/dimensions.dart';
 
@@ -10,7 +11,7 @@ class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
         title: const Text('User Dashboard'),
         actions: [
@@ -20,6 +21,7 @@ class DashboardPage extends StatelessWidget {
               // Логика для уведомлений
             },
           ),
+          const ThemeSwitcherButton(),
           const CircleAvatar(
             radius: 16,
             backgroundImage: NetworkImage(

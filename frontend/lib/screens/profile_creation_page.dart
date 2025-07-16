@@ -5,6 +5,7 @@ import '../widgets/login/widgets.dart';
 import '../theme/colors.dart';
 import '../theme/text_styles.dart';
 import '../theme/dimensions.dart';
+import '../widgets/common/theme_switcher_button.dart';
 
 class ProfileCreationPage extends StatefulWidget {
   const ProfileCreationPage({super.key});
@@ -40,10 +41,13 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).colorScheme.background,
       appBar: AppBar(
-        title: const Text('Profile Creation', style: AppTextStyles.h2),
-        backgroundColor: AppColors.primary,
+        title: const Text('Profile Creation'),
+        backgroundColor: Theme.of(context).brightness == Brightness.dark
+            ? Theme.of(context).colorScheme.surface
+            : Theme.of(context).colorScheme.primary,
+        actions: const [ThemeSwitcherButton()],
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppDimensions.paddingXl),
@@ -52,7 +56,7 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
             ProfileImagePicker(
               profileImage: _profileImage,
               onImagePicked: _onImagePicked,
-              backgroundColor: AppColors.profilePickerBackground,
+              backgroundColor: Theme.of(context).colorScheme.surface,
             ),
             const VSpace.lg(),
             _buildInputField('Full Name', _fullNameController),
@@ -70,7 +74,7 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
               onPressed: () {
                 Navigator.pushReplacementNamed(context, '/main');
               },
-              child: const Text('Sign up', style: AppTextStyles.buttonText),
+              child: const Text('Sign up'),
             ),
           ],
         ),

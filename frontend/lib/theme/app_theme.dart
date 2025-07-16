@@ -66,4 +66,62 @@ class AppTheme {
       ),
     ],
   );
+
+  // Light ThemeData
+  static final ThemeData lightTheme = ThemeData(
+    brightness: Brightness.light,
+    primaryColor: AppColors.primary,
+    scaffoldBackgroundColor: AppColors.background,
+    cardColor: AppColors.cardBackground,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: AppColors.background,
+      foregroundColor: AppColors.textPrimary,
+      elevation: 0,
+      iconTheme: IconThemeData(color: AppColors.textPrimary),
+      titleTextStyle: TextStyle(color: AppColors.textPrimary, fontSize: 20, fontWeight: FontWeight.bold),
+    ),
+    textTheme: const TextTheme(
+      bodyLarge: TextStyle(color: AppColors.textPrimary),
+      bodyMedium: TextStyle(color: AppColors.textSecondary),
+    ),
+    colorScheme: ColorScheme.light(
+      primary: AppColors.primary,
+      background: AppColors.background,
+      surface: AppColors.surface,
+      error: AppColors.error,
+      onPrimary: AppColors.textOnPrimary,
+      onBackground: AppColors.textPrimary,
+      onSurface: AppColors.textPrimary,
+      onError: AppColors.textOnPrimary,
+    ),
+  );
+
+  // Dark ThemeData
+  static final ThemeData darkTheme = ThemeData(
+    brightness: Brightness.dark,
+    primaryColor: AppColors.primaryDarkTheme,
+    scaffoldBackgroundColor: AppColors.backgroundDark,
+    cardColor: AppColors.cardBackgroundDark,
+    appBarTheme: const AppBarTheme(
+      backgroundColor: AppColors.backgroundDark,
+      foregroundColor: AppColors.textPrimaryDark,
+      elevation: 0,
+      iconTheme: IconThemeData(color: AppColors.textPrimaryDark),
+      titleTextStyle: TextStyle(color: AppColors.textPrimaryDark, fontSize: 20, fontWeight: FontWeight.bold),
+    ),
+    textTheme: const TextTheme(
+      bodyLarge: TextStyle(color: AppColors.textPrimaryDark),
+      bodyMedium: TextStyle(color: AppColors.textSecondaryDark),
+    ),
+    colorScheme: ColorScheme.dark(
+      primary: AppColors.primaryDarkTheme,
+      background: AppColors.backgroundDark,
+      surface: AppColors.surfaceDark,
+      error: AppColors.error,
+      onPrimary: AppColors.textOnPrimaryDark,
+      onBackground: AppColors.textPrimaryDark,
+      onSurface: AppColors.textPrimaryDark,
+      onError: AppColors.textOnPrimaryDark,
+    ),
+  );
 }

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../theme/colors.dart';
-import '../../theme/text_styles.dart';
 import '../../theme/dimensions.dart';
 import '../common/widgets.dart';
 
@@ -20,10 +18,16 @@ class FormContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      body: Center(
-        child: SingleChildScrollView(
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+    return Center(
+      child: SingleChildScrollView(
+        child: Card(
+          color: colorScheme.surface,
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           child: Container(
             width: AppDimensions.containerWidth,
             padding: const EdgeInsets.symmetric(
@@ -35,11 +39,11 @@ class FormContainer extends StatelessWidget {
               child: Column(
                 children: [
                   if (title != null) ...[
-                    Text(title!, style: AppTextStyles.appTitle),
+                    Text(title!, style: textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
                     const VSpace.xs(),
                   ],
                   if (subtitle != null) ...[
-                    Text(subtitle!, style: AppTextStyles.appSubtitle),
+                    Text(subtitle!, style: textTheme.bodyMedium),
                     const VSpace.xl(),
                   ],
                   child,
