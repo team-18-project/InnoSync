@@ -3,6 +3,8 @@ import 'package:frontend/theme/colors.dart';
 import '../../../theme/text_styles.dart';
 import '../../../models/project_model.dart';
 import '../../../widgets/common/widgets.dart';
+import '../../../services/api_service.dart';
+import '../../../utils/token_storage.dart';
 
 class ProjectView extends StatelessWidget {
   final Project project;
@@ -120,8 +122,24 @@ class ProjectView extends StatelessWidget {
               width: double.infinity,
               child: SubmitButton(
                 text: 'Apply',
-                onPressed: () {
-                  // TODO: Implement apply logic
+                onPressed: () async {
+                  final token = await getToken();
+                  if (token == null) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Not authenticated!')),
+                    );
+                    return;
+                  }
+                  final api = ApiService();
+                  final success = await api.applyToProject(
+                    token: token,
+                    projectId: project.id,
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(success ? 'Application sent!' : 'Failed to apply.'),
+                    ),
+                  );
                 },
                 isLoading: false,
               ),

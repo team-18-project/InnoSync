@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'InnoSync',
       initialRoute: '/login',
+      // initialRoute: '/main', // TODO: change to login
       routes: appRoutes,
       theme: ThemeData(
         primarySwatch: Colors.green,

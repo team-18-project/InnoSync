@@ -3,6 +3,8 @@ import '../theme/dimensions.dart';
 import '../widgets/login/widgets.dart';
 import '../widgets/common/widgets.dart';
 import '../utils/ui_helpers.dart';
+import '../services/api_service.dart';
+import '../utils/token_storage.dart';
 
 class LoginFormPage extends StatefulWidget {
   const LoginFormPage({super.key});
@@ -18,12 +20,8 @@ class _LoginFormPageState extends State<LoginFormPage>
   final TextEditingController _passwordController = TextEditingController();
   bool _rememberMe = false;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
-  // Temporary container for emails
-  final List<String> _existingEmails = [
-    'existinguser@example.com',
-    '3ilim69@gmail.com',
-  ];
+  final _fullNameController = TextEditingController();
+  bool _obscurePassword = true;
 
   @override
   void initState() {
@@ -39,27 +37,59 @@ class _LoginFormPageState extends State<LoginFormPage>
     super.dispose();
   }
 
-  void _logIn() {
-    if (_formKey.currentState?.validate() ?? false) {
-      final email = _emailController.text.trim();
-      if (!_existingEmails.contains(email)) {
-        UIHelpers.showError(context, 'Account not found. Please sign up.');
-        return;
+  void _logIn() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+    try {
+      final String? token = await ApiService.login(email, password);
+      if (token != null) {
+        await saveToken(token); // сохраняем токен для будущих запросов
+        if (!mounted) return;
+        Navigator.pushNamedAndRemoveUntil(context, '/main', (route) => false);
+      } else {
+        if (!mounted) return;
+        UIHelpers.showError(
+          context,
+          'Login failed. Check your email and password.',
+        );
       }
-      // TODO: Implement login request with try catch
-      Navigator.pushNamed(context, '/main');
+    } catch (e) {
+      if (!mounted) return;
+      UIHelpers.showError(context, 'Connection error.');
     }
   }
 
-  void _signUp() {
-    if (_formKey.currentState?.validate() ?? false) {
-      final email = _emailController.text.trim();
-      if (_existingEmails.contains(email)) {
-        UIHelpers.showError(context, 'Account already exists. Please log in.');
-        return;
+  void _signUp() async {
+    final email = _emailController.text.trim();
+    final password = _passwordController.text;
+    final fullName = _fullNameController.text.trim();
+    try {
+      final success = await ApiService.signup(email, password, fullName);
+      if (success) {
+        // Immediately log in after signup
+        final String? token = await ApiService.login(email, password);
+        if (token != null) {
+          await saveToken(token);
+          if (!mounted) return;
+          Navigator.pushNamed(
+            context,
+            '/create_profile',
+            arguments: {'email': email, 'name': fullName},
+          );
+        } else {
+          if (!mounted) return;
+          UIHelpers.showError(context, 'Could not log in after signup.');
+        }
+      } else {
+        if (!mounted) return;
+        UIHelpers.showError(
+          context,
+          'Registration error. Email may already exist.',
+        );
       }
-      // TODO: Implement sign up request with try catch
-      Navigator.pushNamed(context, '/create_profile');
+    } catch (e) {
+      if (!mounted) return;
+      UIHelpers.showError(context, 'Server connection error.');
     }
   }
 
@@ -78,10 +108,49 @@ class _LoginFormPageState extends State<LoginFormPage>
   }
 
   Widget _buildSignUpTab() {
-    return SignupTab(
-      emailController: _emailController,
-      passwordController: _passwordController,
-      onSignup: _signUp,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ValidatedTextField(
+          icon: Icons.person,
+          hint: "Name",
+          controller: _fullNameController,
+          validator: (value) {
+            if (value == null || value.trim().isEmpty) {
+              return 'Enter Name';
+            }
+            return null;
+          },
+        ),
+        const VSpace.medium(),
+        ValidatedTextField(
+          icon: Icons.email,
+          hint: "Email",
+          controller: _emailController,
+          validator: (value) =>
+              value == null || value.trim().isEmpty ? 'Enter Email' : null,
+        ),
+        const VSpace.medium(),
+        ValidatedTextField(
+          icon: Icons.lock,
+          hint: "Password",
+          obscure: _obscurePassword,
+          controller: _passwordController,
+          validator: (value) =>
+              value == null || value.trim().isEmpty ? 'Enter Password' : null,
+          toggleObscure: () {
+            setState(() {
+              _obscurePassword = !_obscurePassword;
+            });
+          },
+        ),
+        const VSpace.mediumPlus(),
+        SubmitButton(
+          text: "Continue",
+          onPressed: () => _signUp(),
+          isLoading: false,
+        ),
+      ],
     );
   }
 
