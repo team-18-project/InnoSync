@@ -27,7 +27,6 @@ class _MainPageState extends State<MainPage> {
   Invitation? _selectedInvitation;
   final List<Widget> _pages = [];
   bool _isLoading = true;
-  bool _tokenError = false; // TODO: remove this after bug fixed
 
   @override
   void initState() {
