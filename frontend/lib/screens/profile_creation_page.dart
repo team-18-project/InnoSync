@@ -165,7 +165,16 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
                   .map((e) => DropdownMenuItem(value: e, child: Text(e)))
                   .toList(),
               onChanged: (val) => setState(() => _selectedEducation = val),
-              decoration: const InputDecoration(labelText: 'Education'),
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
+                labelText: 'Education',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
+                ),
+              ),
             ),
             const VSpace.lg(),
             _buildInputField('Expertise', _expertiseController),
@@ -177,7 +186,16 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
                   .map((e) => DropdownMenuItem(value: e, child: Text(e)))
                   .toList(),
               onChanged: (val) => setState(() => _selectedExpertiseLevel = val),
-              decoration: const InputDecoration(labelText: 'Expertise Level'),
+              decoration: InputDecoration(
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
+                labelText: 'Expertise Level',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
+                ),
+              ),
             ),
             const VSpace.lg(),
             // Technologies multi-select
@@ -187,6 +205,7 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
             ),
             Wrap(
               spacing: 8,
+              runSpacing: 8,
               children: _allTechnologies
                   .map(
                     (tech) => FilterChip(
@@ -332,7 +351,16 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
       controller: controller,
       readOnly: readOnly,
       maxLines: maxLines,
-      decoration: InputDecoration(labelText: label),
+      decoration: InputDecoration(
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 12,
+        ),
+        labelText: label,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
+        ),
+      ),
     );
   }
 
@@ -347,7 +375,16 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
       controller: TextEditingController(text: exp[key] ?? '')
         ..selection = TextSelection.collapsed(offset: (exp[key] ?? '').length),
       maxLines: maxLines,
-      decoration: InputDecoration(labelText: label),
+      decoration: InputDecoration(
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 12,
+        ),
+        labelText: label,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
+        ),
+      ),
       onChanged: (val) => setState(() => _workExperiences[index][key] = val),
     );
   }
