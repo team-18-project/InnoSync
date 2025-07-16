@@ -122,6 +122,7 @@ class ProjectView extends StatelessWidget {
                 text: 'Apply',
                 onPressed: () {
                   // TODO: Implement apply logic
+                  Navigator.pushReplacementNamed(context, '/main');
                 },
                 isLoading: false,
               ),
