@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/pages/views/project_create.dart';
 import 'package:frontend/models/project_model.dart';
+import 'package:frontend/theme/colors.dart';
 import 'package:frontend/widgets/common/widgets.dart';
 import 'package:frontend/widgets/discover/widgets.dart';
 
@@ -37,6 +38,8 @@ class _MyProjectsPageState extends State<MyProjectsPage> {
               },
             ),
       floatingActionButton: FloatingActionButton(
+        backgroundColor: AppColors.primary,
+        child: const Icon(Icons.add, color: AppColors.background),
         onPressed: () => Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const ProjectCreate()),
