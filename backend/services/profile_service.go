@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"errors"
 	"fmt"
+	"log"
 	"strings"
 	"time"
 
@@ -35,9 +36,11 @@ func (s *ProfileService) CreateProfile(userID int64, req *models.CreateProfileRe
 	var existingProfile models.UserProfile
 	err := s.db.Get(&existingProfile, "SELECT id FROM user_profile WHERE user_id = $1", userID)
 	if err == nil {
+		log.Printf("[ProfileService:CreateProfile] Profile already exists for user %d", userID)
 		return nil, ErrProfileAlreadyExists
 	}
 	if err != sql.ErrNoRows {
+		log.Printf("[ProfileService:CreateProfile] Failed to check existing profile: %v", err)
 		return nil, fmt.Errorf("failed to check existing profile: %w", err)
 	}
 
@@ -45,6 +48,7 @@ func (s *ProfileService) CreateProfile(userID int64, req *models.CreateProfileRe
 	var user models.User
 	err = s.db.Get(&user, "SELECT id, email, full_name FROM users WHERE id = $1", userID)
 	if err != nil {
+		log.Printf("[ProfileService:CreateProfile] Failed to get user: %v", err)
 		return nil, fmt.Errorf("failed to get user: %w", err)
 	}
 
@@ -52,6 +56,7 @@ func (s *ProfileService) CreateProfile(userID int64, req *models.CreateProfileRe
 	if req.Name != user.FullName {
 		_, err = s.db.Exec("UPDATE users SET full_name = $1 WHERE id = $2", req.Name, userID)
 		if err != nil {
+			log.Printf("[ProfileService:CreateProfile] Failed to update user name: %v", err)
 			return nil, fmt.Errorf("failed to update user name: %w", err)
 		}
 		user.FullName = req.Name
@@ -60,6 +65,7 @@ func (s *ProfileService) CreateProfile(userID int64, req *models.CreateProfileRe
 	// Begin transaction
 	tx, err := s.db.Beginx()
 	if err != nil {
+		log.Printf("[ProfileService:CreateProfile] Failed to begin transaction: %v", err)
 		return nil, fmt.Errorf("failed to begin transaction: %w", err)
 	}
 	defer tx.Rollback()
@@ -84,6 +90,7 @@ func (s *ProfileService) CreateProfile(userID int64, req *models.CreateProfileRe
 	err = tx.QueryRowx(query, profile.UserID, profile.Telegram, profile.GitHub, profile.Bio,
 		profile.Position, profile.Education, profile.Expertise, profile.ExpertiseLevel).Scan(&profile.ID)
 	if err != nil {
+		log.Printf("[ProfileService:CreateProfile] Failed to create profile: %v", err)
 		return nil, fmt.Errorf("failed to create profile: %w", err)
 	}
 
@@ -202,8 +209,10 @@ func (s *ProfileService) GetProfile(userID int64) (*models.ProfileResponse, erro
 		&user.FullName, &user.Email, &user.CreatedAt)
 	if err != nil {
 		if err == sql.ErrNoRows {
+			log.Printf("[ProfileService:GetProfile] Profile not found for user %d", userID)
 			return nil, ErrProfileNotFound
 		}
+		log.Printf("[ProfileService:GetProfile] Failed to get profile: %v", err)
 		return nil, fmt.Errorf("failed to get profile: %w", err)
 	}
 
@@ -260,14 +269,17 @@ func (s *ProfileService) UpdateProfile(userID int64, req *models.UpdateProfileRe
 	err := s.db.Get(&profileID, "SELECT id FROM user_profile WHERE user_id = $1", userID)
 	if err != nil {
 		if err == sql.ErrNoRows {
+			log.Printf("[ProfileService:UpdateProfile] Profile not found for user %d", userID)
 			return nil, ErrProfileNotFound
 		}
+		log.Printf("[ProfileService:UpdateProfile] Failed to get profile: %v", err)
 		return nil, fmt.Errorf("failed to get profile: %w", err)
 	}
 
 	// Begin transaction
 	tx, err := s.db.Beginx()
 	if err != nil {
+		log.Printf("[ProfileService:UpdateProfile] Failed to begin transaction: %v", err)
 		return nil, fmt.Errorf("failed to begin transaction: %w", err)
 	}
 	defer tx.Rollback()
@@ -319,6 +331,7 @@ func (s *ProfileService) UpdateProfile(userID int64, req *models.UpdateProfileRe
 		updateValues = append(updateValues, profileID)
 		_, err = tx.Exec(query, updateValues...)
 		if err != nil {
+			log.Printf("[ProfileService:UpdateProfile] Failed to update profile: %v", err)
 			return nil, fmt.Errorf("failed to update profile: %w", err)
 		}
 	}
@@ -328,6 +341,7 @@ func (s *ProfileService) UpdateProfile(userID int64, req *models.UpdateProfileRe
 		// Delete existing work experiences
 		_, err = tx.Exec("DELETE FROM work_experience WHERE user_profile_id = $1", profileID)
 		if err != nil {
+			log.Printf("[ProfileService:UpdateProfile] Failed to delete work experiences: %v", err)
 			return nil, fmt.Errorf("failed to delete work experiences: %w", err)
 		}
 
@@ -343,6 +357,7 @@ func (s *ProfileService) UpdateProfile(userID int64, req *models.UpdateProfileRe
 			// Parse dates
 			startDate, err := time.Parse("2006-01-02", we.StartDate)
 			if err != nil {
+				log.Printf("[ProfileService:UpdateProfile] Invalid start date format: %v", err)
 				return nil, fmt.Errorf("invalid start date format: %w", err)
 			}
 			workExp.StartDate = startDate
@@ -350,6 +365,7 @@ func (s *ProfileService) UpdateProfile(userID int64, req *models.UpdateProfileRe
 			if we.EndDate != nil {
 				endDate, err := time.Parse("2006-01-02", *we.EndDate)
 				if err != nil {
+					log.Printf("[ProfileService:UpdateProfile] Invalid end date format: %v", err)
 					return nil, fmt.Errorf("invalid end date format: %w", err)
 				}
 				workExp.EndDate = &endDate
@@ -362,6 +378,7 @@ func (s *ProfileService) UpdateProfile(userID int64, req *models.UpdateProfileRe
 			_, err = tx.Exec(query, workExp.UserProfileID, workExp.StartDate, workExp.EndDate,
 				workExp.Position, workExp.Company, workExp.Description)
 			if err != nil {
+				log.Printf("[ProfileService:UpdateProfile] Failed to create work experience: %v", err)
 				return nil, fmt.Errorf("failed to create work experience: %w", err)
 			}
 		}
@@ -372,6 +389,7 @@ func (s *ProfileService) UpdateProfile(userID int64, req *models.UpdateProfileRe
 		// Delete existing technology associations
 		_, err = tx.Exec("DELETE FROM user_profile_technology WHERE user_profile_id = $1", profileID)
 		if err != nil {
+			log.Printf("[ProfileService:UpdateProfile] Failed to delete technology associations: %v", err)
 			return nil, fmt.Errorf("failed to delete technology associations: %w", err)
 		}
 
@@ -386,9 +404,11 @@ func (s *ProfileService) UpdateProfile(userID int64, req *models.UpdateProfileRe
 					err = tx.QueryRowx("INSERT INTO technology (name) VALUES ($1) RETURNING id, name, category",
 						techName).StructScan(&tech)
 					if err != nil {
+						log.Printf("[ProfileService:UpdateProfile] Failed to create technology: %v", err)
 						return nil, fmt.Errorf("failed to create technology: %w", err)
 					}
 				} else {
+					log.Printf("[ProfileService:UpdateProfile] Failed to get technology: %v", err)
 					return nil, fmt.Errorf("failed to get technology: %w", err)
 				}
 			}
@@ -397,6 +417,7 @@ func (s *ProfileService) UpdateProfile(userID int64, req *models.UpdateProfileRe
 			_, err = tx.Exec("INSERT INTO user_profile_technology (user_profile_id, technology_id) VALUES ($1, $2)",
 				profileID, tech.ID)
 			if err != nil {
+				log.Printf("[ProfileService:UpdateProfile] Failed to link technology to profile: %v", err)
 				return nil, fmt.Errorf("failed to link technology to profile: %w", err)
 			}
 		}
@@ -404,6 +425,7 @@ func (s *ProfileService) UpdateProfile(userID int64, req *models.UpdateProfileRe
 
 	// Commit transaction
 	if err = tx.Commit(); err != nil {
+		log.Printf("[ProfileService:UpdateProfile] Failed to commit transaction: %v", err)
 		return nil, fmt.Errorf("failed to commit transaction: %w", err)
 	}
 
@@ -415,6 +437,7 @@ func (s *ProfileService) UpdateProfile(userID int64, req *models.UpdateProfileRe
 func (s *ProfileService) UpdateProfileImage(userID int64, imageURL string) error {
 	_, err := s.db.Exec("UPDATE user_profile SET avatar_url = $1 WHERE user_id = $2", imageURL, userID)
 	if err != nil {
+		log.Printf("[ProfileService:UpdateProfileImage] Failed to update profile image: %v", err)
 		return fmt.Errorf("failed to update profile image: %w", err)
 	}
 	return nil
@@ -424,6 +447,7 @@ func (s *ProfileService) UpdateProfileImage(userID int64, imageURL string) error
 func (s *ProfileService) UpdateResumeURL(userID int64, resumeURL string) error {
 	_, err := s.db.Exec("UPDATE user_profile SET resume_url = $1 WHERE user_id = $2", resumeURL, userID)
 	if err != nil {
+		log.Printf("[ProfileService:UpdateResumeURL] Failed to update resume URL: %v", err)
 		return fmt.Errorf("failed to update resume URL: %w", err)
 	}
 	return nil
@@ -434,6 +458,7 @@ func (s *ProfileService) GetTechnologies() ([]models.Technology, error) {
 	var technologies []models.Technology
 	err := s.db.Select(&technologies, "SELECT id, name, category FROM technology ORDER BY name")
 	if err != nil {
+		log.Printf("[ProfileService:GetTechnologies] Failed to get technologies: %v", err)
 		return nil, fmt.Errorf("failed to get technologies: %w", err)
 	}
 	return technologies, nil

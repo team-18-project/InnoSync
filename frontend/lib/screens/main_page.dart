@@ -28,7 +28,9 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
+    print('MainPage initState');
     getToken().then((token) {
+      print('MainPage getToken result: ' + (token ?? 'null'));
       _pages.addAll([
         DiscoverPage(
           onProjectTap: (project) {
@@ -46,8 +48,9 @@ class _MainPageState extends State<MainPage> {
         ),
         const InvitationsPage(),
         const MyProjectsPage(),
-        DashboardPage(token: token!),
+        if (token != null) DashboardPage(token: token),
       ]);
+      setState(() {});
     });
   }
 
@@ -60,6 +63,10 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    print('MainPage build, _pages.length = ${_pages.length}, _currentIndex = $_currentIndex');
+    if (_pages.isEmpty) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
     return Scaffold(
       appBar: const MainAppBar(title: 'InnoSync'),
       body: _selectedProject != null

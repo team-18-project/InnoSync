@@ -4,9 +4,12 @@ import 'package:frontend/theme/text_styles.dart';
 import 'package:frontend/widgets/common/widgets.dart';
 import 'package:frontend/widgets/login/widgets.dart';
 import 'dart:io';
+import '../../../services/api_service.dart';
+import '../../../utils/token_storage.dart';
 
 class ProjectCreate extends StatefulWidget {
-  const ProjectCreate({super.key});
+  final VoidCallback? onProjectCreated;
+  const ProjectCreate({super.key, this.onProjectCreated});
 
   @override
   State<ProjectCreate> createState() => _ProjectCreateState();
@@ -19,6 +22,7 @@ class _ProjectCreateState extends State<ProjectCreate> {
   final List<String> _skills = [];
   final List<String> _positions = [];
   final TextEditingController _skillsController = TextEditingController();
+  final TextEditingController _teamSizeController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,19 +84,37 @@ class _ProjectCreateState extends State<ProjectCreate> {
                     const VSpace.small(),
                   ],
                 ),
+                const VSpace.md(),
+                TextField(
+                  controller: _teamSizeController,
+                  decoration: InputDecoration(labelText: 'Team Size'),
+                ),
                 const Spacer(),
-                SubmitButton(
-                  text: 'Create',
-                  onPressed: () {
-                    setState(() {
-                      _titleController.clear();
-                      _descriptionController.clear();
-                      _skillsController.clear();
-                      _skills.clear();
-                      _logoFile = null;
-                    });
+                ElevatedButton(
+                  onPressed: () async {
+                    final token = await getToken();
+                    if (token == null) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Not authenticated!')),
+                      );
+                      return;
+                    }
+                    final success = await ApiService.createProject(
+                      token,
+                      _titleController.text,
+                      _descriptionController.text,
+                      int.tryParse(_teamSizeController.text),
+                    );
+                    if (success) {
+                      widget.onProjectCreated?.call();
+                      if (mounted) Navigator.pop(context);
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Failed to create project.')),
+                      );
+                    }
                   },
-                  isLoading: false,
+                  child: const Text('Create Project'),
                 ),
                 const VSpace.md(),
               ],

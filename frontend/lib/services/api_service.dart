@@ -214,4 +214,24 @@ class ApiService {
       return false;
     }
   }
+
+  Future<bool> applyToProject({
+    required String token,
+    required int projectId,
+    String? message,
+  }) async {
+    final url = Uri.parse('$baseUrl/applications');
+    final response = await http.post(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({
+        'project_id': projectId,
+        if (message != null) 'message': message,
+      }),
+    );
+    return response.statusCode == 201;
+  }
 }

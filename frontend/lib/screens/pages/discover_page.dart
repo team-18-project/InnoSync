@@ -21,6 +21,7 @@ class DiscoverPage extends StatefulWidget {
 class _DiscoverPageState extends State<DiscoverPage> with SearchMixin {
   final List<Project> _projects = [
     Project(
+      id: 1,
       title: 'InnoSync Platform',
       description:
           'A collaborative platform for innovative teams to manage projects and recruitment.',
@@ -29,6 +30,7 @@ class _DiscoverPageState extends State<DiscoverPage> with SearchMixin {
       positions: ['Full-stack Developer', 'Software Engineer'],
     ),
     Project(
+      id: 2,
       title: 'EcoTrack',
       description:
           'Track your carbon footprint and get personalized eco-friendly tips.',
@@ -37,6 +39,7 @@ class _DiscoverPageState extends State<DiscoverPage> with SearchMixin {
       positions: ['Full-stack Developer', 'Software Engineer'],
     ),
     Project(
+      id: 3,
       title: 'HealthSync',
       description: 'A health data aggregator for patients and doctors.',
       logoUrl: null,
@@ -83,6 +86,22 @@ class _DiscoverPageState extends State<DiscoverPage> with SearchMixin {
 
   String _searchMode = 'Projects'; // or 'Talents'
 
+  List<Project> get _filteredProjects {
+    if (searchFilters.isEmpty) return _projects;
+    return _projects.where((project) {
+      final text = (project.title + ' ' + project.description + ' ' + project.skills.join(' ') + ' ' + project.positions.join(' ')).toLowerCase();
+      return searchFilters.any((filter) => text.contains(filter.toLowerCase()));
+    }).toList();
+  }
+
+  List<Talent> get _filteredTalents {
+    if (searchFilters.isEmpty) return _talents;
+    return _talents.where((talent) {
+      final text = (talent.name + ' ' + talent.description + ' ' + talent.skills.join(' ') + ' ' + talent.positions.join(' ')).toLowerCase();
+      return searchFilters.any((filter) => text.contains(filter.toLowerCase()));
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -123,11 +142,11 @@ class _DiscoverPageState extends State<DiscoverPage> with SearchMixin {
             Expanded(
               child: _searchMode == 'Projects'
                   ? ListView.separated(
-                      itemCount: _projects.length,
+                      itemCount: _filteredProjects.length,
                       separatorBuilder: (context, i) =>
                           const VSpace.mediumPlus(),
                       itemBuilder: (context, i) {
-                        final project = _projects[i];
+                        final project = _filteredProjects[i];
                         return ProjectCard(
                           project: project,
                           onTap: () => widget.onProjectTap?.call(project),
@@ -135,11 +154,11 @@ class _DiscoverPageState extends State<DiscoverPage> with SearchMixin {
                       },
                     )
                   : ListView.separated(
-                      itemCount: _talents.length,
+                      itemCount: _filteredTalents.length,
                       separatorBuilder: (context, i) =>
                           const VSpace.mediumPlus(),
                       itemBuilder: (context, i) {
-                        final talent = _talents[i];
+                        final talent = _filteredTalents[i];
                         return TalentCard(
                           talent: talent,
                           onTap: () => widget.onTalentTap?.call(talent),
