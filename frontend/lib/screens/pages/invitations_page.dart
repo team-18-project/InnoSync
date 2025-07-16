@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import '../../services/api_service.dart';
 import '../../utils/token_storage.dart';
+import 'package:frontend/models/invitation_model.dart';
+import 'package:frontend/widgets/common/widgets.dart';
+import 'package:frontend/widgets/invitation/widgets.dart';
 
 class InvitationsPage extends StatefulWidget {
-  const InvitationsPage({super.key});
+  final Function(Invitation) onInvitationTap;
+  const InvitationsPage({super.key, required this.onInvitationTap});
 
   @override
   State<InvitationsPage> createState() => _InvitationsPageState();
@@ -45,41 +49,17 @@ class _InvitationsPageState extends State<InvitationsPage> {
       SnackBar(content: Text(accept ? 'Invitation accepted!' : 'Invitation declined!')),
     );
   }
-
   @override
   Widget build(BuildContext context) {
-    if (_loading) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
-    }
-    if (_invitations.isEmpty) {
-      return const Scaffold(body: Center(child: Text('No invitations yet.')));
-    }
     return Scaffold(
-      body: ListView.builder(
-        itemCount: _invitations.length,
-        itemBuilder: (context, i) {
-          final inv = _invitations[i];
-          return Card(
-            margin: const EdgeInsets.all(12),
-            child: ListTile(
-              title: Text(inv['project_title'] ?? 'Project'),
-              subtitle: Text(inv['message'] ?? ''),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.check, color: Colors.green),
-                    onPressed: () => _respondToInvitation(inv['id'], true),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.close, color: Colors.red),
-                    onPressed: () => _respondToInvitation(inv['id'], false),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
+      body: ListView.separated(
+        itemCount: invitations.length,
+        separatorBuilder: (context, i) => const VSpace.mediumPlus(),
+        itemBuilder: (context, i) => InvitationCard(
+          invitation: invitations[i],
+          onTap: () => widget.onInvitationTap(invitations[i]),
+        ),
+        padding: const EdgeInsets.all(24),
       ),
     );
   }

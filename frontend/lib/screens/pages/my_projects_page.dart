@@ -3,9 +3,15 @@ import 'package:frontend/screens/pages/views/project_create.dart';
 import 'package:frontend/models/project_model.dart';
 import 'package:frontend/utils/token_storage.dart';
 import 'package:frontend/services/api_service.dart';
+import 'package:frontend/theme/colors.dart';
+import 'package:frontend/widgets/common/widgets.dart';
+import 'package:frontend/widgets/discover/widgets.dart';
+
+typedef ProjectTapCallback = void Function(Project project);
 
 class MyProjectsPage extends StatefulWidget {
-  const MyProjectsPage({super.key});
+  const MyProjectsPage({super.key, this.onProjectTap});
+  final ProjectTapCallback? onProjectTap;
 
   @override
   State<MyProjectsPage> createState() => _MyProjectsPageState();
@@ -50,9 +56,11 @@ class _MyProjectsPageState extends State<MyProjectsPage> {
       const SnackBar(content: Text('Проект успешно создан!')),
     );
   }
-
   @override
   Widget build(BuildContext context) {
+    _projects.addAll([
+      Project(title: 'Project 1', description: 'Description 1'),
+    ]); // TODO: replace with API request
     return Scaffold(
       body: _loading
           ? const Center(child: CircularProgressIndicator())
@@ -60,9 +68,10 @@ class _MyProjectsPageState extends State<MyProjectsPage> {
               ? const Center(child: Text('Нет проектов'))
               : ListView.builder(
                   itemCount: _projects.length,
-                  itemBuilder: (context, i) => ListTile(
-                    title: Text(_projects[i].title),
-                  ),
+                  itemBuilder: (context, i) => return ProjectCard(
+                  project: _project[i],
+                  onTap: () => widget.onProjectTap?.call(project),
+                );
                 ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {

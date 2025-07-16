@@ -21,6 +21,18 @@ class AppTextStyles {
     color: AppColors.textPrimary,
   );
 
+  static const TextStyle h4 = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textPrimary,
+  );
+
+  static const TextStyle h5 = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textPrimary,
+  );
+
   // Body text
   static const TextStyle bodyLarge = TextStyle(
     fontSize: 16,

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/models/invitation_model.dart';
 import 'pages/discover_page.dart';
 import 'pages/dashboard_page.dart';
 import 'pages/invitations_page.dart';
 import 'pages/my_projects_page.dart';
 import '../theme/colors.dart';
 import '../widgets/common/main_app_bar.dart';
+import 'pages/views/invitation_view.dart';
 import 'pages/views/project_view.dart';
 import 'pages/views/talent_view.dart';
 import '../models/project_model.dart';
@@ -22,8 +24,10 @@ class _MainPageState extends State<MainPage> {
   int _currentIndex = 0;
   Project? _selectedProject;
   Talent? _selectedTalent;
-
+  Invitation? _selectedInvitation;
   final List<Widget> _pages = [];
+  bool _isLoading = true;
+  bool _tokenError = false; // TODO: remove this after bug fixed
 
   @override
   void initState() {
@@ -46,8 +50,20 @@ class _MainPageState extends State<MainPage> {
             });
           },
         ),
-        const InvitationsPage(),
-        const MyProjectsPage(),
+          InvitationsPage(
+            onInvitationTap: (invitation) {
+              setState(() {
+                _selectedInvitation = invitation;
+              });
+            },
+          ),
+          MyProjectsPage(
+            onProjectTap: (project) {
+              setState(() {
+                _selectedProject = project;
+              });
+            },
+          ),
         if (token != null) DashboardPage(token: token),
       ]);
       setState(() {});
@@ -58,11 +74,12 @@ class _MainPageState extends State<MainPage> {
     setState(() {
       _selectedProject = null;
       _selectedTalent = null;
+      _selectedInvitation = null;
     });
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) 
     print('MainPage build, _pages.length = ${_pages.length}, _currentIndex = $_currentIndex');
     if (_pages.isEmpty) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
@@ -73,6 +90,8 @@ class _MainPageState extends State<MainPage> {
           ? ProjectView(project: _selectedProject!, onBack: _goBackFromView)
           : _selectedTalent != null
           ? TalentView(talent: _selectedTalent!, onBack: _goBackFromView)
+          : _selectedInvitation != null
+          ? InvitationView(invitation: _selectedInvitation!)
           : _pages[_currentIndex],
       bottomNavigationBar: (_selectedProject == null && _selectedTalent == null)
           ? BottomNavigationBar(
