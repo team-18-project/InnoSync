@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/main_page.dart';
 import 'package:frontend/theme/colors.dart';
+import 'package:frontend/theme/dimensions.dart';
 import 'package:frontend/theme/text_styles.dart';
 import 'package:frontend/widgets/common/widgets.dart';
 import 'package:frontend/widgets/login/widgets.dart';
 import 'dart:io';
-import 'package:frontend/screens/pages/views/project_view.dart';
-import 'package:frontend/models/project_model.dart';
 
 class ProjectCreate extends StatefulWidget {
   const ProjectCreate({super.key});
@@ -34,20 +33,43 @@ class _ProjectCreateState extends State<ProjectCreate> {
             ), // leave space for floating chips
             child: Column(
               children: [
+                const VSpace.md(),
                 ProfileImagePicker(
                   profileImage: _logoFile,
                   onImagePicked: (file) => setState(() => _logoFile = file),
                   backgroundColor: AppColors.profilePickerBackground,
                 ),
-                const VSpace.md(),
+                const VSpace.lg(),
                 TextField(
                   controller: _titleController,
-                  decoration: InputDecoration(labelText: 'Title'),
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
+                    labelText: 'Title',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(
+                        AppDimensions.radiusLg,
+                      ),
+                    ),
+                  ),
                 ),
                 const VSpace.md(),
                 TextField(
                   controller: _descriptionController,
-                  decoration: InputDecoration(labelText: 'Description'),
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
+                    labelText: 'Description',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(
+                        AppDimensions.radiusLg,
+                      ),
+                    ),
+                  ),
                 ),
                 const VSpace.md(),
                 Row(
@@ -56,7 +78,16 @@ class _ProjectCreateState extends State<ProjectCreate> {
                       child: TextField(
                         controller: _skillsController,
                         decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
                           labelText: 'Skills',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(
+                              AppDimensions.radiusLg,
+                            ),
+                          ),
                           suffixIcon: IconButton(
                             icon: const Icon(Icons.add),
                             onPressed: () {
@@ -141,7 +172,16 @@ class _ProjectCreateState extends State<ProjectCreate> {
                       child: TextField(
                         controller: _positionsController,
                         decoration: InputDecoration(
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 12,
+                          ),
                           labelText: 'Positions',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(
+                              AppDimensions.radiusLg,
+                            ),
+                          ),
                           suffixIcon: IconButton(
                             icon: const Icon(Icons.add),
                             onPressed: () {
