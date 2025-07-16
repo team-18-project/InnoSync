@@ -240,19 +240,23 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
                   child: Column(
                     children: [
                       _buildWorkExpField('Position', exp, 'position', i),
+                      const VSpace.sm(),
                       _buildWorkExpField('Company', exp, 'company', i),
+                      const VSpace.sm(),
                       _buildWorkExpField(
                         'Start Date (YYYY-MM-DD)',
                         exp,
                         'startDate',
                         i,
                       ),
+                      const VSpace.sm(),
                       _buildWorkExpField(
                         'End Date (YYYY-MM-DD)',
                         exp,
                         'endDate',
                         i,
                       ),
+                      const VSpace.sm(),
                       _buildWorkExpField(
                         'Description',
                         exp,
