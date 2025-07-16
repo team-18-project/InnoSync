@@ -25,6 +25,7 @@ class _ProjectCreateState extends State<ProjectCreate> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: MainAppBar(title: 'Create Project'),
       body: Stack(
         children: [
           Padding(

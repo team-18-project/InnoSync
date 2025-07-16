@@ -55,7 +55,13 @@ class _MainPageState extends State<MainPage> {
             },
           ),
           const InvitationsPage(),
-          const MyProjectsPage(),
+          MyProjectsPage(
+            onProjectTap: (project) {
+              setState(() {
+                _selectedProject = project;
+              });
+            },
+          ),
           DashboardPage(token: token),
         ]);
         _isLoading = false;
