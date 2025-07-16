@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
 
@@ -179,6 +180,8 @@ class ApiService {
     String? expertiseLevel,
     List<String>? technologies,
     List<Map<String, dynamic>>? workExperience,
+    File? resumeFile,
+    File? profileImage,
   }) async {
     final url = Uri.parse('$baseUrl/profile');
     final Map<String, dynamic> body = {'name': name, 'email': email};

@@ -10,6 +10,7 @@ import '../repositories/profile_repository.dart';
 import '../utils/token_storage.dart';
 import '../services/api_service.dart';
 import '../utils/ui_helpers.dart';
+import 'package:file_picker/file_picker.dart';
 
 class ProfileCreationPage extends StatefulWidget {
   const ProfileCreationPage({super.key});
@@ -24,13 +25,35 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
   final TextEditingController _telegramController = TextEditingController();
   final TextEditingController _githubController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
+  final TextEditingController _positionController = TextEditingController();
+  final TextEditingController _expertiseController = TextEditingController();
   File? _profileImage;
+  File? _resumeFile;
+
+  // Education & Expertise Level enums
+  static const List<String> _educationOptions = [
+    'NO_DEGREE', 'BACHELOR', 'MASTER', 'PHD'
+  ];
+  String? _selectedEducation;
+
+  static const List<String> _expertiseLevelOptions = [
+    'ENTRY', 'JUNIOR', 'MID', 'SENIOR', 'RESEARCHER'
+  ];
+  String? _selectedExpertiseLevel;
+
+  // Technologies (multi-select)
+  List<String> _allTechnologies = [
+    'Flutter', 'Dart', 'Go', 'React', 'Node.js', 'Python', 'Java', 'AWS', 'Docker', 'Kubernetes', 'Figma', 'Sketch', 'Adobe XD', 'Prototyping'
+  ];
+  List<String> _selectedTechnologies = [];
+
+  // Work Experience
+  List<Map<String, dynamic>> _workExperiences = [];
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final args =
-        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     if (args != null) {
       _emailController.text = args['email'] ?? '';
       _fullNameController.text = args['name'] ?? '';
@@ -44,12 +67,41 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
     _telegramController.dispose();
     _githubController.dispose();
     _bioController.dispose();
+    _positionController.dispose();
+    _expertiseController.dispose();
     super.dispose();
   }
 
   void _onImagePicked(File image) {
     setState(() {
       _profileImage = image;
+    });
+  }
+
+  Future<void> _pickResume() async {
+    final result = await FilePicker.platform.pickFiles(type: FileType.any);
+    if (result != null && result.files.single.path != null) {
+      setState(() {
+        _resumeFile = File(result.files.single.path!);
+      });
+    }
+  }
+
+  void _addWorkExperience() {
+    setState(() {
+      _workExperiences.add({
+        'position': '',
+        'company': '',
+        'startDate': '',
+        'endDate': '',
+        'description': '',
+      });
+    });
+  }
+
+  void _removeWorkExperience(int index) {
+    setState(() {
+      _workExperiences.removeAt(index);
     });
   }
 
@@ -82,6 +134,103 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
             _buildInputField('Github', _githubController),
             const VSpace.lg(),
             _buildInputField('Bio', _bioController, maxLines: 4),
+            const VSpace.lg(),
+            _buildInputField('Position', _positionController),
+            const VSpace.lg(),
+            // Education dropdown
+            DropdownButtonFormField<String>(
+              value: _selectedEducation,
+              items: _educationOptions.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+              onChanged: (val) => setState(() => _selectedEducation = val),
+              decoration: const InputDecoration(labelText: 'Education'),
+            ),
+            const VSpace.lg(),
+            _buildInputField('Expertise', _expertiseController),
+            const VSpace.lg(),
+            // Expertise Level dropdown
+            DropdownButtonFormField<String>(
+              value: _selectedExpertiseLevel,
+              items: _expertiseLevelOptions.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+              onChanged: (val) => setState(() => _selectedExpertiseLevel = val),
+              decoration: const InputDecoration(labelText: 'Expertise Level'),
+            ),
+            const VSpace.lg(),
+            // Technologies multi-select
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text('Technologies', style: AppTextStyles.bodyLarge),
+            ),
+            Wrap(
+              spacing: 8,
+              children: _allTechnologies.map((tech) => FilterChip(
+                label: Text(tech),
+                selected: _selectedTechnologies.contains(tech),
+                onSelected: (selected) {
+                  setState(() {
+                    if (selected) {
+                      _selectedTechnologies.add(tech);
+                    } else {
+                      _selectedTechnologies.remove(tech);
+                    }
+                  });
+                },
+              )).toList(),
+            ),
+            const VSpace.lg(),
+            // Work Experience
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text('Work Experience', style: AppTextStyles.bodyLarge),
+            ),
+            ..._workExperiences.asMap().entries.map((entry) {
+              final i = entry.key;
+              final exp = entry.value;
+              return Card(
+                margin: const EdgeInsets.symmetric(vertical: 8),
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Column(
+                    children: [
+                      _buildWorkExpField('Position', exp, 'position', i),
+                      _buildWorkExpField('Company', exp, 'company', i),
+                      _buildWorkExpField('Start Date (YYYY-MM-DD)', exp, 'startDate', i),
+                      _buildWorkExpField('End Date (YYYY-MM-DD)', exp, 'endDate', i),
+                      _buildWorkExpField('Description', exp, 'description', i, maxLines: 2),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: IconButton(
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          onPressed: () => _removeWorkExperience(i),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton.icon(
+                icon: const Icon(Icons.add),
+                label: const Text('Add Work Experience'),
+                onPressed: _addWorkExperience,
+              ),
+            ),
+            const VSpace.lg(),
+            // Resume upload
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ElevatedButton(
+                  onPressed: _pickResume,
+                  child: const Text('Upload Resume'),
+                ),
+                if (_resumeFile != null) ...[
+                  const SizedBox(height: 8),
+                  Text('Selected file: ${_resumeFile!.path.split('/').last}'),
+                ],
+              ],
+            ),
             const VSpace.xxl(),
             ElevatedButton(
               style: AppTheme.primaryButtonStyle,
@@ -91,22 +240,28 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
                   token: token!,
                   name: _fullNameController.text,
                   email: _emailController.text,
-                  telegram: _telegramController.text.isEmpty
-                      ? null
-                      : _telegramController.text,
-                  github: _githubController.text.isEmpty
-                      ? null
-                      : _githubController.text,
+                  telegram: _telegramController.text.isEmpty ? null : _telegramController.text,
+                  github: _githubController.text.isEmpty ? null : _githubController.text,
                   bio: _bioController.text.isEmpty ? null : _bioController.text,
+                  position: _positionController.text.isEmpty ? null : _positionController.text,
+                  education: _selectedEducation,
+                  expertise: _expertiseController.text.isEmpty ? null : _expertiseController.text,
+                  expertiseLevel: _selectedExpertiseLevel,
+                  technologies: _selectedTechnologies,
+                  workExperience: _workExperiences,
+                  resumeFile: _resumeFile,
+                  profileImage: _profileImage,
                 );
                 if (success) {
-                  await saveToken(token!);
+                  await saveToken(token);
+                  if (!mounted) return;
                   Navigator.pushReplacementNamed(context, '/main');
                 } else {
+                  if (!mounted) return;
                   UIHelpers.showError(context, 'Failed to create profile');
                 }
               },
-              child: const Text('Sign up', style: AppTextStyles.buttonText),
+              child: const Text('Create Profile'),
             ),
           ],
         ),
@@ -114,26 +269,22 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
     );
   }
 
-  Widget _buildInputField(
-    String label,
-    TextEditingController controller, {
-    int maxLines = 1,
-    bool readOnly = false,
-  }) {
+  Widget _buildInputField(String label, TextEditingController controller, {bool readOnly = false, int maxLines = 1}) {
     return TextField(
       controller: controller,
-      maxLines: maxLines,
       readOnly: readOnly,
-      decoration: InputDecoration(
-        labelText: label,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
-        ),
-        contentPadding: const EdgeInsets.symmetric(
-          vertical: AppDimensions.paddingMd,
-          horizontal: AppDimensions.paddingLg,
-        ),
-      ),
+      maxLines: maxLines,
+      decoration: InputDecoration(labelText: label),
+    );
+  }
+
+  Widget _buildWorkExpField(String label, Map<String, dynamic> exp, String key, int index, {int maxLines = 1}) {
+    return TextField(
+      controller: TextEditingController(text: exp[key] ?? '')
+        ..selection = TextSelection.collapsed(offset: (exp[key] ?? '').length),
+      maxLines: maxLines,
+      decoration: InputDecoration(labelText: label),
+      onChanged: (val) => setState(() => _workExperiences[index][key] = val),
     );
   }
 }
