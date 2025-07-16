@@ -24,30 +24,42 @@ class _MainPageState extends State<MainPage> {
   Talent? _selectedTalent;
 
   final List<Widget> _pages = [];
+  bool _isLoading = true;
+  bool _tokenError = false; // TODO: remove this after bug fixed
 
   @override
   void initState() {
     super.initState();
     getToken().then((token) {
-      _pages.addAll([
-        DiscoverPage(
-          onProjectTap: (project) {
-            setState(() {
-              _selectedProject = project;
-              _selectedTalent = null;
-            });
-          },
-          onTalentTap: (talent) {
-            setState(() {
-              _selectedTalent = talent;
-              _selectedProject = null;
-            });
-          },
-        ),
-        const InvitationsPage(),
-        const MyProjectsPage(),
-        DashboardPage(token: token!),
-      ]);
+      if (token == null) {
+        setState(() {
+          _tokenError = true;
+          _isLoading = false;
+        });
+        return;
+      }
+      setState(() {
+        _pages.addAll([
+          DiscoverPage(
+            onProjectTap: (project) {
+              setState(() {
+                _selectedProject = project;
+                _selectedTalent = null;
+              });
+            },
+            onTalentTap: (talent) {
+              setState(() {
+                _selectedTalent = talent;
+                _selectedProject = null;
+              });
+            },
+          ),
+          const InvitationsPage(),
+          const MyProjectsPage(),
+          DashboardPage(token: token),
+        ]);
+        _isLoading = false;
+      });
     });
   }
 
@@ -60,6 +72,14 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading || _pages.isEmpty) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
+    // if (_tokenError) {
+    //   return const Scaffold(
+    //     body: Center(child: Text('Error: No token found. Please log in.')),
+    //   );
+    // } // TODO: uncomment after login bug fixed
     return Scaffold(
       appBar: const MainAppBar(title: 'InnoSync'),
       body: _selectedProject != null

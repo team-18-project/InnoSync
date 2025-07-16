@@ -12,7 +12,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'InnoSync',
-      initialRoute: '/login',
+      // initialRoute: '/login',
+      initialRoute: '/main', // TODO: change to login
       routes: appRoutes,
       theme: ThemeData(
         primarySwatch: Colors.green,

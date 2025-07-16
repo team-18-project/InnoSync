@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/screens/main_page.dart';
 import 'package:frontend/theme/colors.dart';
 import 'package:frontend/theme/text_styles.dart';
 import 'package:frontend/widgets/common/widgets.dart';
 import 'package:frontend/widgets/login/widgets.dart';
 import 'dart:io';
+import 'package:frontend/screens/pages/views/project_view.dart';
+import 'package:frontend/models/project_model.dart';
 
 class ProjectCreate extends StatefulWidget {
   const ProjectCreate({super.key});
@@ -19,6 +22,7 @@ class _ProjectCreateState extends State<ProjectCreate> {
   final List<String> _skills = [];
   final List<String> _positions = [];
   final TextEditingController _skillsController = TextEditingController();
+  final TextEditingController _positionsController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,6 +84,142 @@ class _ProjectCreateState extends State<ProjectCreate> {
                     const VSpace.small(),
                   ],
                 ),
+                if (_skills.isNotEmpty)
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: Container(
+                      color: Colors.transparent,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: _skills
+                              .map(
+                                (keyword) => Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: Chip(
+                                    label: Text(
+                                      keyword,
+                                      style: AppTextStyles.bodyLarge.copyWith(
+                                        color: AppColors.textOnPrimary,
+                                      ),
+                                    ),
+                                    backgroundColor: AppColors.primary,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(24),
+                                    ),
+                                    deleteIcon: Container(
+                                      decoration: const BoxDecoration(
+                                        color: AppColors.textOnPrimary,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: const Icon(
+                                        Icons.close,
+                                        size: 18,
+                                        color: AppColors.primary,
+                                      ),
+                                    ),
+                                    onDeleted: () =>
+                                        setState(() => _skills.remove(keyword)),
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ),
+                    ),
+                  ),
+                const VSpace.md(),
+                Row(
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: _positionsController,
+                        decoration: InputDecoration(
+                          labelText: 'Positions',
+                          suffixIcon: IconButton(
+                            icon: const Icon(Icons.add),
+                            onPressed: () {
+                              final value = _positionsController.text.trim();
+                              if (value.isNotEmpty) {
+                                setState(() {
+                                  _positions.add(value);
+                                  _positionsController.clear();
+                                });
+                              }
+                            },
+                            iconSize: 24,
+                          ),
+                        ),
+                        onSubmitted: (value) {
+                          if (value.trim().isNotEmpty) {
+                            setState(() {
+                              _positions.add(value.trim());
+                              _positionsController.clear();
+                            });
+                          }
+                        },
+                      ),
+                    ),
+                    const VSpace.small(),
+                  ],
+                ),
+                if (_skills.isNotEmpty)
+                  Positioned(
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: Container(
+                      color: Colors.transparent,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: _positions
+                              .map(
+                                (keyword) => Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: Chip(
+                                    label: Text(
+                                      keyword,
+                                      style: AppTextStyles.bodyLarge.copyWith(
+                                        color: AppColors.textOnPrimary,
+                                      ),
+                                    ),
+                                    backgroundColor: AppColors.primary,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(24),
+                                    ),
+                                    deleteIcon: Container(
+                                      decoration: const BoxDecoration(
+                                        color: AppColors.textOnPrimary,
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: const Icon(
+                                        Icons.close,
+                                        size: 18,
+                                        color: AppColors.primary,
+                                      ),
+                                    ),
+                                    onDeleted: () => setState(
+                                      () => _positions.remove(keyword),
+                                    ),
+                                  ),
+                                ),
+                              )
+                              .toList(),
+                        ),
+                      ),
+                    ),
+                  ),
                 const Spacer(),
                 SubmitButton(
                   text: 'Create',
@@ -88,9 +228,16 @@ class _ProjectCreateState extends State<ProjectCreate> {
                       _titleController.clear();
                       _descriptionController.clear();
                       _skillsController.clear();
+                      _positionsController.clear();
                       _skills.clear();
+                      _positions.clear();
                       _logoFile = null;
                     });
+                    Navigator.push(
+                      context,
+                      // TODO: throw API request here
+                      MaterialPageRoute(builder: (context) => const MainPage()),
+                    );
                   },
                   isLoading: false,
                 ),
@@ -98,56 +245,6 @@ class _ProjectCreateState extends State<ProjectCreate> {
               ],
             ),
           ),
-          if (_skills.isNotEmpty)
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: Container(
-                color: Colors.transparent,
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: _skills
-                        .map(
-                          (keyword) => Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
-                            child: Chip(
-                              label: Text(
-                                keyword,
-                                style: AppTextStyles.bodyLarge.copyWith(
-                                  color: AppColors.textOnPrimary,
-                                ),
-                              ),
-                              backgroundColor: AppColors.primary,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(24),
-                              ),
-                              deleteIcon: Container(
-                                decoration: const BoxDecoration(
-                                  color: AppColors.textOnPrimary,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Icon(
-                                  Icons.close,
-                                  size: 18,
-                                  color: AppColors.primary,
-                                ),
-                              ),
-                              onDeleted: () =>
-                                  setState(() => _skills.remove(keyword)),
-                            ),
-                          ),
-                        )
-                        .toList(),
-                  ),
-                ),
-              ),
-            ),
         ],
       ),
     );
