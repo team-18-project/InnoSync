@@ -1,4 +1,5 @@
 import '../services/api_service.dart';
+import 'dart:io';
 
 class ProfileRepository {
   final ApiService apiService;
@@ -16,6 +17,14 @@ class ProfileRepository {
     String? telegram,
     String? github,
     String? bio,
+    String? position,
+    String? education,
+    String? expertise,
+    String? expertiseLevel,
+    List<String>? technologies,
+    List<Map<String, dynamic>>? workExperience,
+    File? resumeFile,
+    File? profileImage,
   }) {
     return apiService.createProfile(
       token: token,
@@ -24,6 +33,14 @@ class ProfileRepository {
       telegram: telegram,
       github: github,
       bio: bio,
+      position: position,
+      education: education,
+      expertise: expertise,
+      expertiseLevel: expertiseLevel,
+      technologies: technologies,
+      workExperience: workExperience,
+      resumeFile: resumeFile,
+      profileImage: profileImage,
     );
   }
 } 
