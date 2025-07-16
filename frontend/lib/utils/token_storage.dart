@@ -6,7 +6,6 @@ Future<void> saveToken(String token) async {
 }
 
 Future<String?> getToken() async {
-  // final prefs = await SharedPreferences.getInstance();
-  // return prefs.getString('jwt_token');
-  return ''; // TODO: remove empty token after bug fixed
+  final prefs = await SharedPreferences.getInstance();
+  return prefs.getString('jwt_token');
 }
