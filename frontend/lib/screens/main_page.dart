@@ -26,14 +26,14 @@ class _MainPageState extends State<MainPage> {
   Talent? _selectedTalent;
   Invitation? _selectedInvitation;
   final List<Widget> _pages = [];
-  bool _isLoading = true;
+  final bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
     print('MainPage initState');
     getToken().then((token) {
-      print('MainPage getToken result: ' + (token ?? 'null'));
+      print('MainPage getToken result: ${token ?? 'null'}');
       _pages.addAll([
         DiscoverPage(
           onProjectTap: (project) {

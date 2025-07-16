@@ -89,7 +89,9 @@ class _DiscoverPageState extends State<DiscoverPage> with SearchMixin {
   List<Project> get _filteredProjects {
     if (searchFilters.isEmpty) return _projects;
     return _projects.where((project) {
-      final text = (project.title + ' ' + project.description + ' ' + project.skills.join(' ') + ' ' + project.positions.join(' ')).toLowerCase();
+      final text =
+          ('${project.title} ${project.description} ${project.skills.join(' ')} ${project.positions.join(' ')}')
+              .toLowerCase();
       return searchFilters.any((filter) => text.contains(filter.toLowerCase()));
     }).toList();
   }
@@ -97,7 +99,9 @@ class _DiscoverPageState extends State<DiscoverPage> with SearchMixin {
   List<Talent> get _filteredTalents {
     if (searchFilters.isEmpty) return _talents;
     return _talents.where((talent) {
-      final text = (talent.name + ' ' + talent.description + ' ' + talent.skills.join(' ') + ' ' + talent.positions.join(' ')).toLowerCase();
+      final text =
+          ('${talent.name} ${talent.description} ${talent.skills.join(' ')} ${talent.positions.join(' ')}')
+              .toLowerCase();
       return searchFilters.any((filter) => text.contains(filter.toLowerCase()));
     }).toList();
   }

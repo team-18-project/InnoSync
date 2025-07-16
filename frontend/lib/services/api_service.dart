@@ -185,22 +185,29 @@ class ApiService {
   }) async {
     final url = Uri.parse('$baseUrl/profile');
     final Map<String, dynamic> body = {'name': name, 'email': email};
-    if (telegram != null && telegram.trim().isNotEmpty)
+    if (telegram != null && telegram.trim().isNotEmpty) {
       body['telegram'] = telegram;
+    }
     if (github != null && github.trim().isNotEmpty) body['github'] = github;
     if (bio != null && bio.trim().isNotEmpty) body['bio'] = bio;
-    if (position != null && position.trim().isNotEmpty)
+    if (position != null && position.trim().isNotEmpty) {
       body['position'] = position;
-    if (education != null && education.trim().isNotEmpty)
+    }
+    if (education != null && education.trim().isNotEmpty) {
       body['education'] = education;
-    if (expertise != null && expertise.trim().isNotEmpty)
+    }
+    if (expertise != null && expertise.trim().isNotEmpty) {
       body['expertise'] = expertise;
-    if (expertiseLevel != null && expertiseLevel.trim().isNotEmpty)
+    }
+    if (expertiseLevel != null && expertiseLevel.trim().isNotEmpty) {
       body['expertise_level'] = expertiseLevel;
-    if (technologies != null && technologies.isNotEmpty)
+    }
+    if (technologies != null && technologies.isNotEmpty) {
       body['technologies'] = technologies;
-    if (workExperience != null && workExperience.isNotEmpty)
+    }
+    if (workExperience != null && workExperience.isNotEmpty) {
       body['work_experience'] = workExperience;
+    }
 
     final response = await http.post(
       url,

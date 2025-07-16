@@ -32,28 +32,49 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
 
   // Education & Expertise Level enums
   static const List<String> _educationOptions = [
-    'NO_DEGREE', 'BACHELOR', 'MASTER', 'PHD'
+    'NO_DEGREE',
+    'BACHELOR',
+    'MASTER',
+    'PHD',
   ];
   String? _selectedEducation;
 
   static const List<String> _expertiseLevelOptions = [
-    'ENTRY', 'JUNIOR', 'MID', 'SENIOR', 'RESEARCHER'
+    'ENTRY',
+    'JUNIOR',
+    'MID',
+    'SENIOR',
+    'RESEARCHER',
   ];
   String? _selectedExpertiseLevel;
 
   // Technologies (multi-select)
-  List<String> _allTechnologies = [
-    'Flutter', 'Dart', 'Go', 'React', 'Node.js', 'Python', 'Java', 'AWS', 'Docker', 'Kubernetes', 'Figma', 'Sketch', 'Adobe XD', 'Prototyping'
+  final List<String> _allTechnologies = [
+    'Flutter',
+    'Dart',
+    'Go',
+    'React',
+    'Node.js',
+    'Python',
+    'Java',
+    'AWS',
+    'Docker',
+    'Kubernetes',
+    'Figma',
+    'Sketch',
+    'Adobe XD',
+    'Prototyping',
   ];
-  List<String> _selectedTechnologies = [];
+  final List<String> _selectedTechnologies = [];
 
   // Work Experience
-  List<Map<String, dynamic>> _workExperiences = [];
+  final List<Map<String, dynamic>> _workExperiences = [];
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final args =
+        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
     if (args != null) {
       _emailController.text = args['email'] ?? '';
       _fullNameController.text = args['name'] ?? '';
@@ -140,7 +161,9 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
             // Education dropdown
             DropdownButtonFormField<String>(
               value: _selectedEducation,
-              items: _educationOptions.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+              items: _educationOptions
+                  .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                  .toList(),
               onChanged: (val) => setState(() => _selectedEducation = val),
               decoration: const InputDecoration(labelText: 'Education'),
             ),
@@ -150,7 +173,9 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
             // Expertise Level dropdown
             DropdownButtonFormField<String>(
               value: _selectedExpertiseLevel,
-              items: _expertiseLevelOptions.map((e) => DropdownMenuItem(value: e, child: Text(e))).toList(),
+              items: _expertiseLevelOptions
+                  .map((e) => DropdownMenuItem(value: e, child: Text(e)))
+                  .toList(),
               onChanged: (val) => setState(() => _selectedExpertiseLevel = val),
               decoration: const InputDecoration(labelText: 'Expertise Level'),
             ),
@@ -162,19 +187,23 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
             ),
             Wrap(
               spacing: 8,
-              children: _allTechnologies.map((tech) => FilterChip(
-                label: Text(tech),
-                selected: _selectedTechnologies.contains(tech),
-                onSelected: (selected) {
-                  setState(() {
-                    if (selected) {
-                      _selectedTechnologies.add(tech);
-                    } else {
-                      _selectedTechnologies.remove(tech);
-                    }
-                  });
-                },
-              )).toList(),
+              children: _allTechnologies
+                  .map(
+                    (tech) => FilterChip(
+                      label: Text(tech),
+                      selected: _selectedTechnologies.contains(tech),
+                      onSelected: (selected) {
+                        setState(() {
+                          if (selected) {
+                            _selectedTechnologies.add(tech);
+                          } else {
+                            _selectedTechnologies.remove(tech);
+                          }
+                        });
+                      },
+                    ),
+                  )
+                  .toList(),
             ),
             const VSpace.lg(),
             // Work Experience
@@ -193,9 +222,25 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
                     children: [
                       _buildWorkExpField('Position', exp, 'position', i),
                       _buildWorkExpField('Company', exp, 'company', i),
-                      _buildWorkExpField('Start Date (YYYY-MM-DD)', exp, 'startDate', i),
-                      _buildWorkExpField('End Date (YYYY-MM-DD)', exp, 'endDate', i),
-                      _buildWorkExpField('Description', exp, 'description', i, maxLines: 2),
+                      _buildWorkExpField(
+                        'Start Date (YYYY-MM-DD)',
+                        exp,
+                        'startDate',
+                        i,
+                      ),
+                      _buildWorkExpField(
+                        'End Date (YYYY-MM-DD)',
+                        exp,
+                        'endDate',
+                        i,
+                      ),
+                      _buildWorkExpField(
+                        'Description',
+                        exp,
+                        'description',
+                        i,
+                        maxLines: 2,
+                      ),
                       Align(
                         alignment: Alignment.centerRight,
                         child: IconButton(
@@ -240,12 +285,20 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
                   token: token!,
                   name: _fullNameController.text,
                   email: _emailController.text,
-                  telegram: _telegramController.text.isEmpty ? null : _telegramController.text,
-                  github: _githubController.text.isEmpty ? null : _githubController.text,
+                  telegram: _telegramController.text.isEmpty
+                      ? null
+                      : _telegramController.text,
+                  github: _githubController.text.isEmpty
+                      ? null
+                      : _githubController.text,
                   bio: _bioController.text.isEmpty ? null : _bioController.text,
-                  position: _positionController.text.isEmpty ? null : _positionController.text,
+                  position: _positionController.text.isEmpty
+                      ? null
+                      : _positionController.text,
                   education: _selectedEducation,
-                  expertise: _expertiseController.text.isEmpty ? null : _expertiseController.text,
+                  expertise: _expertiseController.text.isEmpty
+                      ? null
+                      : _expertiseController.text,
                   expertiseLevel: _selectedExpertiseLevel,
                   technologies: _selectedTechnologies,
                   workExperience: _workExperiences,
@@ -269,7 +322,12 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
     );
   }
 
-  Widget _buildInputField(String label, TextEditingController controller, {bool readOnly = false, int maxLines = 1}) {
+  Widget _buildInputField(
+    String label,
+    TextEditingController controller, {
+    bool readOnly = false,
+    int maxLines = 1,
+  }) {
     return TextField(
       controller: controller,
       readOnly: readOnly,
@@ -278,7 +336,13 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
     );
   }
 
-  Widget _buildWorkExpField(String label, Map<String, dynamic> exp, String key, int index, {int maxLines = 1}) {
+  Widget _buildWorkExpField(
+    String label,
+    Map<String, dynamic> exp,
+    String key,
+    int index, {
+    int maxLines = 1,
+  }) {
     return TextField(
       controller: TextEditingController(text: exp[key] ?? '')
         ..selection = TextSelection.collapsed(offset: (exp[key] ?? '').length),

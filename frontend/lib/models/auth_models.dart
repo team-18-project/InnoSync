@@ -12,7 +12,8 @@ class TokenResponse with _$TokenResponse {
     required int expiresIn,
   }) = _TokenResponse;
 
-  factory TokenResponse.fromJson(Map<String, dynamic> json) => _$TokenResponseFromJson(json);
+  factory TokenResponse.fromJson(Map<String, dynamic> json) =>
+      _$TokenResponseFromJson(json);
 }
 
 @freezed
@@ -22,7 +23,8 @@ class AuthResponse with _$AuthResponse {
     required TokenResponse tokens,
   }) = _AuthResponse;
 
-  factory AuthResponse.fromJson(Map<String, dynamic> json) => _$AuthResponseFromJson(json);
+  factory AuthResponse.fromJson(Map<String, dynamic> json) =>
+      _$AuthResponseFromJson(json);
 }
 
 @freezed
@@ -47,7 +49,8 @@ class SignupRequest with _$SignupRequest {
     required String fullName,
   }) = _SignupRequest;
 
-  factory SignupRequest.fromJson(Map<String, dynamic> json) => _$SignupRequestFromJson(json);
+  factory SignupRequest.fromJson(Map<String, dynamic> json) =>
+      _$SignupRequestFromJson(json);
 }
 
 @freezed
@@ -57,23 +60,23 @@ class LoginRequest with _$LoginRequest {
     required String password,
   }) = _LoginRequest;
 
-  factory LoginRequest.fromJson(Map<String, dynamic> json) => _$LoginRequestFromJson(json);
+  factory LoginRequest.fromJson(Map<String, dynamic> json) =>
+      _$LoginRequestFromJson(json);
 }
 
 @freezed
 class RefreshTokenRequest with _$RefreshTokenRequest {
-  const factory RefreshTokenRequest({
-    required String refreshToken,
-  }) = _RefreshTokenRequest;
+  const factory RefreshTokenRequest({required String refreshToken}) =
+      _RefreshTokenRequest;
 
-  factory RefreshTokenRequest.fromJson(Map<String, dynamic> json) => _$RefreshTokenRequestFromJson(json);
+  factory RefreshTokenRequest.fromJson(Map<String, dynamic> json) =>
+      _$RefreshTokenRequestFromJson(json);
 }
 
 @freezed
 class LogoutRequest with _$LogoutRequest {
-  const factory LogoutRequest({
-    required String refreshToken,
-  }) = _LogoutRequest;
+  const factory LogoutRequest({required String refreshToken}) = _LogoutRequest;
 
-  factory LogoutRequest.fromJson(Map<String, dynamic> json) => _$LogoutRequestFromJson(json);
-} 
+  factory LogoutRequest.fromJson(Map<String, dynamic> json) =>
+      _$LogoutRequestFromJson(json);
+}

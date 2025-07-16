@@ -30,7 +30,7 @@ class _MyProjectsPageState extends State<MyProjectsPage> {
     setState(() => _loading = true);
     try {
       final token = await getToken();
-      print('Токен получен: ' + (token ?? 'null'));
+      print('Токен получен: ${token ?? 'null'}');
       if (token == null) throw Exception('No token');
       final projects = await ApiService.getUserProjects(token);
       print('Проекты получены: ${projects.length}');

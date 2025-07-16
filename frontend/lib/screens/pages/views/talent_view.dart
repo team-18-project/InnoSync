@@ -3,8 +3,6 @@ import 'package:frontend/theme/colors.dart';
 import '../../../theme/text_styles.dart';
 import '../../../models/talent_model.dart';
 import '../../../widgets/common/widgets.dart';
-import '../../../services/api_service.dart';
-import '../../../utils/token_storage.dart';
 
 class TalentView extends StatelessWidget {
   final Talent talent;
@@ -202,7 +200,9 @@ class TalentView extends StatelessWidget {
                 onPressed: () async {
                   // TODO: Replace with actual API call if implemented
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Contact request sent! (Demo)')),
+                    const SnackBar(
+                      content: Text('Contact request sent! (Demo)'),
+                    ),
                   );
                 },
                 isLoading: false,

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/screens/main_page.dart';
 import 'package:frontend/theme/colors.dart';
 import 'package:frontend/theme/dimensions.dart';
 import 'package:frontend/theme/text_styles.dart';
