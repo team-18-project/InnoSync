@@ -1,6 +1,8 @@
 package models
 
 import (
+	"database/sql/driver"
+	"fmt"
 	"time"
 )
 
@@ -42,6 +44,50 @@ const (
 	ExpertiseLevelSenior     ExpertiseLevelEnum = "SENIOR"
 	ExpertiseLevelResearcher ExpertiseLevelEnum = "RESEARCHER"
 )
+
+// Implement the sql.Scanner interface for EducationEnum
+func (e *EducationEnum) Scan(value interface{}) error {
+	if value == nil {
+		*e = ""
+		return nil
+	}
+	switch v := value.(type) {
+	case string:
+		*e = EducationEnum(v)
+	case []byte:
+		*e = EducationEnum(string(v))
+	default:
+		return fmt.Errorf("cannot scan %T into EducationEnum", value)
+	}
+	return nil
+}
+
+// Implement the driver.Valuer interface for EducationEnum
+func (e EducationEnum) Value() (driver.Value, error) {
+	return string(e), nil
+}
+
+// Implement the sql.Scanner interface for ExpertiseLevelEnum
+func (e *ExpertiseLevelEnum) Scan(value interface{}) error {
+	if value == nil {
+		*e = ""
+		return nil
+	}
+	switch v := value.(type) {
+	case string:
+		*e = ExpertiseLevelEnum(v)
+	case []byte:
+		*e = ExpertiseLevelEnum(string(v))
+	default:
+		return fmt.Errorf("cannot scan %T into ExpertiseLevelEnum", value)
+	}
+	return nil
+}
+
+// Implement the driver.Valuer interface for ExpertiseLevelEnum
+func (e ExpertiseLevelEnum) Value() (driver.Value, error) {
+	return string(e), nil
+}
 
 // Authentication request/response models
 type SignupRequest struct {

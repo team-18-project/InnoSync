@@ -1,6 +1,10 @@
 package models
 
-import "time"
+import (
+	"database/sql/driver"
+	"fmt"
+	"time"
+)
 
 // Enums for recruitment status
 type InvitationStatusEnum string
@@ -21,6 +25,50 @@ const (
 	ApplicationStatusRejected    ApplicationStatusEnum = "REJECTED"
 	ApplicationStatusWithdrawn   ApplicationStatusEnum = "WITHDRAWN"
 )
+
+// Implement the sql.Scanner interface
+func (e *InvitationStatusEnum) Scan(value interface{}) error {
+	if value == nil {
+		*e = ""
+		return nil
+	}
+	switch v := value.(type) {
+	case string:
+		*e = InvitationStatusEnum(v)
+	case []byte:
+		*e = InvitationStatusEnum(string(v))
+	default:
+		return fmt.Errorf("cannot scan %T into InvitationStatusEnum", value)
+	}
+	return nil
+}
+
+// Implement the driver.Valuer interface
+func (e InvitationStatusEnum) Value() (driver.Value, error) {
+	return string(e), nil
+}
+
+// Implement the sql.Scanner interface for ApplicationStatusEnum
+func (e *ApplicationStatusEnum) Scan(value interface{}) error {
+	if value == nil {
+		*e = ""
+		return nil
+	}
+	switch v := value.(type) {
+	case string:
+		*e = ApplicationStatusEnum(v)
+	case []byte:
+		*e = ApplicationStatusEnum(string(v))
+	default:
+		return fmt.Errorf("cannot scan %T into ApplicationStatusEnum", value)
+	}
+	return nil
+}
+
+// Implement the driver.Valuer interface for ApplicationStatusEnum
+func (e ApplicationStatusEnum) Value() (driver.Value, error) {
+	return string(e), nil
+}
 
 // Invitation represents a project invitation
 type Invitation struct {
