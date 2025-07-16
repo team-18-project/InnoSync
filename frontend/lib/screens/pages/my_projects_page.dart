@@ -12,10 +12,6 @@ class _MyProjectsPageState extends State<MyProjectsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('My Projects'),
-        actions: const [ThemeSwitcherButton()],
-      ),
       body: const Center(child: Text('My Projects Page')),
     );
   }

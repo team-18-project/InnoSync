@@ -12,25 +12,6 @@ class DashboardPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: AppBar(
-        title: const Text('User Dashboard'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications),
-            onPressed: () {
-              // Логика для уведомлений
-            },
-          ),
-          const ThemeSwitcherButton(),
-          const CircleAvatar(
-            radius: 16,
-            backgroundImage: NetworkImage(
-              'https://example.com/user-avatar.jpg',
-            ), // Заменить на реальный URL
-          ),
-          const HSpace.medium(),
-        ],
-      ),
       body: Padding(
         padding: const EdgeInsets.all(AppDimensions.paddingMd),
         child: Row(

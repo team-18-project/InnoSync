@@ -12,10 +12,6 @@ class _InvitationsPageState extends State<InvitationsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Invitations'),
-        actions: const [ThemeSwitcherButton()],
-      ),
       body: const Center(child: Text('Invitations Page')),
     );
   }

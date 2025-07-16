@@ -11,11 +11,6 @@ class SettingsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: AppBar(
-        title: const Text('Settings'),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        actions: const [ThemeSwitcherButton()],
-      ),
       body: Padding(
         padding: const EdgeInsets.all(AppDimensions.paddingXl),
         child: const Center(

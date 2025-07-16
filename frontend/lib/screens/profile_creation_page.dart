@@ -42,13 +42,6 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: AppBar(
-        title: const Text('Profile Creation'),
-        backgroundColor: Theme.of(context).brightness == Brightness.dark
-            ? Theme.of(context).colorScheme.surface
-            : Theme.of(context).colorScheme.primary,
-        actions: const [ThemeSwitcherButton()],
-      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppDimensions.paddingXl),
         child: Column(
