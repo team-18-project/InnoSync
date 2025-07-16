@@ -119,8 +119,19 @@ func (s *InvitationService) GetSentInvitations(userID int64) ([]models.Invitatio
 	var invitations []models.InvitationResponse
 	for rows.Next() {
 		var inv models.InvitationResponse
-		err := rows.Scan(&inv.ID, &inv.ProjectRoleID, &inv.RecipientID, &inv.Status, &inv.SentAt,
-			&inv.RespondedAt, &inv.Message, &inv.RoleName, &inv.ProjectID, &inv.ProjectTitle, &inv.RecipientName)
+		err := rows.Scan(
+			&inv.ID,
+			&inv.ProjectRoleID,
+			&inv.RoleName,
+			&inv.ProjectID,
+			&inv.ProjectTitle,
+			&inv.RecipientID,
+			&inv.RecipientName,
+			&inv.Status,
+			&inv.SentAt,
+			&inv.RespondedAt,
+			&inv.Message,
+		)
 		if err != nil {
 			return nil, fmt.Errorf("failed to scan invitation: %w", err)
 		}
@@ -155,8 +166,19 @@ func (s *InvitationService) GetReceivedInvitations(userID int64) ([]models.Invit
 	var invitations []models.InvitationResponse
 	for rows.Next() {
 		var inv models.InvitationResponse
-		err := rows.Scan(&inv.ID, &inv.ProjectRoleID, &inv.RecipientID, &inv.Status, &inv.SentAt,
-			&inv.RespondedAt, &inv.Message, &inv.RoleName, &inv.ProjectID, &inv.ProjectTitle, &inv.RecipientName)
+		err := rows.Scan(
+			&inv.ID,
+			&inv.ProjectRoleID,
+			&inv.RoleName,
+			&inv.ProjectID,
+			&inv.ProjectTitle,
+			&inv.RecipientID,
+			&inv.RecipientName,
+			&inv.Status,
+			&inv.SentAt,
+			&inv.RespondedAt,
+			&inv.Message,
+		)
 		if err != nil {
 			return nil, fmt.Errorf("failed to scan invitation: %w", err)
 		}
@@ -385,8 +407,19 @@ func (s *InvitationService) GetInvitationsByProjectRole(userID, projectRoleID in
 	var invitations []models.InvitationResponse
 	for rows.Next() {
 		var inv models.InvitationResponse
-		err := rows.Scan(&inv.ID, &inv.ProjectRoleID, &inv.RecipientID, &inv.Status, &inv.SentAt,
-			&inv.RespondedAt, &inv.Message, &inv.RoleName, &inv.ProjectID, &inv.ProjectTitle, &inv.RecipientName)
+		err := rows.Scan(
+			&inv.ID,
+			&inv.ProjectRoleID,
+			&inv.RoleName,
+			&inv.ProjectID,
+			&inv.ProjectTitle,
+			&inv.RecipientID,
+			&inv.RecipientName,
+			&inv.Status,
+			&inv.SentAt,
+			&inv.RespondedAt,
+			&inv.Message,
+		)
 		if err != nil {
 			return nil, fmt.Errorf("failed to scan invitation: %w", err)
 		}
