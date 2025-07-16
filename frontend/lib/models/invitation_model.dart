@@ -1,3 +1,4 @@
+
 class Invitation {
   final int id;
   final String message;

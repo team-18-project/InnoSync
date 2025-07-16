@@ -32,30 +32,24 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
+    print('MainPage initState');
     getToken().then((token) {
-      if (token == null) {
-        setState(() {
-          _tokenError = true;
-          _isLoading = false;
-        });
-        return;
-      }
-      setState(() {
-        _pages.addAll([
-          DiscoverPage(
-            onProjectTap: (project) {
-              setState(() {
-                _selectedProject = project;
-                _selectedTalent = null;
-              });
-            },
-            onTalentTap: (talent) {
-              setState(() {
-                _selectedTalent = talent;
-                _selectedProject = null;
-              });
-            },
-          ),
+      print('MainPage getToken result: ' + (token ?? 'null'));
+      _pages.addAll([
+        DiscoverPage(
+          onProjectTap: (project) {
+            setState(() {
+              _selectedProject = project;
+              _selectedTalent = null;
+            });
+          },
+          onTalentTap: (talent) {
+            setState(() {
+              _selectedTalent = talent;
+              _selectedProject = null;
+            });
+          },
+        ),
           InvitationsPage(
             onInvitationTap: (invitation) {
               setState(() {
@@ -70,10 +64,9 @@ class _MainPageState extends State<MainPage> {
               });
             },
           ),
-          DashboardPage(token: token),
-        ]);
-        _isLoading = false;
-      });
+        if (token != null) DashboardPage(token: token),
+      ]);
+      setState(() {});
     });
   }
 
@@ -86,15 +79,11 @@ class _MainPageState extends State<MainPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    if (_isLoading || _pages.isEmpty) {
+  Widget build(BuildContext context) 
+    print('MainPage build, _pages.length = ${_pages.length}, _currentIndex = $_currentIndex');
+    if (_pages.isEmpty) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
-    // if (_tokenError) {
-    //   return const Scaffold(
-    //     body: Center(child: Text('Error: No token found. Please log in.')),
-    //   );
-    // } // TODO: uncomment after login bug fixed
     return Scaffold(
       appBar: const MainAppBar(title: 'InnoSync'),
       body: _selectedProject != null

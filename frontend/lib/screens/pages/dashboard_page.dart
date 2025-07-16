@@ -78,13 +78,8 @@ class DashboardPage extends StatelessWidget {
               child: DashboardTabs(
                 tabLabels: const ["Overview", "Proposals"],
                 tabViews: [
-                  DashboardTabs(
-                    tabLabels: const ["Overview", "Proposals"],
-                    tabViews: [
-                      Center(child: Text('Overview content')),
-                      Center(child: Text('Proposals content')),
-                    ],
-                  ),
+                  Center(child: Text('Overview content')),
+                  Center(child: Text('Proposals content')),
                 ],
               ),
             ),

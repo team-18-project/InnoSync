@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/screens/pages/views/project_create.dart';
 import 'package:frontend/models/project_model.dart';
+import 'package:frontend/utils/token_storage.dart';
+import 'package:frontend/services/api_service.dart';
 import 'package:frontend/theme/colors.dart';
 import 'package:frontend/widgets/common/widgets.dart';
 import 'package:frontend/widgets/discover/widgets.dart';
@@ -16,34 +18,72 @@ class MyProjectsPage extends StatefulWidget {
 }
 
 class _MyProjectsPageState extends State<MyProjectsPage> {
-  final List<Project> _projects = [];
+  List<Project> _projects = [];
+  bool _loading = true;
 
+  @override
+  void initState() {
+    super.initState();
+    _fetchProjects();
+  }
+
+  Future<void> _fetchProjects() async {
+    print('Начало загрузки проектов');
+    setState(() => _loading = true);
+    try {
+      final token = await getToken();
+      print('Токен получен: ' + (token ?? 'null'));
+      if (token == null) throw Exception('No token');
+      final projects = await ApiService.getUserProjects(token);
+      print('Проекты получены: ${projects.length}');
+      setState(() {
+        _projects = projects.map((e) => Project.fromJson(e)).toList();
+        _loading = false;
+      });
+      print('Загрузка завершена, _loading = false');
+    } catch (e) {
+      setState(() => _loading = false);
+      print('Ошибка загрузки проектов: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Ошибка загрузки проектов: $e')),
+      );
+    }
+  }
+
+  void _onProjectCreated() {
+    _fetchProjects();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Проект успешно создан!')),
+    );
+  }
   @override
   Widget build(BuildContext context) {
     _projects.addAll([
       Project(title: 'Project 1', description: 'Description 1'),
     ]); // TODO: replace with API request
     return Scaffold(
-      body: _projects.isEmpty
-          ? const Center(child: Text('No projects found'))
-          : ListView.separated(
-              itemCount: _projects.length,
-              separatorBuilder: (context, i) => const VSpace.mediumPlus(),
-              itemBuilder: (context, i) {
-                final project = _projects[i];
-                return ProjectCard(
-                  project: project,
+      body: _loading
+          ? const Center(child: CircularProgressIndicator())
+          : _projects.isEmpty
+              ? const Center(child: Text('Нет проектов'))
+              : ListView.builder(
+                  itemCount: _projects.length,
+                  itemBuilder: (context, i) => return ProjectCard(
+                  project: _project[i],
                   onTap: () => widget.onProjectTap?.call(project),
                 );
-              },
-            ),
+                ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColors.primary,
-        child: const Icon(Icons.add, color: AppColors.background),
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const ProjectCreate()),
-        ),
+        onPressed: () async {
+          await Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ProjectCreate(
+                onProjectCreated: _onProjectCreated,
+              ),
+            ),
+          );
+        },
       ),
     );
   }
