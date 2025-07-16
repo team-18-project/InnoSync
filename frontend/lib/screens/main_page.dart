@@ -50,20 +50,20 @@ class _MainPageState extends State<MainPage> {
             });
           },
         ),
-          InvitationsPage(
-            onInvitationTap: (invitation) {
-              setState(() {
-                _selectedInvitation = invitation;
-              });
-            },
-          ),
-          MyProjectsPage(
-            onProjectTap: (project) {
-              setState(() {
-                _selectedProject = project;
-              });
-            },
-          ),
+        InvitationsPage(
+          onInvitationTap: (invitation) {
+            setState(() {
+              _selectedInvitation = invitation;
+            });
+          },
+        ),
+        MyProjectsPage(
+          onProjectTap: (project) {
+            setState(() {
+              _selectedProject = project;
+            });
+          },
+        ),
         if (token != null) DashboardPage(token: token),
       ]);
       setState(() {});
@@ -79,8 +79,10 @@ class _MainPageState extends State<MainPage> {
   }
 
   @override
-  Widget build(BuildContext context) 
-    print('MainPage build, _pages.length = ${_pages.length}, _currentIndex = $_currentIndex');
+  Widget build(BuildContext context) {
+    print(
+      'MainPage build, _pages.length = ${_pages.length}, _currentIndex = $_currentIndex',
+    );
     if (_pages.isEmpty) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
