@@ -46,10 +46,10 @@ func (d *Database) Close() error {
 func (d *Database) Migrate() error {
 	// Check if tables exist and create if not
 	migrations := []string{
-		`DROP TYPE IF EXISTS education_enum CASCADE;`,
-		`CREATE TYPE education_enum AS ENUM ('NO_DEGREE', 'BACHELOR', 'MASTER', 'PHD');`,
-		`DROP TYPE IF EXISTS expertise_level_enum CASCADE;`,
-		`CREATE TYPE expertise_level_enum AS ENUM ('ENTRY', 'JUNIOR', 'MID', 'SENIOR', 'RESEARCHER');`,
+		// `DROP TYPE IF EXISTS education_enum CASCADE;`,
+		`DO $$ BEGIN CREATE TYPE education_enum AS ENUM ('NO_DEGREE', 'BACHELOR', 'MASTER', 'PHD'); EXCEPTION WHEN duplicate_object THEN null; END $$;`,
+		// `DROP TYPE IF EXISTS expertise_level_enum CASCADE;`,
+		`DO $$ BEGIN CREATE TYPE expertise_level_enum AS ENUM ('ENTRY', 'JUNIOR', 'MID', 'SENIOR', 'RESEARCHER'); EXCEPTION WHEN duplicate_object THEN null; END $$;`,
 		`DROP TYPE IF EXISTS invitation_status_enum CASCADE;`,
 		`CREATE TYPE invitation_status_enum AS ENUM ('INVITED', 'ACCEPTED', 'DECLINED', 'REVOKED');`,
 		`DROP TYPE IF EXISTS application_status_enum CASCADE;`,
