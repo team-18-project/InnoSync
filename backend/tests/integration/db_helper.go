@@ -11,21 +11,14 @@ import (
 )
 
 func setupDB() (*sqlx.DB, error) {
-	// Установка значений по умолчанию
-	host := getEnv("DB_HOST", "localhost")
-	port, _ := strconv.Atoi(getEnv("DB_PORT", "5432"))
-	user := getEnv("DB_USER", "postgres")
-	password := getEnv("DB_PASSWORD", "postgres")
-	dbname := getEnv("DB_NAME", "postgres") // Изменено на "postgres"
-
-	connStr := fmt.Sprintf(
-		"host=%s port=%d user=%s password=%s dbname=%s sslmode=disable",
-		host,
-		port,
-		user,
-		password,
-		dbname,
-	)
+    connStr := fmt.Sprintf(
+        "host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+        os.Getenv("POSTGRES_HOST"),
+        os.Getenv("POSTGRES_PORT"),
+        os.Getenv("POSTGRES_USER"),
+        os.Getenv("POSTGRES_PASSWORD"),
+        os.Getenv("POSTGRES_DB"),
+    )
 
 	log.Printf("Connecting to database: %s", connStr)
 
