@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/theme/colors.dart';
 import '../../models/project_model.dart';
 import '../../models/talent_model.dart';
 import '../../widgets/discover/widgets.dart';
@@ -108,8 +107,9 @@ class _DiscoverPageState extends State<DiscoverPage> with SearchMixin {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

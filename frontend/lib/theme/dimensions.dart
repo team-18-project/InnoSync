@@ -30,7 +30,7 @@ class AppDimensions {
 
   // Widths
   static const double containerWidth = 350.0;
-  static const double tabViewHeight = 300.0;
+  static const double tabViewHeight = 240.0;
 
   // Shadows
   static const double shadowBlur = 8.0;

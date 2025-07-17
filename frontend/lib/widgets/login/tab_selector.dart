@@ -13,23 +13,25 @@ class TabSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
     return Container(
       height: AppDimensions.tabHeight,
       decoration: BoxDecoration(
-        border: Border.all(color: colorScheme.primary),
+        border: Border.all(color: theme.colorScheme.primary, width: 2),
         borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
+        color: theme.colorScheme.surface,
       ),
       child: TabBar(
         controller: controller,
-        indicator: BoxDecoration(
-          color: colorScheme.primary,
-          borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
-        ),
-        labelColor: colorScheme.onPrimary,
-        unselectedLabelColor: colorScheme.primary,
-        indicatorSize: TabBarIndicatorSize.tab,
         tabs: tabLabels.map((label) => Tab(text: label)).toList(),
+        indicator: BoxDecoration(
+          color: theme.colorScheme.primary,
+          borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
+          border: Border.all(color: theme.colorScheme.primary, width: 2),
+        ),
+        labelColor: theme.colorScheme.onPrimary,
+        unselectedLabelColor: theme.colorScheme.primary,
+        indicatorSize: TabBarIndicatorSize.tab,
       ),
     );
   }

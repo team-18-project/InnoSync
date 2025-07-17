@@ -158,7 +158,7 @@ class _LoginFormPageState extends State<LoginFormPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: FormContainer(
         formKey: _formKey,
         title: "InnoSync",
