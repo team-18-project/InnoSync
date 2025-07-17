@@ -6,6 +6,13 @@ on:
   pull_request:
     branches: [ main ]
 
+env:
+  FLUTTER_VERSION: '3.13.0'
+  GO_VERSION: '1.21'
+  POSTGRES_USER: test
+  POSTGRES_PASSWORD: test
+  POSTGRES_DB: test_db
+
 jobs:
   backend:
     runs-on: ubuntu-latest
@@ -13,12 +20,16 @@ jobs:
       postgres:
         image: postgres:14
         env:
-          POSTGRES_USER: test
-          POSTGRES_PASSWORD: test
-          POSTGRES_DB: test_db
+          POSTGRES_USER: ${{ env.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ env.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ env.POSTGRES_DB }}
         ports:
           - 5432:5432
-        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
     steps:
       - uses: actions/checkout@v4
@@ -26,17 +37,36 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v4
         with:
-          go-version: '1.21'
+          go-version: ${{ env.GO_VERSION }}
+          cache: true
+
+      - name: Cache Go modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/go/pkg/mod
+            backend/go.sum
+          key: ${{ runner.os }}-go-${{ hashFiles('backend/go.sum') }}
 
       - name: Test Backend (Unit)
+        working-directory: ./backend
         run: |
-          cd backend
-          go test ./tests/unit/...
+          go test -v -coverprofile=unit_coverage.out ./tests/unit/...
+          go tool cover -html=unit_coverage.out -o unit_coverage.html
 
       - name: Test Backend (Integration)
+        working-directory: ./backend
         run: |
-          cd backend
-          go test ./tests/integration/...
+          go test -v -coverprofile=integration_coverage.out ./tests/integration/...
+          go tool cover -html=integration_coverage.out -o integration_coverage.html
+
+      - name: Upload coverage reports
+        uses: actions/upload-artifact@v3
+        with:
+          name: backend-coverage-reports
+          path: |
+            backend/unit_coverage.html
+            backend/integration_coverage.html
 
   frontend:
     runs-on: ubuntu-latest
@@ -46,14 +76,61 @@ jobs:
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.13.0'
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
 
-      - name: Test Flutter (Unit)
-        run: |
-          cd frontend
-          flutter test test/unit/
+      - name: Cache Flutter dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            frontend/.dart_tool
+            frontend/build
+            frontend/pubspec.lock
+          key: ${{ runner.os }}-flutter-${{ hashFiles('frontend/pubspec.lock') }}
 
-      - name: Test Flutter (Integration)
+      - name: Install dependencies
+        working-directory: ./frontend
+        run: flutter pub get
+
+      - name: Analyze code
+        working-directory: ./frontend
+        run: flutter analyze
+
+      - name: Run Flutter unit tests
+        working-directory: ./frontend
         run: |
-          cd frontend
-          flutter test test/integration/
+          flutter test --coverage --test-randomize-ordering-seed=random
+          lcov --list coverage/lcov.info
+
+      - name: Run Flutter integration tests
+        working-directory: ./frontend
+        run: |
+          flutter drive \
+            --driver=test_driver/integration_test.dart \
+            --target=integration_test/app_test.dart
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v3
+        with:
+          name: flutter-coverage-report
+          path: frontend/coverage/lcov.info
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: flutter-test-results
+          path: frontend/test_results/
+
+  notify:
+    needs: [backend, frontend]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Slack notification
+        if: always()
+        uses: rtCamp/action-slack-notify@v2
+        env:
+          SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+          SLACK_COLOR: ${{ job.status == 'success' && 'good' || 'danger' }}
+          SLACK_TITLE: 'CI/CD Pipeline - ${{ job.status }}'
+          SLACK_MESSAGE: 'Tests completed for ${{ github.repository }}'
