@@ -40,14 +40,15 @@ class ProfileImagePicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return GestureDetector(
       onTap: () => _pickImage(context),
       child: CircleAvatar(
         radius: radius,
-        backgroundColor: backgroundColor ?? AppColors.profilePickerBackground,
+        backgroundColor: backgroundColor ?? colorScheme.surface,
         backgroundImage: profileImage != null ? FileImage(profileImage!) : null,
         child: profileImage == null
-            ? Icon(placeholderIcon, size: radius, color: AppColors.primary)
+            ? Icon(placeholderIcon, size: radius, color: colorScheme.primary)
             : null,
       ),
     );

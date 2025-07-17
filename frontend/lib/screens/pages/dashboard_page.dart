@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../widgets/common/widgets.dart';
+import '../../widgets/common/theme_switcher_button.dart';
 import '../../theme/colors.dart';
 import '../../theme/dimensions.dart';
 import '../../repositories/profile_repository.dart';

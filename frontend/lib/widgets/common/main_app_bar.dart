@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../theme/colors.dart';
 import '../../theme/text_styles.dart';
+import 'theme_switcher_button.dart';
 
 class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? title;

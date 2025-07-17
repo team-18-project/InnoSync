@@ -23,6 +23,7 @@ class ValidatedTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
     return TextFormField(
       controller: controller,
       validator: validator,
@@ -31,7 +32,7 @@ class ValidatedTextField extends StatelessWidget {
         NoControlCharsFormatter(),
       ],
       decoration: InputDecoration(
-        prefixIcon: Icon(icon, color: AppColors.primary),
+        prefixIcon: Icon(icon, color: colorScheme.primary),
         hintText: hint,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
@@ -43,7 +44,7 @@ class ValidatedTextField extends StatelessWidget {
             ? IconButton(
                 icon: Icon(
                   obscure ? Icons.visibility_off : Icons.visibility,
-                  color: AppColors.primary,
+                  color: colorScheme.primary,
                 ),
                 onPressed: toggleObscure,
               )

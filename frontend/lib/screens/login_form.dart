@@ -5,6 +5,7 @@ import '../widgets/common/widgets.dart';
 import '../utils/ui_helpers.dart';
 import '../services/api_service.dart';
 import '../utils/token_storage.dart';
+import '../widgets/common/theme_switcher_button.dart';
 
 class LoginFormPage extends StatefulWidget {
   const LoginFormPage({super.key});
@@ -156,26 +157,30 @@ class _LoginFormPageState extends State<LoginFormPage>
 
   @override
   Widget build(BuildContext context) {
-    return FormContainer(
-      formKey: _formKey,
-      title: "InnoSync",
-      subtitle: "We work it together !",
-      child: Column(
-        children: [
-          TabSelector(
-            controller: _tabController,
-            tabLabels: const ['Log In', 'Sign Up'],
-          ),
-          const VSpace.xxl(),
-          FixedHeightSpace(
-            height: AppDimensions.tabViewHeight,
-            child: TabBarView(
+    return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
+      body: FormContainer(
+        formKey: _formKey,
+        title: "InnoSync",
+        subtitle: "We work it together !",
+        child: Column(
+          children: [
+            TabSelector(
               controller: _tabController,
-              children: [_buildLoginTab(), _buildSignUpTab()],
+              tabLabels: const ['Log In', 'Sign Up'],
             ),
-          ),
-        ],
+            const VSpace.xxl(),
+            FixedHeightSpace(
+              height: AppDimensions.tabViewHeight,
+              child: TabBarView(
+                controller: _tabController,
+                children: [_buildLoginTab(), _buildSignUpTab()],
+              ),
+            ),
+          ],
+        ),
       ),
+      floatingActionButton: const ThemeSwitcherButton(),
     );
   }
 }

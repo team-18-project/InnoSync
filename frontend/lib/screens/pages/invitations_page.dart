@@ -4,6 +4,7 @@ import '../../utils/token_storage.dart';
 import 'package:frontend/models/invitation_model.dart';
 import 'package:frontend/widgets/common/widgets.dart';
 import 'package:frontend/widgets/invitation/widgets.dart';
+import '../../widgets/common/theme_switcher_button.dart';
 
 class InvitationsPage extends StatefulWidget {
   final Function(Invitation) onInvitationTap;

@@ -18,23 +18,25 @@ class SubmitButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
     return ElevatedButton(
       style: AppTheme.primaryButtonStyle,
       onPressed: isLoading ? null : onPressed,
       child: isLoading
-          ? const FixedHeightSpace(
+          ? FixedHeightSpace(
               height: 20,
               child: FixedWidthSpace(
                 width: 20,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
                   valueColor: AlwaysStoppedAnimation<Color>(
-                    AppColors.textOnPrimary,
+                    colorScheme.onPrimary,
                   ),
                 ),
               ),
             )
-          : Text(text, style: AppTextStyles.buttonText),
+          : Text(text, style: textTheme.labelLarge?.copyWith(color: colorScheme.onPrimary)),
     );
   }
 }

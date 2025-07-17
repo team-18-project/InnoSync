@@ -11,6 +11,7 @@ import '../utils/token_storage.dart';
 import '../services/api_service.dart';
 import '../utils/ui_helpers.dart';
 import 'package:file_picker/file_picker.dart';
+import '../widgets/common/theme_switcher_button.dart';
 
 class ProfileCreationPage extends StatefulWidget {
   const ProfileCreationPage({super.key});
@@ -131,11 +132,7 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
     final apiService = ApiService();
     final profileRepository = ProfileRepository(apiService: apiService);
     return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(
-        title: const Text('Profile Creation', style: AppTextStyles.h2),
-        backgroundColor: AppColors.primary,
-      ),
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppDimensions.paddingXl),
         child: Column(
@@ -143,7 +140,7 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
             ProfileImagePicker(
               profileImage: _profileImage,
               onImagePicked: _onImagePicked,
-              backgroundColor: AppColors.profilePickerBackground,
+              backgroundColor: Theme.of(context).colorScheme.surface,
             ),
             const VSpace.lg(),
             _buildInputField('Full Name', _fullNameController, readOnly: true),

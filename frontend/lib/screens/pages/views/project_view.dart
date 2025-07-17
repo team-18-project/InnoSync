@@ -5,6 +5,7 @@ import '../../../models/project_model.dart';
 import '../../../widgets/common/widgets.dart';
 import '../../../services/api_service.dart';
 import '../../../utils/token_storage.dart';
+import '../../../widgets/common/theme_switcher_button.dart';
 
 class ProjectView extends StatelessWidget {
   final Project project;
@@ -14,7 +15,7 @@ class ProjectView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -25,7 +26,7 @@ class ProjectView extends StatelessWidget {
               width: 120,
               height: 120,
               decoration: BoxDecoration(
-                color: Colors.grey[200],
+                color: Theme.of(context).colorScheme.surface,
                 borderRadius: BorderRadius.circular(24),
               ),
               child: project.logoUrl != null
@@ -33,23 +34,20 @@ class ProjectView extends StatelessWidget {
                       borderRadius: BorderRadius.circular(24),
                       child: Image.network(project.logoUrl!, fit: BoxFit.cover),
                     )
-                  : const Icon(Icons.apps, size: 64, color: Colors.grey),
+                  : Icon(Icons.apps, size: 64, color: Theme.of(context).colorScheme.onSurface),
             ),
             const VSpace(24),
             // Bold Title
             Text(
               project.title,
-              style: AppTextStyles.h1.copyWith(fontSize: 28),
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontSize: 28),
               textAlign: TextAlign.center,
             ),
             const VSpace(16),
             // Description
             Text(
               project.description,
-              style: AppTextStyles.bodyLarge.copyWith(
-                fontSize: 16,
-                color: Colors.black87,
-              ),
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 16),
               textAlign: TextAlign.center,
             ),
             const VSpace(28),
@@ -59,7 +57,7 @@ class ProjectView extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   'Skills Needed',
-                  style: AppTextStyles.cardLabelStyle.copyWith(fontSize: 16),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 16),
                 ),
               ),
               const VSpace(8),
@@ -71,11 +69,11 @@ class ProjectView extends StatelessWidget {
                       (skill) => Chip(
                         label: Text(
                           skill,
-                          style: AppTextStyles.bodyLarge.copyWith(
-                            color: AppColors.textOnPrimary,
-                          ),
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                              ),
                         ),
-                        backgroundColor: AppColors.primary,
+                        backgroundColor: Theme.of(context).colorScheme.primary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
@@ -91,7 +89,7 @@ class ProjectView extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   'Available Positions',
-                  style: AppTextStyles.cardLabelStyle.copyWith(fontSize: 16),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 16),
                 ),
               ),
               const VSpace(8),
@@ -103,11 +101,11 @@ class ProjectView extends StatelessWidget {
                       (pos) => Chip(
                         label: Text(
                           pos,
-                          style: AppTextStyles.bodyLarge.copyWith(
-                            color: AppColors.textOnPrimary,
-                          ),
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                              ),
                         ),
-                        backgroundColor: AppColors.primary,
+                        backgroundColor: Theme.of(context).colorScheme.primary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),

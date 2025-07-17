@@ -6,6 +6,7 @@ import 'package:frontend/services/api_service.dart';
 import 'package:frontend/widgets/discover/widgets.dart';
 
 typedef ProjectTapCallback = void Function(Project project);
+import '../../widgets/common/theme_switcher_button.dart';
 
 class MyProjectsPage extends StatefulWidget {
   const MyProjectsPage({super.key, this.onProjectTap});

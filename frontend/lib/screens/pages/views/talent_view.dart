@@ -3,6 +3,7 @@ import 'package:frontend/theme/colors.dart';
 import '../../../theme/text_styles.dart';
 import '../../../models/talent_model.dart';
 import '../../../widgets/common/widgets.dart';
+import '../../../widgets/common/theme_switcher_button.dart';
 
 class TalentView extends StatelessWidget {
   final Talent talent;
@@ -13,7 +14,7 @@ class TalentView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -22,7 +23,7 @@ class TalentView extends StatelessWidget {
             // Profile Image
             CircleAvatar(
               radius: 80,
-              backgroundColor: AppColors.textSecondary,
+              backgroundColor: Theme.of(context).colorScheme.surface,
               child: talent.profileImageUrl != null
                   ? ClipRRect(
                       borderRadius: BorderRadius.circular(80),
@@ -33,17 +34,17 @@ class TalentView extends StatelessWidget {
                         height: 160,
                       ),
                     )
-                  : const Icon(
+                  : Icon(
                       Icons.person,
                       size: 80,
-                      color: AppColors.textSecondary,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
             ),
             const VSpace(24),
             // Name
             Text(
               talent.name,
-              style: AppTextStyles.h1.copyWith(fontSize: 28),
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontSize: 28),
               textAlign: TextAlign.center,
             ),
             const VSpace(16),
@@ -57,14 +58,14 @@ class TalentView extends StatelessWidget {
                     vertical: 6,
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.1),
+                    color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Text(
                     '${talent.yearsOfExperience} years experience',
-                    style: AppTextStyles.bodyLarge.copyWith(
-                      color: AppColors.primary,
-                    ),
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                   ),
                 ),
                 const HSpace.medium(),
@@ -74,14 +75,14 @@ class TalentView extends StatelessWidget {
                     vertical: 6,
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.primary.withValues(alpha: 0.1),
+                    color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Text(
                     talent.graduationType,
-                    style: AppTextStyles.bodyLarge.copyWith(
-                      color: AppColors.primary,
-                    ),
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                   ),
                 ),
               ],
@@ -90,10 +91,7 @@ class TalentView extends StatelessWidget {
             // Description
             Text(
               talent.description,
-              style: AppTextStyles.bodyLarge.copyWith(
-                fontSize: 16,
-                color: AppColors.textPrimary,
-              ),
+              style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 16),
               textAlign: TextAlign.center,
             ),
             const VSpace(28),
@@ -103,7 +101,7 @@ class TalentView extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   'Skills',
-                  style: AppTextStyles.cardLabelStyle.copyWith(fontSize: 16),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 16),
                 ),
               ),
               const VSpace(8),
@@ -115,11 +113,11 @@ class TalentView extends StatelessWidget {
                       (skill) => Chip(
                         label: Text(
                           skill,
-                          style: AppTextStyles.bodyLarge.copyWith(
-                            color: AppColors.textOnPrimary,
-                          ),
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                              ),
                         ),
-                        backgroundColor: AppColors.primary,
+                        backgroundColor: Theme.of(context).colorScheme.primary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
@@ -134,7 +132,7 @@ class TalentView extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   'Positions',
-                  style: AppTextStyles.cardLabelStyle.copyWith(fontSize: 16),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 16),
                 ),
               ),
               const VSpace(8),
@@ -146,11 +144,11 @@ class TalentView extends StatelessWidget {
                       (position) => Chip(
                         label: Text(
                           position,
-                          style: AppTextStyles.bodyLarge.copyWith(
-                            color: AppColors.textOnPrimary,
-                          ),
+                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                                color: Theme.of(context).colorScheme.onPrimary,
+                              ),
                         ),
-                        backgroundColor: AppColors.primary,
+                        backgroundColor: Theme.of(context).colorScheme.primary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
@@ -166,15 +164,15 @@ class TalentView extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   'Contact Information',
-                  style: AppTextStyles.cardLabelStyle.copyWith(fontSize: 16),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 16),
                 ),
               ),
               const VSpace(8),
               if (talent.email != null) ...[
                 ListTile(
-                  leading: const Icon(
+                  leading: Icon(
                     Icons.email,
-                    color: AppColors.textSecondary,
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
                   title: Text(talent.email!),
                   contentPadding: EdgeInsets.zero,
@@ -182,9 +180,9 @@ class TalentView extends StatelessWidget {
               ],
               if (talent.location != null) ...[
                 ListTile(
-                  leading: const Icon(
+                  leading: Icon(
                     Icons.location_on,
-                    color: AppColors.textSecondary,
+                    color: Theme.of(context).colorScheme.secondary,
                   ),
                   title: Text(talent.location!),
                   contentPadding: EdgeInsets.zero,
