@@ -66,6 +66,7 @@ class _MyProjectsPageState extends State<MyProjectsPage> {
               ),
             ),
       floatingActionButton: FloatingActionButton(
+        child: const Icon(Icons.add),
         onPressed: () async {
           await Navigator.push(
             context,
