@@ -34,7 +34,6 @@ class TabSelector extends StatelessWidget {
         indicatorSize: TabBarIndicatorSize.tab,
         dividerColor: Colors.transparent,
         indicatorPadding: EdgeInsets.zero,
-        tabs: tabLabels.map((label) => Tab(text: label)).toList(),
       ),
     );
   }
