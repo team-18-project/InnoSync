@@ -98,10 +98,17 @@ func (s *InvitationService) CreateInvitation(userID int64, req *models.CreateInv
 func (s *InvitationService) GetSentInvitations(userID int64) ([]models.InvitationResponse, error) {
 	query := `
 		SELECT
-			i.id, i.project_role_id, i.user_id, i.invitation_status, i.sent_at, i.responded_at, i.message,
+			i.id,
+			i.project_role_id,
+			i.user_id AS recipient_id,
+			i.invitation_status,
+			i.sent_at,
+			i.responded_at,
+			i.message,
 			pr.role_name,
-			p.id as project_id, p.title as project_title,
-			u.full_name as recipient_name
+			p.id AS project_id,
+			p.title AS project_title,
+			u.full_name AS recipient_name
 		FROM invitation i
 		JOIN project_role pr ON i.project_role_id = pr.id
 		JOIN project p ON pr.project_id = p.id
@@ -145,10 +152,17 @@ func (s *InvitationService) GetSentInvitations(userID int64) ([]models.Invitatio
 func (s *InvitationService) GetReceivedInvitations(userID int64) ([]models.InvitationResponse, error) {
 	query := `
 		SELECT
-			i.id, i.project_role_id, i.user_id, i.invitation_status, i.sent_at, i.responded_at, i.message,
+			i.id,
+			i.project_role_id,
+			i.user_id AS recipient_id,
+			i.invitation_status,
+			i.sent_at,
+			i.responded_at,
+			i.message,
 			pr.role_name,
-			p.id as project_id, p.title as project_title,
-			u.full_name as recipient_name
+			p.id AS project_id,
+			p.title AS project_title,
+			u.full_name AS recipient_name
 		FROM invitation i
 		JOIN project_role pr ON i.project_role_id = pr.id
 		JOIN project p ON pr.project_id = p.id
@@ -344,10 +358,17 @@ func (s *InvitationService) DeleteInvitation(userID, invitationID int64) error {
 func (s *InvitationService) getInvitationResponse(invitationID int64) (*models.InvitationResponse, error) {
 	query := `
 		SELECT
-			i.id, i.project_role_id, i.user_id, i.invitation_status, i.sent_at, i.responded_at, i.message,
+			i.id,
+			i.project_role_id,
+			i.user_id AS recipient_id,
+			i.invitation_status,
+			i.sent_at,
+			i.responded_at,
+			i.message,
 			pr.role_name,
-			p.id as project_id, p.title as project_title,
-			u.full_name as recipient_name
+			p.id AS project_id,
+			p.title AS project_title,
+			u.full_name AS recipient_name
 		FROM invitation i
 		JOIN project_role pr ON i.project_role_id = pr.id
 		JOIN project p ON pr.project_id = p.id
