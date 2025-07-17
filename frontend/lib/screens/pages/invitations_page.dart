@@ -48,6 +48,7 @@ class _InvitationsPageState extends State<InvitationsPage> {
           invitation: Invitation.fromJson(_invitations[i]),
           onTap: () =>
               widget.onInvitationTap(Invitation.fromJson(_invitations[i])),
+          onActionCompleted: _fetchInvitations,
         ),
         padding: const EdgeInsets.all(24),
       ),

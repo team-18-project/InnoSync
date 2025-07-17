@@ -119,7 +119,7 @@ CREATE TABLE invitation (
                             id BIGSERIAL PRIMARY KEY,
                             project_role_id BIGINT NOT NULL,
                             user_id BIGINT NOT NULL,
-                            invitation_status invitation_status_enum DEFAULT 'INVITED',
+                            invitation_status VARCHAR(255) DEFAULT 'INVITED',
                             sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                             responded_at TIMESTAMP,
                             message TEXT,  -- Added for personal invitation message

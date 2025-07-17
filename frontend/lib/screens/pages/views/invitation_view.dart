@@ -125,7 +125,7 @@ class InvitationView extends StatelessWidget {
                   ),
                   const VSpace(24),
                   Text(
-                    invitation.message,
+                    invitation.message ?? '',
                     style: theme.textTheme.bodyLarge?.copyWith(
                       color: theme.textTheme.bodyLarge?.color,
                       fontSize: 17,

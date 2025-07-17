@@ -10,9 +10,12 @@ import '../utils/token_storage.dart';
 import '../services/api_service.dart';
 import '../utils/ui_helpers.dart';
 import 'package:file_picker/file_picker.dart';
+import 'dart:convert'; // Added for jsonDecode
+import 'package:http/http.dart' as http; // Added for http
 
 class ProfileCreationPage extends StatefulWidget {
-  const ProfileCreationPage({super.key});
+  final Map<String, dynamic>? profileData;
+  const ProfileCreationPage({super.key, this.profileData});
 
   @override
   State<ProfileCreationPage> createState() => _ProfileCreationPageState();
@@ -28,6 +31,7 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
   final TextEditingController _expertiseController = TextEditingController();
   File? _profileImage;
   File? _resumeFile;
+  String? _resumeUrl;
 
   // Education & Expertise Level enums
   static const List<String> _educationOptions = [
@@ -70,6 +74,47 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
   final List<Map<String, dynamic>> _workExperiences = [];
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.profileData != null) {
+      final p = widget.profileData!;
+      _fullNameController.text = p['name'] ?? '';
+      _emailController.text = p['email'] ?? '';
+      _telegramController.text = p['telegram'] ?? '';
+      _githubController.text = p['github'] ?? '';
+      _bioController.text = p['bio'] ?? '';
+      _positionController.text = p['position'] ?? '';
+      _selectedEducation = p['education'] ?? null;
+      _expertiseController.text = p['expertise'] ?? '';
+      _selectedExpertiseLevel = p['expertise_level'] ?? null;
+      _selectedTechnologies.clear();
+      if (p['technologies'] is List) {
+        _selectedTechnologies.addAll(
+          (p['technologies'] as List)
+              .map((t) => t['name']?.toString() ?? '')
+              .where((t) => t.isNotEmpty)
+              .cast<String>(),
+        );
+      }
+      _workExperiences.clear();
+      if (p['work_experiences'] is List) {
+        for (final we in p['work_experiences']) {
+          _workExperiences.add({
+            'position': we['position'] ?? '',
+            'company': we['company'] ?? '',
+            'startDate': (we['start_date'] ?? '').toString().substring(0, 10),
+            'endDate': (we['end_date'] ?? '').toString().isNotEmpty
+                ? we['end_date'].toString().substring(0, 10)
+                : '',
+            'description': we['description'] ?? '',
+          });
+        }
+      }
+      _resumeUrl = p['resume_url'];
+    }
+  }
+
+  @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final args =
@@ -107,6 +152,30 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
     }
   }
 
+  Future<void> _uploadResume() async {
+    final token = await getToken();
+    if (_resumeFile == null || token == null) return;
+    final request = http.MultipartRequest(
+      'POST',
+      Uri.parse('${ApiService.baseUrl}/profile/resume'),
+    );
+    request.headers['Authorization'] = 'Bearer $token';
+    request.files.add(
+      await http.MultipartFile.fromPath('resume', _resumeFile!.path),
+    );
+    final response = await request.send();
+    if (response.statusCode == 200) {
+      final respStr = await response.stream.bytesToString();
+      final data = jsonDecode(respStr);
+      setState(() {
+        _resumeUrl = data['url'] as String?;
+      });
+      UIHelpers.showSuccess(context, 'Resume uploaded!');
+    } else {
+      UIHelpers.showError(context, 'Resume upload failed');
+    }
+  }
+
   void _addWorkExperience() {
     setState(() {
       _workExperiences.add({
@@ -125,12 +194,44 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
     });
   }
 
+  List<Map<String, dynamic>> _prepareWorkExperiences() {
+    final List<Map<String, dynamic>> result = [];
+    for (final exp in _workExperiences) {
+      if ((exp['position'] ?? '').trim().isEmpty ||
+          (exp['company'] ?? '').trim().isEmpty ||
+          (exp['startDate'] ?? '').trim().isEmpty) {
+        continue; // пропускать невалидные
+      }
+      result.add({
+        'position': exp['position'],
+        'company': exp['company'],
+        'start_date': exp['startDate'],
+        'end_date': (exp['endDate'] ?? '').trim().isEmpty
+            ? null
+            : exp['endDate'],
+        'description': (exp['description'] ?? '').trim().isEmpty
+            ? null
+            : exp['description'],
+      });
+    }
+    return result;
+  }
+
   @override
   Widget build(BuildContext context) {
     final apiService = ApiService();
     final profileRepository = ProfileRepository(apiService: apiService);
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.background,
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        title: const Text('Edit Profile'),
+        backgroundColor: Theme.of(context).colorScheme.background,
+        elevation: 0,
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppDimensions.paddingXl),
         child: Column(
@@ -285,12 +386,19 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 ElevatedButton(
-                  onPressed: _pickResume,
+                  onPressed: () async {
+                    await _pickResume();
+                    await _uploadResume();
+                  },
                   child: const Text('Upload Resume'),
                 ),
                 if (_resumeFile != null) ...[
                   const SizedBox(height: 8),
                   Text('Selected file: ${_resumeFile!.path.split('/').last}'),
+                ],
+                if (_resumeUrl != null) ...[
+                  const SizedBox(height: 8),
+                  Text('Resume uploaded!'),
                 ],
               ],
             ),
@@ -319,8 +427,8 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
                       : _expertiseController.text,
                   expertiseLevel: _selectedExpertiseLevel,
                   technologies: _selectedTechnologies,
-                  workExperience: _workExperiences,
-                  resumeFile: _resumeFile,
+                  workExperience: _prepareWorkExperiences(),
+                  resumeUrl: _resumeUrl,
                   profileImage: _profileImage,
                 );
                 if (success) {

@@ -2,19 +2,67 @@ import 'package:flutter/material.dart';
 import 'package:frontend/models/invitation_model.dart';
 import 'package:frontend/widgets/common/spacing.dart';
 import 'package:frontend/widgets/common/widgets.dart';
+import 'package:frontend/services/api_service.dart';
+import 'package:frontend/utils/token_storage.dart';
+import 'package:frontend/utils/ui_helpers.dart';
 
-class InvitationCard extends StatelessWidget {
+class InvitationCard extends StatefulWidget {
   final Invitation invitation;
   final VoidCallback? onTap;
+  final VoidCallback? onActionCompleted;
 
-  const InvitationCard({super.key, required this.invitation, this.onTap});
+  const InvitationCard({
+    super.key,
+    required this.invitation,
+    this.onTap,
+    this.onActionCompleted,
+  });
+
+  @override
+  State<InvitationCard> createState() => _InvitationCardState();
+}
+
+class _InvitationCardState extends State<InvitationCard> {
+  bool _loading = false;
+
+  Future<void> _respond(String response) async {
+    setState(() => _loading = true);
+    final token = await getToken();
+    if (token == null) {
+      UIHelpers.showError(context, 'Не удалось получить токен');
+      setState(() => _loading = false);
+      return;
+    }
+    try {
+      final api = ApiService();
+      final ok = await api.respondToInvitation(
+        token: token,
+        invitationId: widget.invitation.id,
+        response: response,
+      );
+      if (ok) {
+        UIHelpers.showSuccess(
+          context,
+          response == 'ACCEPTED'
+              ? 'Приглашение принято'
+              : 'Приглашение отклонено',
+        );
+        widget.onActionCompleted?.call();
+      } else {
+        UIHelpers.showError(context, 'Ошибка при отправке ответа');
+      }
+    } catch (e) {
+      UIHelpers.showError(context, 'Ошибка: $e');
+    } finally {
+      setState(() => _loading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    // Get initials for avatar
-    String initials = invitation.recipientName.isNotEmpty
-        ? invitation.recipientName
+    String initials = widget.invitation.recipientName.isNotEmpty
+        ? widget.invitation.recipientName
               .trim()
               .split(' ')
               .map((e) => e.isNotEmpty ? e[0] : '')
@@ -23,7 +71,7 @@ class InvitationCard extends StatelessWidget {
               .toUpperCase()
         : '?';
     return GestureDetector(
-      onTap: onTap,
+      onTap: widget.onTap,
       child: Card(
         elevation: 4,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
@@ -57,13 +105,12 @@ class InvitationCard extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            invitation.recipientName,
+                            widget.invitation.recipientName,
                             style: theme.textTheme.titleLarge?.copyWith(
                               fontSize: 20,
                             ),
                           ),
                         ),
-                        // Status or action icons could go here
                       ],
                     ),
                     const VSpace.small(),
@@ -89,7 +136,7 @@ class InvitationCard extends StatelessWidget {
                               ),
                               const SizedBox(width: 4),
                               Text(
-                                invitation.roleName,
+                                widget.invitation.roleName,
                                 style: theme.textTheme.bodyMedium?.copyWith(
                                   color: theme.colorScheme.primary,
                                   fontWeight: FontWeight.w600,
@@ -119,7 +166,7 @@ class InvitationCard extends StatelessWidget {
                               ),
                               const HSpace.small(),
                               Text(
-                                invitation.projectTitle,
+                                widget.invitation.projectTitle,
                                 style: theme.textTheme.bodyMedium?.copyWith(
                                   color: theme.colorScheme.primary,
                                   fontSize: 13,
@@ -133,15 +180,15 @@ class InvitationCard extends StatelessWidget {
                     ),
                     const VSpace.small(),
                     Text(
-                      invitation.message,
+                      widget.invitation.message ?? '',
                       style: theme.textTheme.bodyMedium?.copyWith(fontSize: 15),
                     ),
-                    if (invitation.roleName.isNotEmpty) ...[
+                    if (widget.invitation.roleName.isNotEmpty) ...[
                       const SizedBox(height: 10),
                       Wrap(
                         spacing: 8,
                         runSpacing: 4,
-                        children: invitation.roleName
+                        children: widget.invitation.roleName
                             .split(' ')
                             .take(3)
                             .map(
@@ -168,6 +215,33 @@ class InvitationCard extends StatelessWidget {
                               ),
                             )
                             .toList(),
+                      ),
+                    ],
+                    // Кнопки принятия/отклонения
+                    if (widget.invitation.invitationStatus == 'INVITED') ...[
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: SubmitButton(
+                              text: 'Принять',
+                              isLoading: _loading,
+                              onPressed: _loading
+                                  ? null
+                                  : () => _respond('ACCEPTED'),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: SubmitButton(
+                              text: 'Отклонить',
+                              isLoading: _loading,
+                              onPressed: _loading
+                                  ? null
+                                  : () => _respond('DECLINED'),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ],
