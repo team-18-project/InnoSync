@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../theme/colors.dart';
 import 'switcher_button.dart';
 
 class ModeSwitcher extends StatelessWidget {
@@ -16,12 +15,13 @@ class ModeSwitcher extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
           decoration: BoxDecoration(
-            color: AppColors.textSecondary,
+            color: theme.colorScheme.onSurface.withOpacity(0.1),
             borderRadius: BorderRadius.circular(32),
           ),
           padding: const EdgeInsets.all(4),

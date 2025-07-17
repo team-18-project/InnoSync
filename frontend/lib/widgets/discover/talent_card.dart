@@ -26,7 +26,7 @@ class TalentCard extends StatelessWidget {
                 width: 56,
                 height: 56,
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
+                  color: theme.colorScheme.onSurface.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(28),
                 ),
                 child: talent.profileImageUrl != null
@@ -40,9 +40,7 @@ class TalentCard extends StatelessWidget {
                     : Icon(
                         Icons.person,
                         size: 32,
-                        color: theme.colorScheme.onSurface.withValues(
-                          alpha: 0.5,
-                        ),
+                        color: theme.colorScheme.onSurface.withOpacity(0.5),
                       ),
               ),
               const HSpace.small(),
@@ -71,7 +69,7 @@ class TalentCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
-                            '${talent.yearsOfExperience} years',
+                            '                           ${talent.yearsOfExperience} years',
                             style: theme.textTheme.bodyMedium?.copyWith(
                               color: theme.colorScheme.primary,
                             ),
@@ -84,9 +82,7 @@ class TalentCard extends StatelessWidget {
                             vertical: 2,
                           ),
                           decoration: BoxDecoration(
-                            color: theme.colorScheme.primary.withValues(
-                              alpha: 0.1,
-                            ),
+                            color: theme.colorScheme.primary.withOpacity(0.1),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(

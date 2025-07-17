@@ -27,7 +27,7 @@ class ProjectCard extends StatelessWidget {
                 width: 56,
                 height: 56,
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
+                  color: theme.colorScheme.onSurface.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: project.logoUrl != null
@@ -41,9 +41,7 @@ class ProjectCard extends StatelessWidget {
                     : Icon(
                         Icons.apps,
                         size: 32,
-                        color: theme.colorScheme.onSurface.withValues(
-                          alpha: 0.5,
-                        ),
+                        color: theme.colorScheme.onSurface.withOpacity(0.5),
                       ),
               ),
               const HSpace.small(),

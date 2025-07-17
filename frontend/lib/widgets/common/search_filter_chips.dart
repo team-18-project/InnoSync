@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../theme/colors.dart';
-import '../../theme/text_styles.dart';
 
 class SearchFilterChips extends StatelessWidget {
   final List<String> filters;
@@ -14,6 +12,7 @@ class SearchFilterChips extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     if (filters.isEmpty) return const SizedBox.shrink();
 
     return Column(
@@ -30,20 +29,24 @@ class SearchFilterChips extends StatelessWidget {
               return Chip(
                 label: Text(
                   keyword,
-                  style: AppTextStyles.bodyLarge.copyWith(
-                    color: AppColors.textOnPrimary,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.onPrimary,
                   ),
                 ),
-                backgroundColor: AppColors.primary,
+                backgroundColor: theme.colorScheme.primary,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(24),
                 ),
                 deleteIcon: Container(
                   decoration: BoxDecoration(
-                    color: AppColors.textOnPrimary,
+                    color: theme.colorScheme.onPrimary,
                     shape: BoxShape.circle,
                   ),
-                  child: Icon(Icons.close, size: 18, color: AppColors.primary),
+                  child: Icon(
+                    Icons.close,
+                    size: 18,
+                    color: theme.colorScheme.primary,
+                  ),
                 ),
                 onDeleted: () => onRemoveFilter(keyword),
               );
