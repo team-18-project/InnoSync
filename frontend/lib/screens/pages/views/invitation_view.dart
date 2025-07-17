@@ -162,21 +162,21 @@ class InvitationView extends StatelessWidget {
                       vertical: 8,
                     ),
                     decoration: BoxDecoration(
-                      color: invitation.status == 'Accepted'
-                          ? theme.colorScheme.primary.withValues(alpha: 0.12)
-                          : invitation.status == 'Declined'
-                          ? theme.colorScheme.error.withValues(alpha: 0.12)
-                          : theme.colorScheme.primary.withValues(alpha: 0.10),
+                      color: invitation.invitationStatus == 'Accepted'
+                          ? AppColors.success.withValues(alpha: 0.12)
+                          : invitation.invitationStatus == 'Declined'
+                          ? AppColors.error.withValues(alpha: 0.12)
+                          : AppColors.primary.withValues(alpha: 0.10),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
-                      invitation.status,
-                      style: theme.textTheme.bodyLarge?.copyWith(
-                        color: invitation.status == 'Accepted'
-                            ? theme.colorScheme.primary
-                            : invitation.status == 'Declined'
-                            ? theme.colorScheme.error
-                            : theme.colorScheme.primary,
+                      invitation.invitationStatus,
+                      style: AppTextStyles.bodyLarge.copyWith(
+                        color: invitation.invitationStatus == 'Accepted'
+                            ? AppColors.primary
+                            : invitation.invitationStatus == 'Declined'
+                            ? AppColors.error
+                            : AppColors.primary,
                         fontWeight: FontWeight.w600,
                         fontSize: 15,
                       ),
