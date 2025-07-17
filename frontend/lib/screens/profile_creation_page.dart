@@ -130,7 +130,7 @@ class _ProfileCreationPageState extends State<ProfileCreationPage> {
     final apiService = ApiService();
     final profileRepository = ProfileRepository(apiService: apiService);
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(AppDimensions.paddingXl),
         child: Column(

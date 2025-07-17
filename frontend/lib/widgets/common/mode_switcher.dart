@@ -21,7 +21,7 @@ class ModeSwitcher extends StatelessWidget {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: theme.colorScheme.onSurface.withOpacity(0.1),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(32),
           ),
           padding: const EdgeInsets.all(4),
