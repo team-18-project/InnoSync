@@ -1,7 +1,7 @@
 
 class Invitation {
   final int id;
-  final String message;
+  final String? message;
   final int projectId;
   final int projectRoleId;
   final String projectTitle;
@@ -14,7 +14,7 @@ class Invitation {
 
   Invitation({
     required this.id,
-    required this.message,
+    this.message,
     required this.projectId,
     required this.projectRoleId,
     required this.projectTitle,
@@ -29,7 +29,7 @@ class Invitation {
   factory Invitation.fromJson(Map<String, dynamic> json) {
     return Invitation(
       id: json['id'],
-      message: json['message'],
+      message: json['message'] as String?,
       projectId: json['project_id'],
       projectRoleId: json['project_role_id'],
       projectTitle: json['project_title'],

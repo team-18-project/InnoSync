@@ -41,37 +41,6 @@ func (e ApplicationStatusEnum) Value() (driver.Value, error) {
 
 // Enums for recruitment status
 
-type InvitationStatusEnum string
-
-const (
-	InvitationStatusInvited  InvitationStatusEnum = "INVITED"
-	InvitationStatusAccepted InvitationStatusEnum = "ACCEPTED"
-	InvitationStatusDeclined InvitationStatusEnum = "DECLINED"
-	InvitationStatusRevoked  InvitationStatusEnum = "REVOKED"
-)
-
-// Implement the sql.Scanner interface
-func (e *InvitationStatusEnum) Scan(value interface{}) error {
-	if value == nil {
-		*e = ""
-		return nil
-	}
-	switch v := value.(type) {
-	case string:
-		*e = InvitationStatusEnum(v)
-	case []byte:
-		*e = InvitationStatusEnum(string(v))
-	default:
-		return fmt.Errorf("cannot scan %T into InvitationStatusEnum", value)
-	}
-	return nil
-}
-
-// Implement the driver.Valuer interface
-func (e InvitationStatusEnum) Value() (driver.Value, error) {
-	return string(e), nil
-}
-
 // Invitation represents a project invitation
 type Invitation struct {
 	ID               int64      `json:"id" db:"id"`

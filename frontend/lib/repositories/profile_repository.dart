@@ -23,10 +23,10 @@ class ProfileRepository {
     String? expertiseLevel,
     List<String>? technologies,
     List<Map<String, dynamic>>? workExperience,
-    File? resumeFile,
+    String? resumeUrl,
     File? profileImage,
-  }) {
-    return apiService.createProfile(
+  }) async {
+    return await apiService.createProfile(
       token: token,
       name: name,
       email: email,
@@ -39,7 +39,7 @@ class ProfileRepository {
       expertiseLevel: expertiseLevel,
       technologies: technologies,
       workExperience: workExperience,
-      resumeFile: resumeFile,
+      resumeUrl: resumeUrl,
       profileImage: profileImage,
     );
   }

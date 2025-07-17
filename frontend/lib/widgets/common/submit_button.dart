@@ -4,13 +4,13 @@ import '../common/widgets.dart';
 
 class SubmitButton extends StatelessWidget {
   final String text;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final bool isLoading;
 
   const SubmitButton({
     super.key,
     required this.text,
-    required this.onPressed,
+    this.onPressed,
     required this.isLoading,
   });
 

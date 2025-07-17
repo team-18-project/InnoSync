@@ -174,7 +174,7 @@ class ApiService {
     String? expertiseLevel,
     List<String>? technologies,
     List<Map<String, dynamic>>? workExperience,
-    File? resumeFile,
+    String? resumeUrl,
     File? profileImage,
   }) async {
     final url = Uri.parse('$baseUrl/profile');
@@ -202,7 +202,9 @@ class ApiService {
     if (workExperience != null && workExperience.isNotEmpty) {
       body['work_experience'] = workExperience;
     }
-
+    if (resumeUrl != null && resumeUrl.isNotEmpty) {
+      body['resume_url'] = resumeUrl;
+    }
     final response = await http.post(
       url,
       headers: {
@@ -211,11 +213,7 @@ class ApiService {
       },
       body: jsonEncode(body),
     );
-    if (response.statusCode == 201) {
-      return true;
-    } else {
-      return false;
-    }
+    return response.statusCode == 201;
   }
 
   Future<bool> applyToProject({

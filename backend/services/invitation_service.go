@@ -74,7 +74,7 @@ func (s *InvitationService) CreateInvitation(userID int64, req *models.CreateInv
 	invitation := &models.Invitation{
 		ProjectRoleID:    req.ProjectRoleID,
 		UserID:           req.RecipientID,
-		InvitationStatus: models.InvitationStatusInvited,
+		InvitationStatus: "INVITED",
 		SentAt:           time.Now(),
 		Message:          req.Message,
 	}
@@ -181,17 +181,17 @@ func (s *InvitationService) GetReceivedInvitations(userID int64) ([]models.Invit
 	for rows.Next() {
 		var inv models.InvitationResponse
 		err := rows.Scan(
-			&inv.ID,
-			&inv.ProjectRoleID,
-			&inv.RoleName,
-			&inv.ProjectID,
-			&inv.ProjectTitle,
-			&inv.RecipientID,
-			&inv.RecipientName,
-			&inv.InvitationStatus,
-			&inv.SentAt,
-			&inv.RespondedAt,
-			&inv.Message,
+			&inv.ID,               // i.id
+			&inv.ProjectRoleID,    // i.project_role_id
+			&inv.RecipientID,      // i.user_id AS recipient_id
+			&inv.InvitationStatus, // i.invitation_status
+			&inv.SentAt,           // i.sent_at
+			&inv.RespondedAt,      // i.responded_at
+			&inv.Message,          // i.message
+			&inv.RoleName,         // pr.role_name
+			&inv.ProjectID,        // p.id AS project_id
+			&inv.ProjectTitle,     // p.title AS project_title
+			&inv.RecipientName,    // u.full_name AS recipient_name
 		)
 		if err != nil {
 			return nil, fmt.Errorf("failed to scan invitation: %w", err)
@@ -230,12 +230,12 @@ func (s *InvitationService) RespondToInvitation(userID, invitationID int64, req 
 	}
 
 	// Check if invitation is still pending
-	if invitation.InvitationStatus != models.InvitationStatusInvited {
+	if invitation.InvitationStatus != "INVITED" {
 		return nil, ErrInvitationAlreadyReplied
 	}
 
 	// Validate response
-	if req.Response != models.InvitationStatusAccepted && req.Response != models.InvitationStatusDeclined {
+	if req.Response != "ACCEPTED" && req.Response != "DECLINED" {
 		return nil, ErrInvalidInvitationStatus
 	}
 
@@ -293,7 +293,7 @@ func (s *InvitationService) RevokeInvitation(userID, invitationID int64) (*model
 	}
 
 	// Check if invitation can be revoked (only pending invitations)
-	if invitation.InvitationStatus != models.InvitationStatusInvited {
+	if invitation.InvitationStatus != "INVITED" {
 		return nil, ErrInvalidInvitationStatus
 	}
 
@@ -304,7 +304,7 @@ func (s *InvitationService) RevokeInvitation(userID, invitationID int64) (*model
 		SET invitation_status = $1, responded_at = $2
 		WHERE id = $3
 	`
-	_, err = s.db.Exec(updateQuery, models.InvitationStatusRevoked, now, invitationID)
+	_, err = s.db.Exec(updateQuery, "REVOKED", now, invitationID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to revoke invitation: %w", err)
 	}

@@ -103,17 +103,17 @@ type UpdateApplicationStatusRequest struct {
 
 // Invitation response models
 type InvitationResponse struct {
-	ID               int64                `json:"id" db:"id"`
-	ProjectRoleID    int64                `json:"project_role_id" db:"project_role_id"`
-	RoleName         string               `json:"role_name" db:"role_name"`
-	ProjectID        int64                `json:"project_id" db:"project_id"`
-	ProjectTitle     string               `json:"project_title" db:"project_title"`
-	RecipientID      int64                `json:"recipient_id" db:"recipient_id"`
-	RecipientName    string               `json:"recipient_name" db:"recipient_name"`
-	InvitationStatus InvitationStatusEnum `json:"invitation_status" db:"invitation_status"`
-	SentAt           time.Time            `json:"sent_at" db:"sent_at"`
-	RespondedAt      *time.Time           `json:"responded_at,omitempty" db:"responded_at"`
-	Message          *string              `json:"message,omitempty" db:"message"`
+	ID               int64      `json:"id" db:"id"`
+	ProjectRoleID    int64      `json:"project_role_id" db:"project_role_id"`
+	RoleName         string     `json:"role_name" db:"role_name"`
+	ProjectID        int64      `json:"project_id" db:"project_id"`
+	ProjectTitle     string     `json:"project_title" db:"project_title"`
+	RecipientID      int64      `json:"recipient_id" db:"recipient_id"`
+	RecipientName    string     `json:"recipient_name" db:"recipient_name"`
+	InvitationStatus string     `json:"invitation_status" db:"invitation_status"`
+	SentAt           time.Time  `json:"sent_at" db:"sent_at"`
+	RespondedAt      *time.Time `json:"responded_at,omitempty" db:"responded_at"`
+	Message          *string    `json:"message,omitempty" db:"message"`
 }
 
 type CreateInvitationRequest struct {
@@ -123,7 +123,7 @@ type CreateInvitationRequest struct {
 }
 
 type RespondInvitationRequest struct {
-	Response InvitationStatusEnum `json:"response" binding:"required"`
+	Response string `json:"response" binding:"required"`
 }
 
 // Helper methods
