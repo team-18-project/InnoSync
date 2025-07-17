@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
-import '../../models/project_model.dart';
-import '../../models/talent_model.dart';
-import '../../widgets/discover/widgets.dart';
-import '../../mixins/search_mixin.dart';
-import '../../widgets/common/widgets.dart';
-
+import 'package:frontend/models/project_model.dart';
+import 'package:frontend/models/talent_model.dart';
+import 'package:frontend/mixins/search_mixin.dart';
+import 'package:frontend/widgets/common/spacing.dart';
+import 'package:frontend/widgets/common/search_filter_chips.dart';
+import 'package:frontend/widgets/discover/search_bar.dart';
+import 'package:frontend/widgets/discover/sort_filter_button.dart';
+import 'package:frontend/widgets/discover/project_card.dart';
+import 'package:frontend/widgets/discover/talent_card.dart';
+import 'package:frontend/widgets/common/widgets.dart';
 typedef ProjectTapCallback = void Function(Project project);
 typedef TalentTapCallback = void Function(Talent talent);
 

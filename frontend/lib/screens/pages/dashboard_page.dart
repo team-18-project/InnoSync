@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import '../../widgets/common/widgets.dart';
-import '../../theme/colors.dart';
-import '../../theme/dimensions.dart';
-import '../../repositories/profile_repository.dart';
-import '../../services/api_service.dart';
-import '../../widgets/dashboard/widgets.dart';
+import 'package:frontend/widgets/common/spacing.dart';
+import 'package:frontend/widgets/dashboard/dashboard_tabs.dart';
+import 'package:frontend/widgets/dashboard/user_info_card.dart';
+import 'package:frontend/repositories/profile_repository.dart';
+import 'package:frontend/services/api_service.dart';
 
 class DashboardPage extends StatelessWidget {
   final String token;
@@ -15,7 +14,7 @@ class DashboardPage extends StatelessWidget {
     final apiService = ApiService();
     final profileRepository = ProfileRepository(apiService: apiService);
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
         title: const Text('User Dashboard'),
         actions: [
@@ -35,7 +34,7 @@ class DashboardPage extends StatelessWidget {
         ],
       ),
       body: Padding(
-        padding: const EdgeInsets.all(AppDimensions.paddingMd),
+        padding: const EdgeInsets.all(24),
         child: Row(
           children: [
             FutureBuilder<Map<String, dynamic>>(

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../theme/colors.dart';
 import '../../theme/text_styles.dart';
 
 class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -25,8 +24,8 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
               ).pushNamedAndRemoveUntil('/main', (route) => false),
             )
           : null,
-      backgroundColor: AppColors.background,
-      foregroundColor: AppColors.textPrimary,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      foregroundColor: Theme.of(context).colorScheme.onSurface,
       elevation: 0,
       title: title != null
           ? Text(title!, style: AppTextStyles.appTitle.copyWith(fontSize: 20))
