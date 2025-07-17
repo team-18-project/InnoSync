@@ -138,6 +138,13 @@ frontend/  # Flutter app, widgets, screens, models
 
 ---
 
+
+## Database Documentation
+-This is our database schema and documentation [Link](https://github.com/team-18-project/InnoSync/blob/main/db/DB_design.md)
+![Database Schema](https://raw.githubusercontent.com/team-18-project/InnoSync/refs/heads/main/db/DB_diagram.png)
+
+---
+
 ## Contributions
 
 - Stefan Farafonov: Team lead and management, Flutter Frontend Implementation
