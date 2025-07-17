@@ -86,9 +86,6 @@ class ApiService {
       final List data = jsonDecode(response.body);
       return data.cast<Map<String, dynamic>>();
     } else {
-      print(
-        'fetchInvitations error: \\${response.statusCode} \\${response.body}',
-      );
       throw Exception('Failed to load invitations');
     }
   }
@@ -103,9 +100,6 @@ class ApiService {
       final List data = jsonDecode(response.body);
       return data.cast<Map<String, dynamic>>();
     } else {
-      print(
-        'fetchProposals error: \\${response.statusCode} \\${response.body}',
-      );
       throw Exception('Failed to load proposals');
     }
   }
@@ -133,7 +127,6 @@ class ApiService {
     if (response.statusCode == 200) {
       return jsonDecode(response.body) as Map<String, dynamic>;
     } else {
-      print('fetchProfile error: \\${response.statusCode} \\${response.body}');
       throw Exception('Failed to load profile');
     }
   }
@@ -160,9 +153,6 @@ class ApiService {
     if (response.statusCode == 201) {
       return true;
     } else {
-      print(
-        'createInvitation error: \\${response.statusCode} \\${response.body}',
-      );
       return false;
     }
   }
@@ -220,7 +210,6 @@ class ApiService {
     if (response.statusCode == 201) {
       return true;
     } else {
-      print('createProfile error: \\${response.statusCode} \\${response.body}');
       return false;
     }
   }

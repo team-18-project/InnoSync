@@ -6,7 +6,6 @@ import 'package:frontend/services/api_service.dart';
 import 'package:frontend/widgets/discover/widgets.dart';
 
 typedef ProjectTapCallback = void Function(Project project);
-import '../../widgets/common/theme_switcher_button.dart';
 
 class MyProjectsPage extends StatefulWidget {
   const MyProjectsPage({super.key, this.onProjectTap});
@@ -27,22 +26,18 @@ class _MyProjectsPageState extends State<MyProjectsPage> {
   }
 
   Future<void> _fetchProjects() async {
-    print('Начало загрузки проектов');
     setState(() => _loading = true);
     try {
       final token = await getToken();
-      print('Токен получен: ${token ?? 'null'}');
       if (token == null) throw Exception('No token');
       final projects = await ApiService.getUserProjects(token);
-      print('Проекты получены: ${projects.length}');
       setState(() {
         _projects = projects.map((e) => Project.fromJson(e)).toList();
         _loading = false;
       });
-      print('Загрузка завершена, _loading = false');
     } catch (e) {
       setState(() => _loading = false);
-      print('Ошибка загрузки проектов: $e');
+      if (!mounted) return;
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('Ошибка загрузки проектов: $e')));

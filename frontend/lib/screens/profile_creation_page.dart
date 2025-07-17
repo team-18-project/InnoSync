@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'dart:io';
 import '../widgets/common/widgets.dart';
 import '../widgets/login/widgets.dart';
-import '../theme/colors.dart';
 import '../theme/text_styles.dart';
 import '../theme/dimensions.dart';
 import '../theme/app_theme.dart';
@@ -11,7 +10,6 @@ import '../utils/token_storage.dart';
 import '../services/api_service.dart';
 import '../utils/ui_helpers.dart';
 import 'package:file_picker/file_picker.dart';
-import '../widgets/common/theme_switcher_button.dart';
 
 class ProfileCreationPage extends StatefulWidget {
   const ProfileCreationPage({super.key});

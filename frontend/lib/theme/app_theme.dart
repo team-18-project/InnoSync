@@ -78,7 +78,11 @@ class AppTheme {
       foregroundColor: AppColors.textPrimary,
       elevation: 0,
       iconTheme: IconThemeData(color: AppColors.textPrimary),
-      titleTextStyle: TextStyle(color: AppColors.textPrimary, fontSize: 20, fontWeight: FontWeight.bold),
+      titleTextStyle: TextStyle(
+        color: AppColors.textPrimary,
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      ),
     ),
     textTheme: const TextTheme(
       bodyLarge: TextStyle(color: AppColors.textPrimary),
@@ -86,11 +90,9 @@ class AppTheme {
     ),
     colorScheme: ColorScheme.light(
       primary: AppColors.primary,
-      background: AppColors.background,
       surface: AppColors.surface,
       error: AppColors.error,
       onPrimary: AppColors.textOnPrimary,
-      onBackground: AppColors.textPrimary,
       onSurface: AppColors.textPrimary,
       onError: AppColors.textOnPrimary,
     ),
@@ -107,7 +109,11 @@ class AppTheme {
       foregroundColor: AppColors.textPrimaryDark,
       elevation: 0,
       iconTheme: IconThemeData(color: AppColors.textPrimaryDark),
-      titleTextStyle: TextStyle(color: AppColors.textPrimaryDark, fontSize: 20, fontWeight: FontWeight.bold),
+      titleTextStyle: TextStyle(
+        color: AppColors.textPrimaryDark,
+        fontSize: 20,
+        fontWeight: FontWeight.bold,
+      ),
     ),
     textTheme: const TextTheme(
       bodyLarge: TextStyle(color: AppColors.textPrimaryDark),
@@ -115,11 +121,9 @@ class AppTheme {
     ),
     colorScheme: ColorScheme.dark(
       primary: AppColors.primaryDarkTheme,
-      background: AppColors.backgroundDark,
       surface: AppColors.surfaceDark,
       error: AppColors.error,
       onPrimary: AppColors.textOnPrimaryDark,
-      onBackground: AppColors.textPrimaryDark,
       onSurface: AppColors.textPrimaryDark,
       onError: AppColors.textOnPrimaryDark,
     ),

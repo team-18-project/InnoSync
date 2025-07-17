@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/theme/colors.dart';
-import '../../../theme/text_styles.dart';
 import '../../../models/project_model.dart';
 import '../../../widgets/common/widgets.dart';
 import '../../../services/api_service.dart';
 import '../../../utils/token_storage.dart';
-import '../../../widgets/common/theme_switcher_button.dart';
 
 class ProjectView extends StatelessWidget {
   final Project project;
@@ -15,7 +12,7 @@ class ProjectView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -34,20 +31,28 @@ class ProjectView extends StatelessWidget {
                       borderRadius: BorderRadius.circular(24),
                       child: Image.network(project.logoUrl!, fit: BoxFit.cover),
                     )
-                  : Icon(Icons.apps, size: 64, color: Theme.of(context).colorScheme.onSurface),
+                  : Icon(
+                      Icons.apps,
+                      size: 64,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
             ),
             const VSpace(24),
             // Bold Title
             Text(
               project.title,
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontSize: 28),
+              style: Theme.of(
+                context,
+              ).textTheme.headlineSmall?.copyWith(fontSize: 28),
               textAlign: TextAlign.center,
             ),
             const VSpace(16),
             // Description
             Text(
               project.description,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 16),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyLarge?.copyWith(fontSize: 16),
               textAlign: TextAlign.center,
             ),
             const VSpace(28),
@@ -57,7 +62,9 @@ class ProjectView extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   'Skills Needed',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 16),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleMedium?.copyWith(fontSize: 16),
                 ),
               ),
               const VSpace(8),
@@ -69,7 +76,8 @@ class ProjectView extends StatelessWidget {
                       (skill) => Chip(
                         label: Text(
                           skill,
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          style: Theme.of(context).textTheme.bodyLarge
+                              ?.copyWith(
                                 color: Theme.of(context).colorScheme.onPrimary,
                               ),
                         ),
@@ -89,7 +97,9 @@ class ProjectView extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   'Available Positions',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 16),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleMedium?.copyWith(fontSize: 16),
                 ),
               ),
               const VSpace(8),
@@ -101,7 +111,8 @@ class ProjectView extends StatelessWidget {
                       (pos) => Chip(
                         label: Text(
                           pos,
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          style: Theme.of(context).textTheme.bodyLarge
+                              ?.copyWith(
                                 color: Theme.of(context).colorScheme.onPrimary,
                               ),
                         ),
@@ -135,7 +146,9 @@ class ProjectView extends StatelessWidget {
                   );
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(success ? 'Application sent!' : 'Failed to apply.'),
+                      content: Text(
+                        success ? 'Application sent!' : 'Failed to apply.',
+                      ),
                     ),
                   );
                 },
