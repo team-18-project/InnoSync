@@ -5,7 +5,7 @@ on:
     branches: [ main, feature/ci-cd ]
   pull_request:
     branches: [ main, feature/ci-cd ]
-  workflow_dispatch:  # Add this line
+  workflow_dispatch:
 
 env:
   FLUTTER_VERSION: '3.13.0'
@@ -31,7 +31,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-
     steps:
       - uses: actions/checkout@v4
 
@@ -62,13 +61,12 @@ jobs:
           go tool cover -html=integration_coverage.out -o integration_coverage.html
 
       - name: Upload coverage reports
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: backend-coverage-reports
           path: |
             backend/unit_coverage.html
             backend/integration_coverage.html
-
 
   notify:
     needs: [backend]
