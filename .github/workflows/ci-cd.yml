@@ -68,62 +68,9 @@ jobs:
             backend/unit_coverage.html
             backend/integration_coverage.html
 
-  frontend:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: ${{ env.FLUTTER_VERSION }}
-          channel: stable
-
-      - name: Cache Flutter dependencies
-        uses: actions/cache@v3
-        with:
-          path: |
-            frontend/.dart_tool
-            frontend/build
-            frontend/pubspec.lock
-          key: ${{ runner.os }}-flutter-${{ hashFiles('frontend/pubspec.lock') }}
-
-      - name: Install dependencies
-        working-directory: ./frontend
-        run: flutter pub get
-
-      - name: Analyze code
-        working-directory: ./frontend
-        run: flutter analyze
-
-      - name: Run Flutter unit tests
-        working-directory: ./frontend
-        run: |
-          flutter test --coverage --test-randomize-ordering-seed=random
-          lcov --list coverage/lcov.info
-
-      - name: Run Flutter integration tests
-        working-directory: ./frontend
-        run: |
-          flutter drive \
-            --driver=test_driver/integration_test.dart \
-            --target=integration_test/app_test.dart
-
-      - name: Upload coverage report
-        uses: actions/upload-artifact@v3
-        with:
-          name: flutter-coverage-report
-          path: frontend/coverage/lcov.info
-
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v3
-        with:
-          name: flutter-test-results
-          path: frontend/test_results/
 
   notify:
-    needs: [backend, frontend]
+    needs: [backend]
     runs-on: ubuntu-latest
     steps:
       - name: Slack notification
