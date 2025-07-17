@@ -71,7 +71,7 @@ jobs:
             backend/integration_coverage.html
   
   notify:
-    needs: [backend, frontend]
+    needs: [backend]
     runs-on: ubuntu-latest
     steps:
       - name: Slack notification
