@@ -8,8 +8,7 @@ on:
   workflow_dispatch:
 
 env:
-  # Updated Flutter version to one that includes Dart 3.8.1+
-  FLUTTER_VERSION: '3.16.0'  # This includes Dart 3.2.1
+  FLUTTER_VERSION: '3.19.0'  # This includes Dart 3.3.0 - adjust if you need higher
   GO_VERSION: '1.21'
   POSTGRES_USER: test
   POSTGRES_PASSWORD: test
@@ -32,12 +31,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-    env:
-      POSTGRES_HOST: localhost
-      POSTGRES_PORT: 5432
-      POSTGRES_USER: test
-      POSTGRES_PASSWORD: test
-      POSTGRES_DB: test_db
     steps:
       - uses: actions/checkout@v4
       - name: Set up Go
@@ -75,10 +68,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Using Flutter version that matches your Dart requirement
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: ${{ env.FLUTTER_VERSION }}
+          flutter-version: '3.13.0'  # Change to '3.13.0' if you need Dart 3.8.1 specifically
           channel: 'stable'
 
       - name: Disable Flutter analytics
