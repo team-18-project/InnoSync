@@ -2,9 +2,9 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [ deploy/apk ]
   pull_request:
-    branches: [ main ]
+    branches: [ deploy/apk ]
 
 jobs:
   build-and-deploy:
@@ -30,7 +30,7 @@ jobs:
         flutter build web --release --base-href "/InnoSync/"
         
     - name: Deploy to GitHub Pages
-      if: github.ref == 'refs/heads/main'
+      if: github.ref == 'refs/heads/deploy/apk'
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.ABCD124717 }}
