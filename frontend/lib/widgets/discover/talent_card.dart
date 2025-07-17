@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/talent_model.dart';
-import 'package:frontend/theme/colors.dart';
-import 'package:frontend/theme/text_styles.dart';
 import 'package:frontend/widgets/common/widgets.dart';
 
 class TalentCard extends StatelessWidget {
@@ -12,6 +10,7 @@ class TalentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return GestureDetector(
       onTap: onTap,
       child: Card(
@@ -27,7 +26,7 @@ class TalentCard extends StatelessWidget {
                 width: 56,
                 height: 56,
                 decoration: BoxDecoration(
-                  color: Colors.grey[200],
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(28),
                 ),
                 child: talent.profileImageUrl != null
@@ -38,10 +37,12 @@ class TalentCard extends StatelessWidget {
                           fit: BoxFit.cover,
                         ),
                       )
-                    : const Icon(
+                    : Icon(
                         Icons.person,
                         size: 32,
-                        color: AppColors.textSecondary,
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.5,
+                        ),
                       ),
               ),
               const HSpace.small(),
@@ -52,7 +53,7 @@ class TalentCard extends StatelessWidget {
                   children: [
                     Text(
                       talent.name,
-                      style: AppTextStyles.h3.copyWith(fontSize: 20),
+                      style: theme.textTheme.titleLarge?.copyWith(fontSize: 20),
                     ),
                     const VSpace.small(),
                     // Years and graduation type
@@ -64,13 +65,15 @@ class TalentCard extends StatelessWidget {
                             vertical: 2,
                           ),
                           decoration: BoxDecoration(
-                            color: AppColors.primary.withValues(alpha: 0.1),
+                            color: theme.colorScheme.primary.withValues(
+                              alpha: 0.1,
+                            ),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
-                            '${talent.yearsOfExperience} years',
-                            style: AppTextStyles.bodyLarge.copyWith(
-                              color: AppColors.primary,
+                            '                           ${talent.yearsOfExperience} years',
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: theme.colorScheme.primary,
                             ),
                           ),
                         ),
@@ -81,15 +84,15 @@ class TalentCard extends StatelessWidget {
                             vertical: 2,
                           ),
                           decoration: BoxDecoration(
-                            color: const Color(
-                              0xFF298217,
-                            ).withValues(alpha: 0.1),
+                            color: theme.colorScheme.primary.withValues(
+                              alpha: 0.1,
+                            ),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
                             talent.graduationType,
-                            style: const TextStyle(
-                              color: Color(0xFF298217),
+                            style: TextStyle(
+                              color: theme.colorScheme.primary,
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
                             ),
@@ -98,12 +101,7 @@ class TalentCard extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 8),
-                    Text(
-                      talent.description,
-                      style: AppTextStyles.bodyLarge.copyWith(
-                        color: Colors.black87,
-                      ),
-                    ),
+                    Text(talent.description, style: theme.textTheme.bodyMedium),
                     if (talent.skills.isNotEmpty) ...[
                       const SizedBox(height: 8),
                       Wrap(
@@ -118,13 +116,16 @@ class TalentCard extends StatelessWidget {
                                   vertical: 2,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: Colors.grey[200],
+                                  color: theme.colorScheme.onSurface.withValues(
+                                    alpha: 0.1,
+                                  ),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Text(
                                   skill,
                                   style: TextStyle(
-                                    color: Colors.grey[700],
+                                    color: theme.colorScheme.onSurface
+                                        .withValues(alpha: 0.7),
                                     fontSize: 10,
                                     fontWeight: FontWeight.w500,
                                   ),

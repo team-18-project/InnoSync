@@ -96,6 +96,14 @@ class AppTheme {
       onSurface: AppColors.textPrimary,
       onError: AppColors.textOnPrimary,
     ),
+    tabBarTheme: TabBarThemeData(
+      indicator: BoxDecoration(
+        color: AppColors.primary,
+        borderRadius: BorderRadius.all(Radius.circular(AppDimensions.radiusLg)),
+        border: Border.all(color: AppColors.primary, width: 2),
+      ),
+      dividerColor: Colors.transparent,
+    ),
   );
 
   // Dark ThemeData
@@ -126,6 +134,14 @@ class AppTheme {
       onPrimary: AppColors.textOnPrimaryDark,
       onSurface: AppColors.textPrimaryDark,
       onError: AppColors.textOnPrimaryDark,
+    ),
+    tabBarTheme: TabBarThemeData(
+      indicator: BoxDecoration(
+        color: AppColors.primaryDarkTheme,
+        borderRadius: BorderRadius.all(Radius.circular(AppDimensions.radiusLg)),
+        border: Border.all(color: AppColors.primaryDarkTheme, width: 2),
+      ),
+      dividerColor: Colors.transparent,
     ),
   );
 }
