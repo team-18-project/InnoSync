@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/theme/colors.dart';
-import 'package:frontend/theme/text_styles.dart';
+import 'package:frontend/widgets/common/spacing.dart';
 
 class SortFilterButton extends StatelessWidget {
   final VoidCallback? onTap;
@@ -10,8 +9,9 @@ class SortFilterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Material(
-      color: AppColors.background,
+      color: theme.colorScheme.surface,
       borderRadius: BorderRadius.circular(12.0),
       child: InkWell(
         borderRadius: BorderRadius.circular(12.0),
@@ -20,20 +20,20 @@ class SortFilterButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           child: Row(
             children: [
-              const Icon(Icons.sort, color: AppColors.textPrimary),
+              Icon(Icons.sort, color: theme.colorScheme.onSurface),
               if (label != null) ...[
-                const SizedBox(width: 4),
+                const HSpace.small(),
                 Text(
                   label!,
-                  style: AppTextStyles.bodyLarge.copyWith(
-                    color: AppColors.textPrimary,
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.onSurface,
                   ),
                 ),
               ],
-              const SizedBox(width: 4),
-              const Icon(
+              const HSpace.small(),
+              Icon(
                 Icons.arrow_drop_down,
-                color: AppColors.textPrimary,
+                color: theme.colorScheme.onSurface,
                 size: 20,
               ),
             ],

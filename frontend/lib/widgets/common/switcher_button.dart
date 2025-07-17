@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../theme/colors.dart';
-import '../../theme/text_styles.dart';
 
 class SwitcherButton extends StatelessWidget {
   final String label;
@@ -8,36 +6,36 @@ class SwitcherButton extends StatelessWidget {
   final VoidCallback onTap;
 
   const SwitcherButton({
+    super.key,
     required this.label,
     required this.selected,
     required this.onTap,
-    super.key,
   });
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return GestureDetector(
       onTap: onTap,
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 10),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: selected ? AppColors.primary : AppColors.background,
-          borderRadius: BorderRadius.circular(24),
-          boxShadow: selected
-              ? [
-                  BoxShadow(
-                    color: AppColors.primary.withValues(alpha: 0.15),
-                    blurRadius: 8,
-                    offset: const Offset(0, 2),
-                  ),
-                ]
-              : [],
+          color: selected
+              ? theme.colorScheme.primary
+              : theme.colorScheme.surface,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+            color: theme.colorScheme.primary.withValues(alpha: 0.15),
+            width: 1,
+          ),
         ),
         child: Text(
           label,
-          style: AppTextStyles.bodyLarge.copyWith(
-            color: selected ? AppColors.textOnPrimary : AppColors.textPrimary,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: selected
+                ? theme.colorScheme.onPrimary
+                : theme.colorScheme.onSurface,
+            fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
           ),
         ),
       ),

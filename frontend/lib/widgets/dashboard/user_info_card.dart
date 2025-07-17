@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../theme/colors.dart';
-import '../../theme/text_styles.dart';
-import '../../theme/dimensions.dart';
 import '../common/widgets.dart';
 
 class UserInfoCard extends StatelessWidget {
@@ -13,6 +10,7 @@ class UserInfoCard extends StatelessWidget {
   final String? avatarUrl;
   final double width;
   final double avatarRadius;
+  final VoidCallback? onTap;
 
   const UserInfoCard({
     super.key,
@@ -24,51 +22,73 @@ class UserInfoCard extends StatelessWidget {
     this.avatarUrl,
     this.width = 250,
     this.avatarRadius = 50,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: width,
-      decoration: BoxDecoration(
-        color: AppColors.cardBackground,
-        borderRadius: BorderRadius.circular(AppDimensions.radiusLg),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.shadow,
-            blurRadius: AppDimensions.shadowBlur,
-            offset: const Offset(0, AppDimensions.shadowOffset),
+    final theme = Theme.of(context);
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        elevation: 2,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Container(
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surface,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: theme.colorScheme.shadow.withValues(alpha: 0.1),
+                blurRadius: 8,
+                offset: const Offset(0, 2),
+              ),
+            ],
           ),
-        ],
-      ),
-      padding: const EdgeInsets.all(AppDimensions.paddingXl),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Profile photo
-          CircleAvatar(
-            radius: avatarRadius,
-            backgroundImage: avatarUrl != null
-                ? NetworkImage(avatarUrl!)
-                : null,
-            child: avatarUrl == null
-                ? Icon(Icons.person, size: avatarRadius)
-                : null,
+          padding: const EdgeInsets.all(20),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 30,
+                backgroundImage: avatarUrl != null
+                    ? NetworkImage(avatarUrl!)
+                    : null,
+                child: avatarUrl == null
+                    ? Text(
+                        name.isNotEmpty ? name[0].toUpperCase() : '?',
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          color: theme.colorScheme.onPrimary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )
+                    : null,
+              ),
+              const HSpace.medium(),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const VSpace.small(),
+                    Text(
+                      email,
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.7,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-          const VSpace.lg(),
-          Text(name, style: AppTextStyles.cardTitle),
-          const VSpace.sm(),
-          Text(email, style: AppTextStyles.cardSubtitle),
-          const VSpace.lg(),
-          const Text("Bio:", style: AppTextStyles.cardLabelStyle),
-          Text(bio, style: AppTextStyles.bodyMedium),
-          const VSpace.lg(),
-          const Text("Positions:", style: AppTextStyles.cardLabelStyle),
-          Text(positions, style: AppTextStyles.bodyMedium),
-          const VSpace.lg(),
-          const Text("Technologies:", style: AppTextStyles.cardLabelStyle),
-          Text(technologies, style: AppTextStyles.bodyMedium),
-        ],
+        ),
       ),
     );
   }

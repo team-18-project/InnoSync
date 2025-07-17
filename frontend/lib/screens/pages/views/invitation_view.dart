@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/invitation_model.dart';
-import 'package:frontend/theme/colors.dart';
-import 'package:frontend/theme/text_styles.dart';
+import 'package:frontend/widgets/common/spacing.dart';
 import 'package:frontend/widgets/common/widgets.dart';
 
 class InvitationView extends StatelessWidget {
@@ -10,6 +9,7 @@ class InvitationView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     // Get initials for avatar
     String initials = invitation.recipientName.isNotEmpty
         ? invitation.recipientName
@@ -21,7 +21,7 @@ class InvitationView extends StatelessWidget {
               .toUpperCase()
         : '?';
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(24),
@@ -39,11 +39,13 @@ class InvitationView extends StatelessWidget {
                   // Avatar
                   CircleAvatar(
                     radius: 36,
-                    backgroundColor: AppColors.primary.withValues(alpha: 0.15),
+                    backgroundColor: theme.colorScheme.primary.withValues(
+                      alpha: 0.15,
+                    ),
                     child: Text(
                       initials,
-                      style: AppTextStyles.h3.copyWith(
-                        color: AppColors.primary,
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        color: theme.colorScheme.primary,
                         fontWeight: FontWeight.bold,
                         fontSize: 32,
                       ),
@@ -52,7 +54,7 @@ class InvitationView extends StatelessWidget {
                   const VSpace(24),
                   Text(
                     invitation.recipientName,
-                    style: AppTextStyles.h3.copyWith(fontSize: 22),
+                    style: theme.textTheme.titleLarge?.copyWith(fontSize: 22),
                     textAlign: TextAlign.center,
                   ),
                   const VSpace(16),
@@ -65,21 +67,23 @@ class InvitationView extends StatelessWidget {
                           vertical: 6,
                         ),
                         decoration: BoxDecoration(
-                          color: AppColors.primary.withValues(alpha: 0.12),
+                          color: theme.colorScheme.primary.withValues(
+                            alpha: 0.12,
+                          ),
                           borderRadius: BorderRadius.circular(14),
                         ),
                         child: Row(
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.work_outline,
                               size: 18,
-                              color: AppColors.primary,
+                              color: theme.colorScheme.primary,
                             ),
                             const SizedBox(width: 4),
                             Text(
                               invitation.roleName,
-                              style: AppTextStyles.bodyLarge.copyWith(
-                                color: AppColors.primary,
+                              style: theme.textTheme.bodyLarge?.copyWith(
+                                color: theme.colorScheme.primary,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
@@ -93,21 +97,23 @@ class InvitationView extends StatelessWidget {
                           vertical: 6,
                         ),
                         decoration: BoxDecoration(
-                          color: AppColors.primary.withValues(alpha: 0.12),
+                          color: theme.colorScheme.primary.withValues(
+                            alpha: 0.12,
+                          ),
                           borderRadius: BorderRadius.circular(14),
                         ),
                         child: Row(
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.folder_open,
                               size: 18,
-                              color: AppColors.primary,
+                              color: theme.colorScheme.primary,
                             ),
                             const SizedBox(width: 4),
                             Text(
                               invitation.projectTitle,
-                              style: const TextStyle(
-                                color: AppColors.primary,
+                              style: theme.textTheme.bodyLarge?.copyWith(
+                                color: theme.colorScheme.primary,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -120,9 +126,9 @@ class InvitationView extends StatelessWidget {
                   const VSpace(24),
                   Text(
                     invitation.message,
-                    style: AppTextStyles.bodyLarge.copyWith(
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      color: theme.textTheme.bodyLarge?.color,
                       fontSize: 17,
-                      color: Colors.black87,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -133,13 +139,17 @@ class InvitationView extends StatelessWidget {
                       Icon(
                         Icons.calendar_today,
                         size: 18,
-                        color: AppColors.textSecondary,
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.5,
+                        ),
                       ),
                       const SizedBox(width: 6),
                       Text(
                         invitation.sentAt.toString(),
-                        style: AppTextStyles.bodyLarge.copyWith(
-                          color: AppColors.textSecondary,
+                        style: theme.textTheme.bodyLarge?.copyWith(
+                          color: theme.colorScheme.onSurface.withValues(
+                            alpha: 0.5,
+                          ),
                           fontSize: 14,
                         ),
                       ),
@@ -153,20 +163,20 @@ class InvitationView extends StatelessWidget {
                     ),
                     decoration: BoxDecoration(
                       color: invitation.status == 'Accepted'
-                          ? AppColors.success.withValues(alpha: 0.12)
+                          ? theme.colorScheme.primary.withValues(alpha: 0.12)
                           : invitation.status == 'Declined'
-                          ? AppColors.error.withValues(alpha: 0.12)
-                          : AppColors.primary.withValues(alpha: 0.10),
+                          ? theme.colorScheme.error.withValues(alpha: 0.12)
+                          : theme.colorScheme.primary.withValues(alpha: 0.10),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: Text(
                       invitation.status,
-                      style: AppTextStyles.bodyLarge.copyWith(
+                      style: theme.textTheme.bodyLarge?.copyWith(
                         color: invitation.status == 'Accepted'
-                            ? AppColors.primary
+                            ? theme.colorScheme.primary
                             : invitation.status == 'Declined'
-                            ? AppColors.error
-                            : AppColors.primary,
+                            ? theme.colorScheme.error
+                            : theme.colorScheme.primary,
                         fontWeight: FontWeight.w600,
                         fontSize: 15,
                       ),

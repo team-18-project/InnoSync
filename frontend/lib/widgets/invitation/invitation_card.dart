@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/invitation_model.dart';
-import 'package:frontend/theme/colors.dart';
-import 'package:frontend/theme/text_styles.dart';
+import 'package:frontend/widgets/common/spacing.dart';
 import 'package:frontend/widgets/common/widgets.dart';
 
 class InvitationCard extends StatelessWidget {
@@ -12,6 +11,7 @@ class InvitationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     // Get initials for avatar
     String initials = invitation.recipientName.isNotEmpty
         ? invitation.recipientName
@@ -36,11 +36,13 @@ class InvitationCard extends StatelessWidget {
               // Avatar with initials
               CircleAvatar(
                 radius: 28,
-                backgroundColor: AppColors.primary.withValues(alpha: 0.15),
+                backgroundColor: theme.colorScheme.primary.withValues(
+                  alpha: 0.15,
+                ),
                 child: Text(
                   initials,
-                  style: AppTextStyles.h3.copyWith(
-                    color: AppColors.primary,
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    color: theme.colorScheme.primary,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -56,7 +58,9 @@ class InvitationCard extends StatelessWidget {
                         Expanded(
                           child: Text(
                             invitation.recipientName,
-                            style: AppTextStyles.h3.copyWith(fontSize: 20),
+                            style: theme.textTheme.titleLarge?.copyWith(
+                              fontSize: 20,
+                            ),
                           ),
                         ),
                         // Status or action icons could go here
@@ -71,49 +75,53 @@ class InvitationCard extends StatelessWidget {
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: AppColors.primary.withValues(alpha: 0.12),
+                            color: theme.colorScheme.primary.withValues(
+                              alpha: 0.12,
+                            ),
                             borderRadius: BorderRadius.circular(14),
                           ),
                           child: Row(
                             children: [
-                              const Icon(
+                              Icon(
                                 Icons.work_outline,
                                 size: 16,
-                                color: AppColors.primary,
+                                color: theme.colorScheme.primary,
                               ),
                               const SizedBox(width: 4),
                               Text(
                                 invitation.roleName,
-                                style: AppTextStyles.bodyLarge.copyWith(
-                                  color: AppColors.primary,
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: theme.colorScheme.primary,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ],
                           ),
                         ),
-                        const SizedBox(width: 10),
+                        const HSpace.medium(),
                         Container(
                           padding: const EdgeInsets.symmetric(
                             horizontal: 10,
                             vertical: 4,
                           ),
                           decoration: BoxDecoration(
-                            color: AppColors.primary.withValues(alpha: 0.12),
+                            color: theme.colorScheme.primary.withValues(
+                              alpha: 0.12,
+                            ),
                             borderRadius: BorderRadius.circular(14),
                           ),
                           child: Row(
                             children: [
-                              const Icon(
+                              Icon(
                                 Icons.folder_open,
                                 size: 16,
-                                color: AppColors.primary,
+                                color: theme.colorScheme.primary,
                               ),
-                              const SizedBox(width: 4),
+                              const HSpace.small(),
                               Text(
                                 invitation.projectTitle,
-                                style: AppTextStyles.bodyLarge.copyWith(
-                                  color: AppColors.primary,
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: theme.colorScheme.primary,
                                   fontSize: 13,
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -126,10 +134,7 @@ class InvitationCard extends StatelessWidget {
                     const VSpace.small(),
                     Text(
                       invitation.message,
-                      style: AppTextStyles.bodyLarge.copyWith(
-                        color: Colors.black87,
-                        fontSize: 15,
-                      ),
+                      style: theme.textTheme.bodyMedium?.copyWith(fontSize: 15),
                     ),
                     if (invitation.roleName.isNotEmpty) ...[
                       const SizedBox(height: 10),
@@ -146,13 +151,16 @@ class InvitationCard extends StatelessWidget {
                                   vertical: 3,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: Colors.grey[200],
+                                  color: theme.colorScheme.onSurface.withValues(
+                                    alpha: 0.1,
+                                  ),
                                   borderRadius: BorderRadius.circular(8),
                                 ),
                                 child: Text(
                                   skill,
-                                  style: const TextStyle(
-                                    color: Colors.grey,
+                                  style: TextStyle(
+                                    color: theme.colorScheme.onSurface
+                                        .withValues(alpha: 0.6),
                                     fontSize: 11,
                                     fontWeight: FontWeight.w500,
                                   ),
