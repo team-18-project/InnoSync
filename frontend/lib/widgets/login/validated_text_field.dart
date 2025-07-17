@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../theme/colors.dart';
 import '../../theme/dimensions.dart';
 import 'package:flutter/services.dart';
 
@@ -28,9 +27,7 @@ class ValidatedTextField extends StatelessWidget {
       controller: controller,
       validator: validator,
       obscureText: obscure,
-      inputFormatters: [
-        NoControlCharsFormatter(),
-      ],
+      inputFormatters: [NoControlCharsFormatter()],
       decoration: InputDecoration(
         prefixIcon: Icon(icon, color: colorScheme.primary),
         hintText: hint,
@@ -62,9 +59,6 @@ class NoControlCharsFormatter extends TextInputFormatter {
   ) {
     // Удаляем все управляющие символы (код < 32, кроме \n)
     final filtered = newValue.text.replaceAll(RegExp(r'[\x00-\x1F\x7F]'), '');
-    return TextEditingValue(
-      text: filtered,
-      selection: newValue.selection,
-    );
+    return TextEditingValue(text: filtered, selection: newValue.selection);
   }
 }

@@ -4,7 +4,6 @@ import 'pages/discover_page.dart';
 import 'pages/dashboard_page.dart';
 import 'pages/invitations_page.dart';
 import 'pages/my_projects_page.dart';
-import '../theme/colors.dart';
 import '../widgets/common/main_app_bar.dart';
 import 'pages/views/invitation_view.dart';
 import 'pages/views/project_view.dart';
@@ -26,14 +25,11 @@ class _MainPageState extends State<MainPage> {
   Talent? _selectedTalent;
   Invitation? _selectedInvitation;
   final List<Widget> _pages = [];
-  final bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    print('MainPage initState');
     getToken().then((token) {
-      print('MainPage getToken result: ${token ?? 'null'}');
       _pages.addAll([
         DiscoverPage(
           onProjectTap: (project) {
@@ -79,9 +75,6 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    print(
-      'MainPage build, _pages.length = ${_pages.length}, _currentIndex = $_currentIndex',
-    );
     if (_pages.isEmpty) {
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
@@ -99,7 +92,9 @@ class _MainPageState extends State<MainPage> {
               currentIndex: _currentIndex,
               onTap: (index) => setState(() => _currentIndex = index),
               selectedItemColor: Theme.of(context).colorScheme.primary,
-              unselectedItemColor: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+              unselectedItemColor: Theme.of(
+                context,
+              ).colorScheme.onSurface.withValues(alpha: 0.6),
               backgroundColor: Theme.of(context).colorScheme.surface,
               type: BottomNavigationBarType.fixed,
               elevation: 0,

@@ -274,6 +274,7 @@ class _ProjectCreateState extends State<ProjectCreate> {
                   onPressed: () async {
                     final token = await getToken();
                     if (token == null) {
+                      if (!mounted) return;
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Not authenticated!')),
                       );
@@ -285,9 +286,11 @@ class _ProjectCreateState extends State<ProjectCreate> {
                       _descriptionController.text,
                       int.tryParse(_teamSizeController.text),
                     );
+                    if (!mounted) return;
                     if (success) {
                       widget.onProjectCreated?.call();
-                      if (mounted) Navigator.pop(context);
+                      if (!mounted) return;
+                      Navigator.pop(context);
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(

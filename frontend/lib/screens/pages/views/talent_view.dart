@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:frontend/theme/colors.dart';
-import '../../../theme/text_styles.dart';
 import '../../../models/talent_model.dart';
 import '../../../widgets/common/widgets.dart';
-import '../../../widgets/common/theme_switcher_button.dart';
 
 class TalentView extends StatelessWidget {
   final Talent talent;
@@ -14,7 +11,7 @@ class TalentView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
         child: Column(
@@ -44,7 +41,9 @@ class TalentView extends StatelessWidget {
             // Name
             Text(
               talent.name,
-              style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontSize: 28),
+              style: Theme.of(
+                context,
+              ).textTheme.headlineSmall?.copyWith(fontSize: 28),
               textAlign: TextAlign.center,
             ),
             const VSpace(16),
@@ -58,14 +57,16 @@ class TalentView extends StatelessWidget {
                     vertical: 6,
                   ),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Text(
                     '${talent.yearsOfExperience} years experience',
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
                 ),
                 const HSpace.medium(),
@@ -75,14 +76,16 @@ class TalentView extends StatelessWidget {
                     vertical: 6,
                   ),
                   decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.primary.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Text(
                     talent.graduationType,
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
                   ),
                 ),
               ],
@@ -91,7 +94,9 @@ class TalentView extends StatelessWidget {
             // Description
             Text(
               talent.description,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(fontSize: 16),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyLarge?.copyWith(fontSize: 16),
               textAlign: TextAlign.center,
             ),
             const VSpace(28),
@@ -101,7 +106,9 @@ class TalentView extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   'Skills',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 16),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleMedium?.copyWith(fontSize: 16),
                 ),
               ),
               const VSpace(8),
@@ -113,7 +120,8 @@ class TalentView extends StatelessWidget {
                       (skill) => Chip(
                         label: Text(
                           skill,
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          style: Theme.of(context).textTheme.bodyLarge
+                              ?.copyWith(
                                 color: Theme.of(context).colorScheme.onPrimary,
                               ),
                         ),
@@ -132,7 +140,9 @@ class TalentView extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   'Positions',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 16),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleMedium?.copyWith(fontSize: 16),
                 ),
               ),
               const VSpace(8),
@@ -144,7 +154,8 @@ class TalentView extends StatelessWidget {
                       (position) => Chip(
                         label: Text(
                           position,
-                          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          style: Theme.of(context).textTheme.bodyLarge
+                              ?.copyWith(
                                 color: Theme.of(context).colorScheme.onPrimary,
                               ),
                         ),
@@ -164,7 +175,9 @@ class TalentView extends StatelessWidget {
                 alignment: Alignment.centerLeft,
                 child: Text(
                   'Contact Information',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(fontSize: 16),
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleMedium?.copyWith(fontSize: 16),
                 ),
               ),
               const VSpace(8),

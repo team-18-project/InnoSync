@@ -4,7 +4,6 @@ import '../../utils/token_storage.dart';
 import 'package:frontend/models/invitation_model.dart';
 import 'package:frontend/widgets/common/widgets.dart';
 import 'package:frontend/widgets/invitation/widgets.dart';
-import '../../widgets/common/theme_switcher_button.dart';
 
 class InvitationsPage extends StatefulWidget {
   final Function(Invitation) onInvitationTap;
@@ -37,20 +36,6 @@ class _InvitationsPageState extends State<InvitationsPage> {
     } catch (e) {
       setState(() => _loading = false);
     }
-  }
-
-  Future<void> _respondToInvitation(int id, bool accept) async {
-    final token = await getToken();
-    if (token == null) return;
-    // TODO: Replace with actual API call for accept/decline
-    setState(() {
-      _invitations.removeWhere((inv) => inv['id'] == id);
-    });
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(accept ? 'Invitation accepted!' : 'Invitation declined!'),
-      ),
-    );
   }
 
   @override

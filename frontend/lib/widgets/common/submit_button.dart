@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../theme/colors.dart';
 import '../../theme/app_theme.dart';
-import '../../theme/text_styles.dart';
 import '../common/widgets.dart';
 
 class SubmitButton extends StatelessWidget {
@@ -36,7 +34,12 @@ class SubmitButton extends StatelessWidget {
                 ),
               ),
             )
-          : Text(text, style: textTheme.labelLarge?.copyWith(color: colorScheme.onPrimary)),
+          : Text(
+              text,
+              style: textTheme.labelLarge?.copyWith(
+                color: colorScheme.onPrimary,
+              ),
+            ),
     );
   }
 }
