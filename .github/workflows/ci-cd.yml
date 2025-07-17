@@ -8,7 +8,8 @@ on:
   workflow_dispatch:
 
 env:
-  FLUTTER_VERSION: '3.19.0'  # This includes Dart 3.3.0 - adjust if you need higher
+  # Updated Flutter version to one that includes Dart 3.8.1+
+  FLUTTER_VERSION: '3.16.0'  # This includes Dart 3.2.1
   GO_VERSION: '1.21'
   POSTGRES_USER: test
   POSTGRES_PASSWORD: test
@@ -31,6 +32,12 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+    env:
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: test_db
     steps:
       - uses: actions/checkout@v4
       - name: Set up Go
@@ -62,18 +69,16 @@ jobs:
           path: |
             backend/unit_coverage.html
             backend/integration_coverage.html
-
   frontend:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      # Using Flutter version that matches your Dart requirement
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.13.0'  # Change to '3.13.0' if you need Dart 3.8.1 specifically
-          channel: 'stable'
+          flutter-version: 'master'
+          channel: 'master'
 
       - name: Disable Flutter analytics
         run: flutter config --no-analytics
@@ -89,7 +94,6 @@ jobs:
           flutter test --coverage --coverage-path=unit_coverage.info test/unit/
           lcov --remove unit_coverage.info '**/*.g.dart' '**/*.freezed.dart' -o filtered_unit_coverage.info
           genhtml filtered_unit_coverage.info -o unit_coverage_report
-
       - name: Run Flutter integration tests
         working-directory: ./frontend
         run: |
@@ -97,7 +101,6 @@ jobs:
           flutter test --coverage --coverage-path=integration_coverage.info test/integration/
           lcov --remove integration_coverage.info '**/*.g.dart' '**/*.freezed.dart' -o filtered_integration_coverage.info
           genhtml filtered_integration_coverage.info -o integration_coverage_report
-
       - name: Upload coverage reports
         uses: actions/upload-artifact@v4
         with:
@@ -105,7 +108,6 @@ jobs:
           path: |
             frontend/unit_coverage_report/**
             frontend/integration_coverage_report/**
-
   notify:
     needs: [backend, frontend]
     runs-on: ubuntu-latest
