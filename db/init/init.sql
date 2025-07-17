@@ -119,7 +119,7 @@ CREATE TABLE invitation (
                             id BIGSERIAL PRIMARY KEY,
                             project_role_id BIGINT NOT NULL,
                             user_id BIGINT NOT NULL,
-                            status invitation_status_enum DEFAULT 'INVITED',
+                            invitation_status invitation_status_enum DEFAULT 'INVITED',
                             sent_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                             responded_at TIMESTAMP,
                             message TEXT,  -- Added for personal invitation message
@@ -186,7 +186,9 @@ CREATE INDEX idx_project_role_project_id ON project_role(project_id);
 CREATE INDEX idx_project_role_open ON project_role(is_open);
 CREATE INDEX idx_invitation_project_role_id ON invitation(project_role_id);
 CREATE INDEX idx_invitation_user_id ON invitation(user_id);
-CREATE INDEX idx_invitation_status ON invitation(status);
+-- Переименовать индекс
+DROP INDEX IF EXISTS idx_invitation_status;
+CREATE INDEX idx_invitation_invitation_status ON invitation(invitation_status);
 CREATE INDEX idx_role_application_user_id ON role_application(user_id);
 CREATE INDEX idx_role_application_project_role_id ON role_application(project_role_id);
 CREATE INDEX idx_role_application_status ON role_application(status);
