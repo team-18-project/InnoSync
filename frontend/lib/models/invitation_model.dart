@@ -10,7 +10,7 @@ class Invitation {
   final DateTime? respondedAt;
   final String roleName;
   final DateTime sentAt;
-  final String status;
+  final String invitationStatus;
 
   Invitation({
     required this.id,
@@ -23,7 +23,7 @@ class Invitation {
     this.respondedAt,
     required this.roleName,
     required this.sentAt,
-    required this.status,
+    required this.invitationStatus,
   });
 
   factory Invitation.fromJson(Map<String, dynamic> json) {
@@ -40,7 +40,7 @@ class Invitation {
           : null,
       roleName: json['role_name'],
       sentAt: DateTime.parse(json['sent_at']),
-      status: json['status'],
+      invitationStatus: json['invitation_status'],
     );
   }
 }

@@ -72,13 +72,13 @@ func (e ApplicationStatusEnum) Value() (driver.Value, error) {
 
 // Invitation represents a project invitation
 type Invitation struct {
-	ID            int64                `json:"id" db:"id"`
-	ProjectRoleID int64                `json:"project_role_id" db:"project_role_id"`
-	UserID        int64                `json:"user_id" db:"user_id"`
-	Status        InvitationStatusEnum `json:"status" db:"status"`
-	SentAt        time.Time            `json:"sent_at" db:"sent_at"`
-	RespondedAt   *time.Time           `json:"responded_at,omitempty" db:"responded_at"`
-	Message       *string              `json:"message,omitempty" db:"message"`
+	ID               int64                `json:"id" db:"id"`
+	ProjectRoleID    int64                `json:"project_role_id" db:"project_role_id"`
+	UserID           int64                `json:"user_id" db:"user_id"`
+	InvitationStatus InvitationStatusEnum `json:"invitation_status" db:"invitation_status"`
+	SentAt           time.Time            `json:"sent_at" db:"sent_at"`
+	RespondedAt      *time.Time           `json:"responded_at,omitempty" db:"responded_at"`
+	Message          *string              `json:"message,omitempty" db:"message"`
 }
 
 // RoleApplication represents a role application

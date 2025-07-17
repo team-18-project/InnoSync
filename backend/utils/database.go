@@ -50,10 +50,8 @@ func (d *Database) Migrate() error {
 		`DO $$ BEGIN CREATE TYPE education_enum AS ENUM ('NO_DEGREE', 'BACHELOR', 'MASTER', 'PHD'); EXCEPTION WHEN duplicate_object THEN null; END $$;`,
 		// `DROP TYPE IF EXISTS expertise_level_enum CASCADE;`,
 		`DO $$ BEGIN CREATE TYPE expertise_level_enum AS ENUM ('ENTRY', 'JUNIOR', 'MID', 'SENIOR', 'RESEARCHER'); EXCEPTION WHEN duplicate_object THEN null; END $$;`,
-		`DROP TYPE IF EXISTS invitation_status_enum CASCADE;`,
-		`CREATE TYPE invitation_status_enum AS ENUM ('INVITED', 'ACCEPTED', 'DECLINED', 'REVOKED');`,
-		`DROP TYPE IF EXISTS application_status_enum CASCADE;`,
-		`CREATE TYPE application_status_enum AS ENUM ('PENDING', 'UNDER_REVIEW', 'ACCEPTED', 'REJECTED', 'WITHDRAWN');`,
+		`DO $$ BEGIN CREATE TYPE invitation_status_enum AS ENUM ('INVITED', 'ACCEPTED', 'DECLINED', 'REVOKED'); EXCEPTION WHEN duplicate_object THEN null; END $$;`,
+		`DO $$ BEGIN CREATE TYPE application_status_enum AS ENUM ('PENDING', 'UNDER_REVIEW', 'ACCEPTED', 'REJECTED', 'WITHDRAWN'); EXCEPTION WHEN duplicate_object THEN null; END $$;`,
 	}
 
 	for _, migration := range migrations {

@@ -38,13 +38,13 @@ type CreateProjectRequest struct {
 }
 
 type ProjectResponse struct {
-	ID          int64     `json:"id"`
-	Title       string    `json:"title"`
-	Description *string   `json:"description,omitempty"`
-	TeamSize    int       `json:"team_size"`
-	CreatedAt   time.Time `json:"created_at"`
-	UpdatedAt   time.Time `json:"updated_at"`
-	IsActive    bool      `json:"is_active"`
+	ID          int64         `json:"id"`
+	Title       string        `json:"title"`
+	Description *string       `json:"description,omitempty"`
+	TeamSize    int           `json:"team_size"`
+	CreatedAt   time.Time     `json:"created_at"`
+	UpdatedAt   time.Time     `json:"updated_at"`
+	IsActive    bool          `json:"is_active"`
 	Roles       []ProjectRole `json:"roles,omitempty"`
 }
 
@@ -56,9 +56,9 @@ type UpdateProjectRequest struct {
 
 // Project role request/response models
 type CreateProjectRoleRequest struct {
-	RoleName       string                `json:"role_name" binding:"required"`
-	ExpertiseLevel *ExpertiseLevelEnum   `json:"expertise_level,omitempty"`
-	Technologies   []string              `json:"technologies,omitempty"`
+	RoleName       string              `json:"role_name" binding:"required"`
+	ExpertiseLevel *ExpertiseLevelEnum `json:"expertise_level,omitempty"`
+	Technologies   []string            `json:"technologies,omitempty"`
 }
 
 type ProjectRoleResponse struct {
@@ -72,10 +72,10 @@ type ProjectRoleResponse struct {
 }
 
 type UpdateProjectRoleRequest struct {
-	RoleName       *string               `json:"role_name,omitempty"`
-	ExpertiseLevel *ExpertiseLevelEnum   `json:"expertise_level,omitempty"`
-	Technologies   []string              `json:"technologies,omitempty"`
-	IsOpen         *bool                 `json:"is_open,omitempty"`
+	RoleName       *string             `json:"role_name,omitempty"`
+	ExpertiseLevel *ExpertiseLevelEnum `json:"expertise_level,omitempty"`
+	Technologies   []string            `json:"technologies,omitempty"`
+	IsOpen         *bool               `json:"is_open,omitempty"`
 }
 
 // Application response models
@@ -103,17 +103,17 @@ type UpdateApplicationStatusRequest struct {
 
 // Invitation response models
 type InvitationResponse struct {
-	ID            int64                `json:"id"`
-	ProjectRoleID int64                `json:"project_role_id"`
-	RoleName      string               `json:"role_name"`
-	ProjectID     int64                `json:"project_id"`
-	ProjectTitle  string               `json:"project_title"`
-	RecipientID   int64                `json:"recipient_id"`
-	RecipientName string               `json:"recipient_name"`
-	Status        InvitationStatusEnum `json:"status"`
-	SentAt        time.Time            `json:"sent_at"`
-	RespondedAt   *time.Time           `json:"responded_at,omitempty"`
-	Message       *string              `json:"message,omitempty"`
+	ID               int64                `json:"id"`
+	ProjectRoleID    int64                `json:"project_role_id"`
+	RoleName         string               `json:"role_name"`
+	ProjectID        int64                `json:"project_id"`
+	ProjectTitle     string               `json:"project_title"`
+	RecipientID      int64                `json:"recipient_id"`
+	RecipientName    string               `json:"recipient_name"`
+	InvitationStatus InvitationStatusEnum `json:"invitation_status"`
+	SentAt           time.Time            `json:"sent_at"`
+	RespondedAt      *time.Time           `json:"responded_at,omitempty"`
+	Message          *string              `json:"message,omitempty"`
 }
 
 type CreateInvitationRequest struct {

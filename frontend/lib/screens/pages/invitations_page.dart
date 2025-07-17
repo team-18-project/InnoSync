@@ -20,36 +20,7 @@ class _InvitationsPageState extends ConsumerState<InvitationsPage> {
   List<Invitation> _invitations = [];
   bool _isLoading = true;
   String? _errorMessage;
-
-  // Моковые данные для приглашений
-  final List<Invitation> _mockInvitations = [
-    Invitation(
-      id: 1,
-      message: 'Join our Flutter project as a developer!',
-      projectId: 101,
-      projectRoleId: 201,
-      projectTitle: 'FlutterApp',
-      recipientId: 301,
-      recipientName: 'Alice Johnson',
-      respondedAt: null,
-      roleName: 'Flutter Developer',
-      sentAt: DateTime.now().subtract(const Duration(days: 1)),
-      status: 'Pending',
-    ),
-    Invitation(
-      id: 2,
-      message: 'We need your expertise in backend development.',
-      projectId: 102,
-      projectRoleId: 202,
-      projectTitle: 'BackendAPI',
-      recipientId: 302,
-      recipientName: 'Bob Smith',
-      respondedAt: null,
-      roleName: 'Backend Developer',
-      sentAt: DateTime.now().subtract(const Duration(days: 2)),
-      status: 'Accepted',
-    ),
-  ];
+  int? _processingId; // id приглашения, по которому идёт запрос
 
   @override
   void initState() {
@@ -62,36 +33,47 @@ class _InvitationsPageState extends ConsumerState<InvitationsPage> {
       _isLoading = true;
       _errorMessage = null;
     });
-
-    // Используем моковые данные вместо API
-    await Future.delayed(const Duration(seconds: 1)); // имитация загрузки
-    setState(() {
-      _invitations = _mockInvitations;
-      _isLoading = false;
-    });
+    try {
+      final token = await getToken();
+      if (token == null) throw Exception('No token');
+      final api = ApiService();
+      final invitationsData = await api.fetchInvitations(token);
+      setState(() {
+        _invitations = invitationsData.map((data) => Invitation.fromJson(data)).toList();
+        _isLoading = false;
+      });
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Failed to load invitations: ${e.toString()}';
+        _isLoading = false;
+      });
+    }
   }
 
-  void _updateInvitationStatus(int id, String newStatus) {
+  Future<void> _updateInvitationStatus(int id, String newStatus) async {
     setState(() {
-      _invitations = _invitations.map((inv) {
-        if (inv.id == id) {
-          return Invitation(
-            id: inv.id,
-            message: inv.message,
-            projectId: inv.projectId,
-            projectRoleId: inv.projectRoleId,
-            projectTitle: inv.projectTitle,
-            recipientId: inv.recipientId,
-            recipientName: inv.recipientName,
-            respondedAt: DateTime.now(),
-            roleName: inv.roleName,
-            sentAt: inv.sentAt,
-            status: newStatus,
-          );
-        }
-        return inv;
-      }).toList();
+      _processingId = id;
     });
+    try {
+      final token = await getToken();
+      if (token == null) throw Exception('No token');
+      final api = ApiService();
+      final ok = await api.respondToInvitation(
+        token: token,
+        invitationId: id,
+        response: newStatus == 'Accepted' ? 'ACCEPTED' : 'DECLINED',
+      );
+      if (!ok) throw Exception('Failed to update invitation');
+      await _fetchInvitations();
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Failed to update invitation: ${e.toString()}';
+      });
+    } finally {
+      setState(() {
+        _processingId = null;
+      });
+    }
   }
 
   @override
@@ -154,28 +136,34 @@ class _InvitationsPageState extends ConsumerState<InvitationsPage> {
               invitation: invitation,
               onTap: () => widget.onInvitationTap(invitation),
             ),
-            if (invitation.status == 'Pending')
+            if (invitation.invitationStatus == 'Pending' || invitation.invitationStatus == 'INVITED')
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   TextButton(
-                    onPressed: () => _updateInvitationStatus(invitation.id, 'Declined'),
-                    child: const Text('Decline', style: TextStyle(color: Colors.red)),
+                    onPressed: _processingId == invitation.id ? null : () => _updateInvitationStatus(invitation.id, 'Declined'),
+                    child: _processingId == invitation.id
+                        ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2))
+                        : const Text('Decline', style: TextStyle(color: Colors.red)),
                   ),
                   const SizedBox(width: 8),
                   ElevatedButton(
-                    onPressed: () => _updateInvitationStatus(invitation.id, 'Accepted'),
-                    child: const Text('Accept'),
+                    onPressed: _processingId == invitation.id ? null : () => _updateInvitationStatus(invitation.id, 'Accepted'),
+                    child: _processingId == invitation.id
+                        ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white))
+                        : const Text('Accept'),
                   ),
                 ],
               ),
-            if (invitation.status != 'Pending')
+            if (invitation.invitationStatus != 'Pending' && invitation.invitationStatus != 'INVITED')
               Align(
                 alignment: Alignment.centerRight,
                 child: Text(
-                  invitation.status == 'Accepted' ? 'Accepted' : 'Declined',
+                  invitation.invitationStatus == 'Accepted' || invitation.invitationStatus == 'ACCEPTED'
+                      ? 'Accepted'
+                      : 'Declined',
                   style: TextStyle(
-                    color: invitation.status == 'Accepted'
+                    color: invitation.invitationStatus == 'Accepted' || invitation.invitationStatus == 'ACCEPTED'
                         ? Colors.green
                         : Colors.red,
                     fontWeight: FontWeight.bold,

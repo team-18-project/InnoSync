@@ -72,19 +72,19 @@ func (s *InvitationService) CreateInvitation(userID int64, req *models.CreateInv
 
 	// Create invitation
 	invitation := &models.Invitation{
-		ProjectRoleID: req.ProjectRoleID,
-		UserID:        req.RecipientID,
-		Status:        models.InvitationStatusInvited,
-		SentAt:        time.Now(),
-		Message:       req.Message,
+		ProjectRoleID:    req.ProjectRoleID,
+		UserID:           req.RecipientID,
+		InvitationStatus: models.InvitationStatusInvited,
+		SentAt:           time.Now(),
+		Message:          req.Message,
 	}
 
 	query := `
-		INSERT INTO invitation (project_role_id, user_id, status, sent_at, message)
+		INSERT INTO invitation (project_role_id, user_id, invitation_status, sent_at, message)
 		VALUES ($1, $2, $3, $4, $5)
 		RETURNING id
 	`
-	err = s.db.QueryRowx(query, invitation.ProjectRoleID, invitation.UserID, invitation.Status,
+	err = s.db.QueryRowx(query, invitation.ProjectRoleID, invitation.UserID, invitation.InvitationStatus,
 		invitation.SentAt, invitation.Message).Scan(&invitation.ID)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create invitation: %w", err)
@@ -98,7 +98,7 @@ func (s *InvitationService) CreateInvitation(userID int64, req *models.CreateInv
 func (s *InvitationService) GetSentInvitations(userID int64) ([]models.InvitationResponse, error) {
 	query := `
 		SELECT
-			i.id, i.project_role_id, i.user_id, i.status, i.sent_at, i.responded_at, i.message,
+			i.id, i.project_role_id, i.user_id, i.invitation_status, i.sent_at, i.responded_at, i.message,
 			pr.role_name,
 			p.id as project_id, p.title as project_title,
 			u.full_name as recipient_name
@@ -127,7 +127,7 @@ func (s *InvitationService) GetSentInvitations(userID int64) ([]models.Invitatio
 			&inv.ProjectTitle,
 			&inv.RecipientID,
 			&inv.RecipientName,
-			&inv.Status,
+			&inv.InvitationStatus,
 			&inv.SentAt,
 			&inv.RespondedAt,
 			&inv.Message,
@@ -145,7 +145,7 @@ func (s *InvitationService) GetSentInvitations(userID int64) ([]models.Invitatio
 func (s *InvitationService) GetReceivedInvitations(userID int64) ([]models.InvitationResponse, error) {
 	query := `
 		SELECT
-			i.id, i.project_role_id, i.user_id, i.status, i.sent_at, i.responded_at, i.message,
+			i.id, i.project_role_id, i.user_id, i.invitation_status, i.sent_at, i.responded_at, i.message,
 			pr.role_name,
 			p.id as project_id, p.title as project_title,
 			u.full_name as recipient_name
@@ -174,7 +174,7 @@ func (s *InvitationService) GetReceivedInvitations(userID int64) ([]models.Invit
 			&inv.ProjectTitle,
 			&inv.RecipientID,
 			&inv.RecipientName,
-			&inv.Status,
+			&inv.InvitationStatus,
 			&inv.SentAt,
 			&inv.RespondedAt,
 			&inv.Message,
@@ -198,7 +198,7 @@ func (s *InvitationService) RespondToInvitation(userID, invitationID int64, req 
 	// Get the invitation
 	var invitation models.Invitation
 	query := `
-		SELECT id, project_role_id, user_id, status, sent_at, responded_at, message
+		SELECT id, project_role_id, user_id, invitation_status, sent_at, responded_at, message
 		FROM invitation
 		WHERE id = $1
 	`
@@ -216,7 +216,7 @@ func (s *InvitationService) RespondToInvitation(userID, invitationID int64, req 
 	}
 
 	// Check if invitation is still pending
-	if invitation.Status != models.InvitationStatusInvited {
+	if invitation.InvitationStatus != models.InvitationStatusInvited {
 		return nil, ErrInvitationAlreadyReplied
 	}
 
@@ -229,7 +229,7 @@ func (s *InvitationService) RespondToInvitation(userID, invitationID int64, req 
 	now := time.Now()
 	updateQuery := `
 		UPDATE invitation
-		SET status = $1, responded_at = $2
+		SET invitation_status = $1, responded_at = $2
 		WHERE id = $3
 	`
 	_, err = s.db.Exec(updateQuery, req.Response, now, invitationID)
@@ -251,7 +251,7 @@ func (s *InvitationService) RevokeInvitation(userID, invitationID int64) (*model
 	// Get the invitation
 	var invitation models.Invitation
 	query := `
-		SELECT id, project_role_id, user_id, status, sent_at, responded_at, message
+		SELECT id, project_role_id, user_id, invitation_status, sent_at, responded_at, message
 		FROM invitation
 		WHERE id = $1
 	`
@@ -279,7 +279,7 @@ func (s *InvitationService) RevokeInvitation(userID, invitationID int64) (*model
 	}
 
 	// Check if invitation can be revoked (only pending invitations)
-	if invitation.Status != models.InvitationStatusInvited {
+	if invitation.InvitationStatus != models.InvitationStatusInvited {
 		return nil, ErrInvalidInvitationStatus
 	}
 
@@ -287,7 +287,7 @@ func (s *InvitationService) RevokeInvitation(userID, invitationID int64) (*model
 	now := time.Now()
 	updateQuery := `
 		UPDATE invitation
-		SET status = $1, responded_at = $2
+		SET invitation_status = $1, responded_at = $2
 		WHERE id = $3
 	`
 	_, err = s.db.Exec(updateQuery, models.InvitationStatusRevoked, now, invitationID)
@@ -303,7 +303,7 @@ func (s *InvitationService) DeleteInvitation(userID, invitationID int64) error {
 	// Get the invitation
 	var invitation models.Invitation
 	query := `
-		SELECT id, project_role_id, user_id, status, sent_at, responded_at, message
+		SELECT id, project_role_id, user_id, invitation_status, sent_at, responded_at, message
 		FROM invitation
 		WHERE id = $1
 	`
@@ -344,7 +344,7 @@ func (s *InvitationService) DeleteInvitation(userID, invitationID int64) error {
 func (s *InvitationService) getInvitationResponse(invitationID int64) (*models.InvitationResponse, error) {
 	query := `
 		SELECT
-			i.id, i.project_role_id, i.user_id, i.status, i.sent_at, i.responded_at, i.message,
+			i.id, i.project_role_id, i.user_id, i.invitation_status, i.sent_at, i.responded_at, i.message,
 			pr.role_name,
 			p.id as project_id, p.title as project_title,
 			u.full_name as recipient_name
@@ -386,7 +386,7 @@ func (s *InvitationService) GetInvitationsByProjectRole(userID, projectRoleID in
 
 	query := `
 		SELECT
-			i.id, i.project_role_id, i.user_id, i.status, i.sent_at, i.responded_at, i.message,
+			i.id, i.project_role_id, i.user_id, i.invitation_status, i.sent_at, i.responded_at, i.message,
 			pr.role_name,
 			p.id as project_id, p.title as project_title,
 			u.full_name as recipient_name
@@ -415,7 +415,7 @@ func (s *InvitationService) GetInvitationsByProjectRole(userID, projectRoleID in
 			&inv.ProjectTitle,
 			&inv.RecipientID,
 			&inv.RecipientName,
-			&inv.Status,
+			&inv.InvitationStatus,
 			&inv.SentAt,
 			&inv.RespondedAt,
 			&inv.Message,

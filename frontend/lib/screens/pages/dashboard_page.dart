@@ -79,18 +79,49 @@ class DashboardPage extends StatelessWidget {
                 tabLabels: const ["Overview", "Proposals"],
                 tabViews: [
                   // --- Overview Content ---
-                  Builder(
-                    builder: (context) {
-                      // Try to get the profile from the FutureBuilder above
-                      // (not ideal, but for mockup, just use a placeholder)
-                      final String userName = 'Welcome!';
+                  FutureBuilder<List<dynamic>>(
+                    future: Future.wait([
+                      profileRepository.fetchProfile(token),
+                      ApiService.getUserProjects(token),
+                      ApiService().fetchInvitations(token),
+                      ApiService().fetchProposals(token),
+                    ]),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                      if (snapshot.hasError || snapshot.data == null) {
+                        return Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(24.0),
+                            child: SelectableText.rich(
+                              TextSpan(
+                                text: 'Error: ',
+                                style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),
+                                children: [
+                                  TextSpan(
+                                    text: snapshot.error?.toString() ?? 'Unknown error',
+                                    style: const TextStyle(color: Colors.red),
+                                  ),
+                                ],
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        );
+                      }
+                      final profile = snapshot.data![0] as Map<String, dynamic>;
+                      final projects = snapshot.data![1] as List;
+                      final invitations = snapshot.data![2] as List;
+                      final proposals = snapshot.data![3] as List;
+                      final String userName = profile['name'] ?? '-';
                       return SingleChildScrollView(
                         padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 8),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Welcome to InnoSync!',
+                              'Welcome, $userName!',
                               style: Theme.of(context).textTheme.titleLarge,
                             ),
                             const SizedBox(height: 8),
@@ -103,21 +134,21 @@ class DashboardPage extends StatelessWidget {
                               children: [
                                 _StatCard(
                                   label: 'Projects',
-                                  value: '3',
+                                  value: projects.length.toString(),
                                   icon: Icons.folder,
                                   color: Colors.blue,
                                 ),
                                 const SizedBox(width: 16),
                                 _StatCard(
                                   label: 'Invitations',
-                                  value: '2',
+                                  value: invitations.length.toString(),
                                   icon: Icons.mail,
                                   color: Colors.orange,
                                 ),
                                 const SizedBox(width: 16),
                                 _StatCard(
                                   label: 'Proposals',
-                                  value: '1',
+                                  value: proposals.length.toString(),
                                   icon: Icons.assignment,
                                   color: Colors.green,
                                 ),

@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"errors"
+	"log"
 	"net/http"
 	"strconv"
 
@@ -54,6 +55,7 @@ func (h *InvitationHandler) CreateInvitation(c *gin.Context) {
 
 	response, err := h.invitationService.CreateInvitation(userID, &req)
 	if err != nil {
+		log.Printf("CreateInvitation error: %v", err)
 		if errors.Is(err, services.ErrInvitationAlreadyExists) {
 			c.JSON(http.StatusConflict, gin.H{"error": "Invitation already exists"})
 			return
@@ -96,6 +98,7 @@ func (h *InvitationHandler) GetSentInvitations(c *gin.Context) {
 
 	invitations, err := h.invitationService.GetSentInvitations(userID)
 	if err != nil {
+		log.Printf("GetSentInvitations error: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get sent invitations"})
 		return
 	}
@@ -122,6 +125,7 @@ func (h *InvitationHandler) GetReceivedInvitations(c *gin.Context) {
 
 	invitations, err := h.invitationService.GetReceivedInvitations(userID)
 	if err != nil {
+		log.Printf("GetReceivedInvitations error: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to get received invitations"})
 		return
 	}
@@ -151,6 +155,7 @@ func (h *InvitationHandler) GetInvitation(c *gin.Context) {
 
 	invitation, err := h.invitationService.GetInvitation(invitationID)
 	if err != nil {
+		log.Printf("GetInvitation error: %v", err)
 		if errors.Is(err, services.ErrInvitationNotFound) {
 			c.JSON(http.StatusNotFound, gin.H{"error": "Invitation not found"})
 			return
@@ -200,6 +205,7 @@ func (h *InvitationHandler) RespondToInvitation(c *gin.Context) {
 
 	response, err := h.invitationService.RespondToInvitation(userID, invitationID, &req)
 	if err != nil {
+		log.Printf("RespondToInvitation error: %v", err)
 		if errors.Is(err, services.ErrInvitationNotFound) {
 			c.JSON(http.StatusNotFound, gin.H{"error": "Invitation not found"})
 			return
@@ -252,6 +258,7 @@ func (h *InvitationHandler) RevokeInvitation(c *gin.Context) {
 
 	response, err := h.invitationService.RevokeInvitation(userID, invitationID)
 	if err != nil {
+		log.Printf("RevokeInvitation error: %v", err)
 		if errors.Is(err, services.ErrInvitationNotFound) {
 			c.JSON(http.StatusNotFound, gin.H{"error": "Invitation not found"})
 			return
@@ -300,6 +307,7 @@ func (h *InvitationHandler) DeleteInvitation(c *gin.Context) {
 
 	err = h.invitationService.DeleteInvitation(userID, invitationID)
 	if err != nil {
+		log.Printf("DeleteInvitation error: %v", err)
 		if errors.Is(err, services.ErrInvitationNotFound) {
 			c.JSON(http.StatusNotFound, gin.H{"error": "Invitation not found"})
 			return
@@ -345,6 +353,7 @@ func (h *InvitationHandler) GetInvitationsByProjectRole(c *gin.Context) {
 
 	invitations, err := h.invitationService.GetInvitationsByProjectRole(userID, projectRoleID)
 	if err != nil {
+		log.Printf("GetInvitationsByProjectRole error: %v", err)
 		if errors.Is(err, services.ErrProjectRoleNotFound) {
 			c.JSON(http.StatusNotFound, gin.H{"error": "Project role not found"})
 			return

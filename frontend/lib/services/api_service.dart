@@ -47,7 +47,8 @@ class ApiService {
       headers: {'Authorization': 'Bearer $token'},
     );
     if (response.statusCode == 200) {
-      final List data = jsonDecode(response.body);
+      final decoded = jsonDecode(response.body);
+      final List data = decoded is List ? decoded : [];
       return data.cast<Map<String, dynamic>>();
     } else {
       throw Exception('Failed to load projects');
@@ -83,10 +84,11 @@ class ApiService {
       headers: {'Authorization': 'Bearer $token'},
     );
     if (response.statusCode == 200) {
-      final List data = jsonDecode(response.body);
+      final decoded = jsonDecode(response.body);
+      final List data = decoded is List ? decoded : [];
       return data.cast<Map<String, dynamic>>();
     } else {
-      throw Exception('Failed to load invitations');
+      throw Exception('Failed to load invitations (status: ${response.statusCode}, body: ${response.body})');
     }
   }
 
@@ -97,10 +99,11 @@ class ApiService {
       headers: {'Authorization': 'Bearer $token'},
     );
     if (response.statusCode == 200) {
-      final List data = jsonDecode(response.body);
+      final decoded = jsonDecode(response.body);
+      final List data = decoded is List ? decoded : [];
       return data.cast<Map<String, dynamic>>();
     } else {
-      throw Exception('Failed to load proposals');
+      throw Exception('Failed to load proposals (status: ${response.statusCode}, body: ${response.body})');
     }
   }
 
@@ -111,7 +114,8 @@ class ApiService {
       headers: {'Authorization': 'Bearer $token'},
     );
     if (response.statusCode == 200) {
-      final List data = jsonDecode(response.body);
+      final decoded = jsonDecode(response.body);
+      final List data = decoded is List ? decoded : [];
       return data.cast<Map<String, dynamic>>();
     } else {
       throw Exception('Failed to load chats');
@@ -230,6 +234,49 @@ class ApiService {
         'project_id': projectId,
         if (message != null) 'message': message,
       }),
+    );
+    return response.statusCode == 201;
+  }
+
+  Future<bool> respondToInvitation({
+    required String token,
+    required int invitationId,
+    required String response, // 'ACCEPTED' или 'DECLINED'
+  }) async {
+    final url = Uri.parse('$baseUrl/invitations/$invitationId/respond');
+    final resp = await http.patch(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({'response': response}),
+    );
+    return resp.statusCode == 200;
+  }
+
+  Future<bool> createProjectRole({
+    required String token,
+    required int projectId,
+    required String roleName,
+    String? description,
+    List<String>? skills,
+    int? count,
+  }) async {
+    final url = Uri.parse('$baseUrl/projects/$projectId/roles');
+    final body = {
+      'role_name': roleName,
+      if (description != null && description.isNotEmpty) 'description': description,
+      if (skills != null && skills.isNotEmpty) 'skills': skills,
+      if (count != null) 'count': count,
+    };
+    final response = await http.post(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode(body),
     );
     return response.statusCode == 201;
   }
