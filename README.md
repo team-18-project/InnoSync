@@ -131,17 +131,47 @@ frontend/  # Flutter app, widgets, screens, models
   flutter analyze
   ```
 
+## 📄 API Documentation
+
+Access and interact with our API seamlessly:
+
+- **Swagger UI** – Explore and test endpoints interactively.
+- **Markdown Guide** – Full API spec in [backend/README.md](https://github.com/team-18-project/InnoSync/blob/main/backend/README.md).
+
+### 🔍 API Highlights
+
+- **Authentication**
+  - JWT based with secure login and token refresh.
+- **Core Endpoints**
+  - **Users**: register, login, profile management.
+  - **Projects**: create, read, update, delete; team invites.
 ---
 
-## API Documentation
-- We have our swagger UI api documentation along with an API .md file you can accesss it through this [Link](https://github.com/team-18-project/InnoSync/blob/main/backend/README.md)
+## 🗄️ Database Schema & Design
+
+Visual and descriptive overview available:
+
+- **Schema Diagram**
+  ![Database Schema](https://raw.githubusercontent.com/team-18-project/InnoSync/refs/heads/main/db/DB_diagram.png)
+- **Detailed ERD & Tables** – See [db/DB_design.md](https://github.com/team-18-project/InnoSync/blob/main/db/DB_design.md)
+  - Tables: `users`, `projects`, `tasks`, `comments`, `notifications`, `activities`, etc.
+  - Relationships: one-to-many (users→projects, projects→tasks), many-to-many (users↔projects via project_team join table).
 
 ---
 
+---
 
-## Database Documentation
--This is our database schema and documentation [Link](https://github.com/team-18-project/InnoSync/blob/main/db/DB_design.md)
-![Database Schema](https://raw.githubusercontent.com/team-18-project/InnoSync/refs/heads/main/db/DB_diagram.png)
+## 🧠 Product Design & UX Research
+
+Comprehensive user-research-backed features:
+
+- In-depth findings and validation in [Product Design & UX Research](https://www.figma.com/design/islrijonPzZEUrBi9NgV94/UX-UI-Mid?node-id=47-31994&t=bATNSWtlbjcDZmov-1)
+- Highlights:
+  - **User Pain Points** – Collaboration friction, task visibility gaps.
+  - **Proposed Solutions** – Real-time updates, shared project dashboards, invitation workflows.
+  - **Feature Roadmap** – Prioritized through user feedback and impact analysis.
+  - **Wireframes & Mockups** – Visual representations of key screens and user flows.
+- High-Fideliy Design [Link](https://www.figma.com/design/qDq1rHa8D5f1AlJtMBb0rz/High-Fi-design-InnoSync?t=5BQsZTzFq7z2nK77-0)
 
 ---
 
@@ -155,6 +185,24 @@ frontend/  # Flutter app, widgets, screens, models
 
 ---
 
+## 🌐 Web Application Access
+
+In addition to the mobile app, we also offer a **Web Application** with full project management functionalities.
+You can access it here: [https://innosync.duckdns.org](https://innosync.duckdns.org)
+
+The web app ensures a seamless experience across both platforms, with plans for advanced account syncing and unified notifications.
+
+---
+
+## 🚀 Future Plans
+
+- **Quick Syncing (AI-Powered Smart Matching)**
+  - AI-driven recommendations for team matching and project collaborations.
+
+- **Cross-Platform Account Syncing**
+  - Seamless integration between mobile and web applications for unified access and synchronized notifications.
+
+---
 ## License
 
 MIT License
