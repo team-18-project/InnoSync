@@ -75,6 +75,7 @@ class _MyProjectsPageState extends State<MyProjectsPage> {
             ),
           );
         },
+        child: const Icon(Icons.add),
       ),
     );
   }
