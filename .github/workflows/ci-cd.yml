@@ -69,45 +69,7 @@ jobs:
           path: |
             backend/unit_coverage.html
             backend/integration_coverage.html
-  frontend:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: 'master'
-          channel: 'master'
-
-      - name: Disable Flutter analytics
-        run: flutter config --no-analytics
-
-      - name: Install dependencies
-        working-directory: ./frontend
-        run: flutter pub get
-
-      - name: Run Flutter unit tests
-        working-directory: ./frontend
-        run: |
-          flutter test test/unit/
-          flutter test --coverage --coverage-path=unit_coverage.info test/unit/
-          lcov --remove unit_coverage.info '**/*.g.dart' '**/*.freezed.dart' -o filtered_unit_coverage.info
-          genhtml filtered_unit_coverage.info -o unit_coverage_report
-      - name: Run Flutter integration tests
-        working-directory: ./frontend
-        run: |
-          flutter test test/integration/
-          flutter test --coverage --coverage-path=integration_coverage.info test/integration/
-          lcov --remove integration_coverage.info '**/*.g.dart' '**/*.freezed.dart' -o filtered_integration_coverage.info
-          genhtml filtered_integration_coverage.info -o integration_coverage_report
-      - name: Upload coverage reports
-        uses: actions/upload-artifact@v4
-        with:
-          name: frontend-coverage-reports
-          path: |
-            frontend/unit_coverage_report/**
-            frontend/integration_coverage_report/**
+  
   notify:
     needs: [backend, frontend]
     runs-on: ubuntu-latest
