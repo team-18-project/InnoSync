@@ -9,7 +9,6 @@ import 'package:frontend/widgets/discover/sort_filter_button.dart';
 import 'package:frontend/widgets/discover/project_card.dart';
 import 'package:frontend/widgets/discover/talent_card.dart';
 import 'package:frontend/widgets/common/widgets.dart';
-
 typedef ProjectTapCallback = void Function(Project project);
 typedef TalentTapCallback = void Function(Talent talent);
 
@@ -112,8 +111,9 @@ class _DiscoverPageState extends State<DiscoverPage> with SearchMixin {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
