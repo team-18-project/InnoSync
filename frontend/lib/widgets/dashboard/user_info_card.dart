@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import '../common/widgets.dart';
 
 class UserInfoCard extends StatelessWidget {
-  final String name;
-  final String email;
-  final String bio;
-  final String positions;
-  final String technologies;
+  final String? name;
+  final String? email;
+  final String? bio;
+  final String? positions;
+  final String? technologies;
   final String? avatarUrl;
   final double width;
   final double avatarRadius;
@@ -14,11 +14,11 @@ class UserInfoCard extends StatelessWidget {
 
   const UserInfoCard({
     super.key,
-    required this.name,
-    required this.email,
-    required this.bio,
-    required this.positions,
-    required this.technologies,
+    this.name,
+    this.email,
+    this.bio,
+    this.positions,
+    this.technologies,
     this.avatarUrl,
     this.width = 250,
     this.avatarRadius = 50,
@@ -55,7 +55,9 @@ class UserInfoCard extends StatelessWidget {
                     : null,
                 child: avatarUrl == null
                     ? Text(
-                        name.isNotEmpty ? name[0].toUpperCase() : '?',
+                        name?.isNotEmpty ?? false
+                            ? name![0].toUpperCase()
+                            : '?',
                         style: theme.textTheme.titleLarge?.copyWith(
                           color: theme.colorScheme.onPrimary,
                           fontWeight: FontWeight.bold,
@@ -69,14 +71,14 @@ class UserInfoCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      name,
+                      name ?? '',
                       style: theme.textTheme.titleMedium?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const VSpace.small(),
                     Text(
-                      email,
+                      email ?? '',
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: theme.colorScheme.onSurface.withValues(
                           alpha: 0.7,

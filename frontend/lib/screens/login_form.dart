@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import '../theme/dimensions.dart';
-import '../widgets/login/widgets.dart';
-import '../widgets/common/widgets.dart';
-import '../utils/ui_helpers.dart';
-import '../services/api_service.dart';
-import '../utils/token_storage.dart';
-import '../widgets/common/theme_switcher_button.dart';
+import 'package:frontend/theme/dimensions.dart';
+import 'package:frontend/widgets/common/spacing.dart';
+import 'package:frontend/widgets/common/widgets.dart';
+import 'package:frontend/widgets/login/widgets.dart';
+import 'package:frontend/utils/ui_helpers.dart';
+import 'package:frontend/services/api_service.dart';
+import 'package:frontend/utils/token_storage.dart';
+import 'package:frontend/widgets/common/theme_switcher_button.dart';
 
 class LoginFormPage extends StatefulWidget {
   const LoginFormPage({super.key});
