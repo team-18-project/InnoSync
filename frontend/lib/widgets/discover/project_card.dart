@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/project_model.dart';
-import 'package:frontend/theme/colors.dart';
-import 'package:frontend/theme/text_styles.dart';
+import 'package:frontend/widgets/common/spacing.dart';
 import 'package:frontend/widgets/common/widgets.dart';
 
 class ProjectCard extends StatelessWidget {
@@ -12,6 +11,7 @@ class ProjectCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return GestureDetector(
       onTap: onTap,
       child: Card(
@@ -27,7 +27,7 @@ class ProjectCard extends StatelessWidget {
                 width: 56,
                 height: 56,
                 decoration: BoxDecoration(
-                  color: AppColors.textSecondary,
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: project.logoUrl != null
@@ -38,10 +38,12 @@ class ProjectCard extends StatelessWidget {
                           fit: BoxFit.cover,
                         ),
                       )
-                    : const Icon(
+                    : Icon(
                         Icons.apps,
                         size: 32,
-                        color: AppColors.textSecondary,
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.5,
+                        ),
                       ),
               ),
               const HSpace.small(),
@@ -52,14 +54,12 @@ class ProjectCard extends StatelessWidget {
                   children: [
                     Text(
                       project.title,
-                      style: AppTextStyles.h3.copyWith(fontSize: 20),
+                      style: theme.textTheme.titleLarge?.copyWith(fontSize: 20),
                     ),
                     const VSpace.small(),
                     Text(
                       project.description,
-                      style: AppTextStyles.bodyLarge.copyWith(
-                        color: AppColors.textPrimary,
-                      ),
+                      style: theme.textTheme.bodyMedium,
                     ),
                   ],
                 ),
