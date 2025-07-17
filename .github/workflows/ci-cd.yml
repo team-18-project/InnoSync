@@ -8,7 +8,8 @@ on:
   workflow_dispatch:
 
 env:
-  FLUTTER_VERSION: '3.13.0'  # Using version that matches your Dart 3.8.1 requirement
+  # Updated Flutter version to one that includes Dart 3.8.1+
+  FLUTTER_VERSION: '3.13.0'
   GO_VERSION: '1.21'
   POSTGRES_USER: test
   POSTGRES_PASSWORD: test
@@ -31,6 +32,12 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+    env:
+      POSTGRES_HOST: localhost
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: test
+      POSTGRES_PASSWORD: test
+      POSTGRES_DB: test_db
     steps:
       - uses: actions/checkout@v4
       - name: Set up Go
@@ -67,31 +74,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Option 1: Use stable Flutter with compatible Dart version
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: ${{ env.FLUTTER_VERSION }}
-          channel: 'stable'
+          flutter-version: 'master'
+          channel: 'master'
 
-      # Option 2: OR use master channel for latest Dart version (uncomment if needed)
-      # - name: Set up Flutter
-      #   uses: subosito/flutter-action@v2
-      #   with:
-      #     flutter-version: 'master'
-      #     channel: 'master'
+      - name: Disable Flutter analytics
+        run: flutter config --no-analytics
 
-      - name: Verify Dart version
-        run: dart --version
-
-      - name: Update SDK constraints in pubspec.yaml
-        working-directory: ./frontend
-        run: |
-          # Update Dart SDK constraint to match the installed version
-          sed -i 's/sdk: \^3\.8\.1/sdk: ">=3.3.0 <4.0.0"/g' pubspec.yaml
-          
-          # Update integration_test version if needed
-          sed -i 's/integration_test: \^1\.2\.0/integration_test: ^2.0.0/g' pubspec.yaml
       - name: Install dependencies
         working-directory: ./frontend
         run: flutter pub get
@@ -117,7 +108,6 @@ jobs:
           path: |
             frontend/unit_coverage_report/**
             frontend/integration_coverage_report/**
-            
   notify:
     needs: [backend, frontend]
     runs-on: ubuntu-latest
